@@ -32,18 +32,3 @@ Field.propTypes = {
   helpTextComponent: React.PropTypes.element,
   helpText: React.PropTypes.string
 }
-
-
-let formStyles = StyleSheet.create({
-
-  helpTextContainer:{
-    marginTop:9,
-    marginBottom: 25,
-    paddingLeft: 20,
-    paddingRight: 20,
-
-  },
-  helpText:{
-    color: '#7a7a7a'
-  }
-});

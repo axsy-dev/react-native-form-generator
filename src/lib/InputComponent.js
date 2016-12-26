@@ -144,18 +144,11 @@ export class InputComponent extends React.Component{
     this.refs.inputBox.focus();
   }
   render(){
- // style={[formStyles.fieldContainer,
- //     formStyles.horizontalContainer,
- //     this.props.containerStyle,
- //     {height: this.state.inputHeight+1}
- //   ]}
+
     return(<Field {...this.props}>
         <View
           onLayout={this.handleLayoutChange}
-          style={[
-              this.props.containerStyle,
-
-            ]}>
+          style={this.props.containerStyle}>
           {(this.props.iconLeft)
             ? this.props.iconLeft
             : null
@@ -173,20 +166,11 @@ export class InputComponent extends React.Component{
             {...this.props}
             ref='inputBox'
             keyboardType = {this.props.keyboardType}
-            style={[
-                this.props.inputStyle,
-                {height: this.state.inputHeight}
-              ]}
-
+            style={this.props.inputStyle}
             onChange={this.handleChange}
             onFocus={this._scrollToInput}
             placeholder={this.props.placeholder}
             value={this.state.value}
-            width={this.state.width-this.state.labelWidth
-                -((this.props.iconRight)?this.props.iconRight.props.size:0)
-                -((this.props.iconLeft)?this.props.iconLeft.props.size:0)
-              }
-
             />
           {(this.props.iconRight)
               ? this.props.iconRight
