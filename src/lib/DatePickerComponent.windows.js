@@ -1,10 +1,15 @@
 'use strict';
 
 
-import React from 'react';
-let { View, StyleSheet, TextInput, Text} = require('react-native');
+import React, { Component } from 'react';
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Text
+} from 'react-native';
 import {Field} from './Field';
-
+import DateTimeSelector from './DateTimeSelector';
 
 export class DatePickerComponent extends React.Component{
   constructor(props){
@@ -24,7 +29,6 @@ export class DatePickerComponent extends React.Component{
     let {x, y, width, height} = {... e.nativeEvent.layout};
 
     this.setState(e.nativeEvent.layout);
-    //e.nativeEvent.layout: {x, y, width, height}}}.
   }
 
   handleValueChange(date){
@@ -36,14 +40,8 @@ export class DatePickerComponent extends React.Component{
 
   }
 
-
-
-  //      this.refs.picker.measure(this.getPickerLayout.bind(this));
-
-
   _togglePicker(event){
     this.setState({isPickerVisible:!this.state.isPickerVisible});
-    //this._scrollToInput(event);
     this.props.onPress && this.props.onPress(event);
   }
 
@@ -52,19 +50,17 @@ export class DatePickerComponent extends React.Component{
           minuteInterval, mode,
           onDateChange,   timeZoneOffsetInMinutes } = this.props;
 
-    let  valueString = this.props.dateTimeFormat(this.state.date, this.props.mode);
+    let valueString = this.props.dateTimeFormat(this.state.date, this.props.mode);
 
-    // let datePicker= <DatePickerIOS
-    //   maximumDate = {maximumDate}
-    //   minimumDate = {minimumDate}
-    //   minuteInterval = {minuteInterval}
-    //   mode = {mode}
-    //   timeZoneOffsetInMinutes = {timeZoneOffsetInMinutes}
-    //   date = {this.state.date || new Date()}
-    //   onDateChange = {this.handleValueChange.bind(this)}
-    // />
-
-    let datePicker = <Text style={this.props.placeholderStyle}>{this.state.date}</Text>
+    let datePicker= <DateTimeSelector
+      maximumDate = {maximumDate}
+      minimumDate = {minimumDate}
+      minuteInterval = {minuteInterval}
+      mode = {mode}
+      timeZoneOffsetInMinutes = {timeZoneOffsetInMinutes}
+      date = {this.state.date || new Date()}
+      onDateChange = {this.handleValueChange.bind(this)}
+    />
 
     let pickerWrapper = React.cloneElement(this.props.pickerWrapper,{onHidePicker:()=>{this.setState({isPickerVisible:false})}},datePicker);
 
@@ -86,7 +82,8 @@ export class DatePickerComponent extends React.Component{
                       : <Text style={this.props.placeholderStyle}>{this.props.placeholder}</Text>
     return(<View><Field
       {...this.props}
-      ref='inputBox'>
+      ref='inputBox'
+      onPress={this._togglePicker.bind(this)}>
       <View style={this.props.containerStyle}
           onLayout={this.handleLayoutChange.bind(this)}>
           {(iconLeft)

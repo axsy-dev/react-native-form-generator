@@ -3,7 +3,11 @@
     "name": "Michael Cereda",
     "url": "info@michaelcereda.com"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "3.10.1",
+    "moment": "2.10.6",
+    "moment-range": "3.0.0"
+  },
   "description": "Generate amazing React Native forms in a breeze",
   "gitHead": "f67d26986f3916668d0c3e9e74b66d0ed6165cba",
   "homepage": "https://github.com/MichaelCereda/react-native-form-generator#readme",
