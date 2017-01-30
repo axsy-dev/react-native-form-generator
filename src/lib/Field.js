@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {HelpText} from './HelpText';
-let { View, StyleSheet, Text, TouchableHighlight} = require('react-native');
+let { View, StyleSheet, Text, TouchableOpacity} = require('react-native');
 
 export class Field extends React.Component{
   render(){
@@ -13,12 +13,12 @@ export class Field extends React.Component{
           : null);
 
     if(this.props.onPress){
-      return <TouchableHighlight onPress={this.props.onPress}>
+      return <TouchableOpacity onPress={this.props.onPress}>
         <View>
           {this.props.children}
           {fieldHelpText}
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     }
     return   <View>
       {this.props.children}
