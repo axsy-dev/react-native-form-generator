@@ -68,7 +68,7 @@ class TimeSelector extends Component {
         const { selectedTime } = this.props;
         
         if (selectedTime) {
-            const m = moment(selectedTime, 'h:mm A');
+            const m = moment(selectedTime, 'H:mm');
             const hour = m.hour();
             const hours = hour > 12 ? hour - 12 : hour;
             const minutes = str_pad_left(m.minute(), '0', 2);
