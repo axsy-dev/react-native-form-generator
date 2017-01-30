@@ -72,7 +72,7 @@ class TimeSelector extends Component {
             const hour = m.hour();
             const hours = hour > 12 ? hour - 12 : hour;
             const minutes = str_pad_left(m.minute(), '0', 2);
-            const ampm = hour > 12 ? 'PM' : 'AM';
+            const ampm = hour > 11 ? 'PM' : 'AM';
 
             this.setState({hours: String(hours), minutes: String(minutes), ampm});
         }
