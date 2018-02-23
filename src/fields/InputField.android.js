@@ -23,8 +23,6 @@ export class InputField extends React.Component{
       {...this.props}
       ref='fieldComponent'
       onValidation={this.handleValidation.bind(this)}
-      //onChange={this.handleChange.bind(this)}
-      //ref={this.props.fieldRef}
       />
     );
   }

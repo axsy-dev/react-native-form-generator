@@ -24,7 +24,6 @@ var PickerItem = Picker.Item;
       let {x, y, width, height} = {... e.nativeEvent.layout};
 
       this.setState(e.nativeEvent.layout);
-      //e.nativeEvent.layout: {x, y, width, height}}}.
     }
 
     handleValueChange(value){
@@ -45,13 +44,8 @@ var PickerItem = Picker.Item;
           handle
         )
       }
-
-//      this.refs.picker.measure(this.getPickerLayout.bind(this));
-
     }
     _togglePicker(event){
-        //this.setState({isPickerVisible:!this.state.isPickerVisible});
-        //this._scrollToInput(event);
     }
     render(){
 

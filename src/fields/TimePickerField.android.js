@@ -11,10 +11,8 @@ export class TimePickerField extends React.Component{
   setTime(date){
     this.refs.datePickerComponent.setTime(date);
   }
-  render(){
-/*
 
- */
+  render(){
     return(<TimePickerComponent
       {...this.props}
       ref='fieldComponent'

@@ -25,7 +25,6 @@ export class PickerComponent extends React.Component{
       let {x, y, width, height} = {... e.nativeEvent.layout};
 
       this.setState(e.nativeEvent.layout);
-      //e.nativeEvent.layout: {x, y, width, height}}}.
     }
 
     handleValueChange(value){
@@ -48,47 +47,14 @@ export class PickerComponent extends React.Component{
         )
       }
 
-//      this.refs.picker.measure(this.getPickerLayout.bind(this));
 
     }
     _togglePicker(event){
         this.setState({isPickerVisible:!this.state.isPickerVisible});
         this.props.onPress && this.props.onPress(event);
-        //this._scrollToInput(event);
     }
+
     render(){
-      //
-      // if (this.state.isMultipleSelect){
-      //             let iconName = 'ios-circle-outline';
-      //             let iconColor = {};
-      //             if (this.state.multipleSelectValue[name]) {
-      //                 iconName = 'ios-checkmark-outline';
-      //                 iconColor = {color:'red'};
-      //             }
-      //             return (
-      //                 <TouchableWithoutFeedback
-      //                     onPress={()=>{this.checkStateChange(name)}}>
-      //                     <Icon name={iconName} size={30} {...iconColor}/>
-      //                 </TouchableWithoutFeedback>
-      //             );
-      //         }else {
-      //             return (
-      //                 <View style={styles.accessory}/>
-      //             );
-      //         }
-
-      // <Switch
-      // onValueChange={(value) => this.setState({falseSwitchIsOn: value})}
-      //
-      // value={this.state.falseSwitchIsOn} />
-
-      // this.props.options.map((option, i) => {
-      //   pickerOptions.push(<PickerItem
-      //     key={i}
-      //     value={option.value}
-      //     label={option.label}
-      //   />);
-      // });
       let picker = <Picker ref='picker'
         {...this.props.pickerProps}
         selectedValue={this.state.value}

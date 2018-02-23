@@ -17,7 +17,6 @@ export class InputComponent extends React.Component{
     super(props);
 
     this.triggerValidation = this.triggerValidation.bind(this);
-    // this.validate = this.validate.bind(this)
     this.validate(props.value);
     this.validationErrors = [];
     this.state = {
@@ -25,7 +24,6 @@ export class InputComponent extends React.Component{
       value: props.value,
       minFieldHeight: props.height || 44,
       inputHeight: Math.max(props.height || 44),
-      // isValid:
     };
     this.setValue = this.setValue.bind(this)
     this.focus = this.focus.bind(this)
@@ -103,7 +101,6 @@ export class InputComponent extends React.Component{
 
 	      this.setState(e.nativeEvent.layout);
 	  }
-    // //e.nativeEvent.layout: {x, y, width, height}}}.
   }
 
   handleLabelLayoutChange(e){
@@ -112,7 +109,6 @@ export class InputComponent extends React.Component{
 
 	      this.setState({labelWidth:width});
 	  }
-    // //e.nativeEvent.layout: {x, y, width, height}}}.
   }
   handleChange(event){
     const value = event.nativeEvent.text;
@@ -125,13 +121,11 @@ export class InputComponent extends React.Component{
           ? event.nativeEvent.contentSize.height
           : 0)
       });
-    //this.props.onChange(this.props.fieldRef, value);
     if(this.props.onChange)      this.props.onChange(value, this.valid);
     if(this.props.onValueChange) this.props.onValueChange(value,this.valid);
   }
 
   _scrollToInput (event) {
-    //debugger;
     if (this.props.onFocus) {
       let handle = ReactNative.findNodeHandle(this.refs.inputBox);
       this.props.onFocus(
@@ -182,11 +176,6 @@ export class InputComponent extends React.Component{
   }
 
 }
-
-// InputComponent.propTypes = {
-//   multiline: React.PropTypes.bool,
-//   placeholder:React.PropTypes.string,
-// }
 
 InputComponent.propTypes = {
   labelStyle: Text.propTypes.style,

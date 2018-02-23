@@ -10,17 +10,21 @@ import {Field} from './Field';
     constructor(props){
       super(props);
       this.state = {
-        date: props.date? new Date(props.date) :'',
         isPickerVisible: false
       }
-
     }
+
+    componentDidMount() {
+      const { date } = this.props;
+      
+      this.setState({data: date ? new Date(date) : new Date()});
+    }
+
 
     handleLayoutChange(e){
       let {x, y, width, height} = {... e.nativeEvent.layout};
 
       this.setState(e.nativeEvent.layout);
-      //e.nativeEvent.layout: {x, y, width, height}}}.
     }
 
     handleValueChange(date){
@@ -35,9 +39,6 @@ import {Field} from './Field';
       if(this.props.onChange)      this.props.onChange((this.props.prettyPrint)?this.props.dateTimeFormat(date):date);
       if(this.props.onValueChange) this.props.onValueChange(date);
     }
-
-
-//      this.refs.picker.measure(this.getPickerLayout.bind(this));
 
 
     async _togglePicker(event){

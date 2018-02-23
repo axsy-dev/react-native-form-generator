@@ -15,11 +15,16 @@ export class DatePickerComponent extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      date: props.date? new Date(props.date) : '',
       isPickerVisible: false
     }
-
   }
+
+  componentDidMount() {
+    const { date } = this.props;
+    
+    this.setState({date: date ? new Date(date) : new Date()});
+  }
+
   setDate(date){
     this.setState({date:date});
     if(this.props.onChange)      this.props.onChange((this.props.prettyPrint)?this.props.dateTimeFormat(date):date);
