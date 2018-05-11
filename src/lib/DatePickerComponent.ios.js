@@ -2,7 +2,8 @@
 
 
 import React from 'react';
-let { View, StyleSheet, TextInput, Text, DatePickerIOS} = require('react-native');
+import PropTypes from 'prop-types';
+import { View, StyleSheet, TextInput, Text, DatePickerIOS}  from 'react-native';
 import {Field} from './Field';
 
 
@@ -16,13 +17,13 @@ export class DatePickerComponent extends React.Component{
 
   componentDidMount() {
     const { date } = this.props;
-    
+
     this.setState({date: date ? new Date(date) : new Date()});
   }
 
   setDate(date){
     this.setState({date:date});
-    
+
     if(this.props.onChange)      this.props.onChange((this.props.prettyPrint)?this.props.dateTimeFormat(date):date);
     if(this.props.onValueChange) this.props.onValueChange(date);
   }
@@ -93,8 +94,8 @@ export class DatePickerComponent extends React.Component{
             : null
           }
           {placeholderComponent}
-          <View style={this.props.valueContainerStyle}>
-            <Text style={this.props.valueStyle}>{ valueString }</Text>
+          <View style={[formStyles.alignRight, formStyles.horizontalContainer, this.props.valueContainerStyle]}>
+            <Text style={[formStyles.fieldValue,this.props.valueStyle ]}>{ valueString }</Text>
 
             {(iconRight)
               ? iconRight
@@ -115,9 +116,9 @@ export class DatePickerComponent extends React.Component{
 }
 
 DatePickerComponent.propTypes = {
-  dateTimeFormat: React.PropTypes.func,
-  pickerWrapper: React.PropTypes.element,
-  prettyPrint: React.PropTypes.bool
+  dateTimeFormat: PropTypes.func,
+  pickerWrapper: PropTypes.element,
+  prettyPrint: PropTypes.bool
 }
 
 DatePickerComponent.defaultProps = {
@@ -134,6 +135,9 @@ DatePickerComponent.defaultProps = {
       case 'time':
         value = date.toLocaleTimeString()
       break;
+        case 'countdown':
+            value = date.getHours() + ":" + date.getMinutes();
+            break;
       default:
         value = date.toLocaleDateString()
     }

@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {HelpText} from './HelpText';
 let { View, StyleSheet, Text, TouchableOpacity} = require('react-native');
 
@@ -29,6 +30,6 @@ export class Field extends React.Component{
   }
 }
 Field.propTypes = {
-  helpTextComponent: React.PropTypes.element,
-  helpText: React.PropTypes.string
+  helpTextComponent: PropTypes.element,
+  helpText: PropTypes.string
 }

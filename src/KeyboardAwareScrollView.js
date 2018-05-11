@@ -6,11 +6,11 @@ import ViewStylePropTypes from 'react-native/Libraries/Components/View/ViewStyle
 export class KeyboardAwareScrollView extends React.Component {
     constructor (props) {
         super(props);
-    
+
         this.state = {
           keyboardSpace: 0,
         }
-    
+
         this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
         this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
     }
@@ -19,11 +19,11 @@ export class KeyboardAwareScrollView extends React.Component {
     updateKeyboardSpace(frames) {
         let coordinatesHeight = frames.endCoordinates.height;
         const keyboardSpace = (this.props.viewIsInsideTabBar) ? coordinatesHeight - 49 : coordinatesHeight
-    
+
         this.setState({
           keyboardSpace: keyboardSpace
         });
-        
+
         return {};
     }
 
