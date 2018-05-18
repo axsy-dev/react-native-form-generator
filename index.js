@@ -1,6 +1,6 @@
 'use strict';
 
-import {Form} from './src/Form';
+import {Form as _Form} from './src/Form';
 import {Separator} from './src/fields/Separator';
 import {InputField} from './src/fields/InputField';
 import {LinkField} from './src/fields/LinkField';
@@ -10,8 +10,10 @@ import {DatePickerField} from './src/fields/DatePickerField';
 import {TimePickerField} from './src/fields/TimePickerField';
 import {CountDownField} from './src/fields/CountDownField';
 
+import { TestPathContainer } from '@axsy/testable';
 
-//import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+const Form = TestPathContainer(_Form, 'Form');
+
 export {
         Form,
         Separator, InputField, LinkField,

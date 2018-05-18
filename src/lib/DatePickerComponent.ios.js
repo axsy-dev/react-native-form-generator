@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet, TextInput, Text, DatePickerIOS}  from 'react-native';
 import {Field} from './Field';
 
+import { TestPathSegment, TText } from '@axsy/testable';
 
 export class DatePickerComponent extends React.Component{
   constructor(props){
@@ -82,8 +83,8 @@ export class DatePickerComponent extends React.Component{
     }
     let placeholderComponent = (this.props.placeholderComponent)
                       ? this.props.placeholderComponent
-                      : <Text style={this.props.placeholderStyle}>{this.props.placeholder}</Text>
-    return(<View><Field
+                      : <TText tid='placeholder' style={this.props.placeholderStyle}>{this.props.placeholder}</TText>
+    return(<TestPathSegment name={`Field[${this.props.fieldRef}]` || 'DatePicker'}><View><Field
       {...this.props}
       ref='inputBox'
       onPress={this._togglePicker.bind(this)}>
@@ -94,8 +95,8 @@ export class DatePickerComponent extends React.Component{
             : null
           }
           {placeholderComponent}
-          <View style={[formStyles.alignRight, formStyles.horizontalContainer, this.props.valueContainerStyle]}>
-            <Text style={[formStyles.fieldValue,this.props.valueStyle ]}>{ valueString }</Text>
+          <View style={[this.props.valueContainerStyle]}>
+            <TText tid='Value' style={[this.props.valueStyle ]}>{ valueString }</TText>
 
             {(iconRight)
               ? iconRight
@@ -109,7 +110,7 @@ export class DatePickerComponent extends React.Component{
         pickerWrapper : null
       }
 
-    </View>
+    </View></TestPathSegment>
   )
 }
 

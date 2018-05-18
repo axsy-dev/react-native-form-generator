@@ -1,9 +1,10 @@
 'use strict';
 
 import React from 'react';
-let { View, StyleSheet, Text} = require('react-native');
+let { View, StyleSheet, Text } = require('react-native');
 import {Field} from './Field';
 
+import { TestPathContainer, TText } from '@axsy/testable';
 
 export class LinkComponent extends React.Component{
   constructor(props){
@@ -27,10 +28,11 @@ export class LinkComponent extends React.Component{
           ? this.props.iconLeft
           : null
         }
-        <Text
+        <TText
+          tid='Label'
           style={this.props.labelStyle}>
             {this.props.label}
-        </Text>
+        </TText>
 
           {(this.props.iconRight)
             ? this.props.iconRight

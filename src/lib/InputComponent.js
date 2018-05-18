@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import ReactNative, { Platform } from 'react-native';
 import {Field} from './Field.js';
 
-const {View, StyleSheet, TextInput, Text} = ReactNative;
+const {View, StyleSheet, Text, TextInput } = ReactNative;
+
+import { TestPathSegment, TText, TTextInput } from '@axsy/testable';
 
 function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -140,39 +142,43 @@ export class InputComponent extends React.Component{
   }
   render(){
 
-    return(<Field {...this.props}>
-        <View
-          onLayout={this.handleLayoutChange}
-          style={this.props.containerStyle}>
-          {(this.props.iconLeft)
-            ? this.props.iconLeft
-            : null
-          }
-          {(this.props.label)
-            ?
-            <Text style={this.props.labelStyle}
-              onLayout={this.handleLabelLayoutChange}
-              onPress={this.handleFieldPress}
-              suppressHighlighting={true}
-              >{this.props.label}</Text>
-            : null
-          }
-          <TextInput
-            {...this.props}
-            ref='inputBox'
-            keyboardType = {this.props.keyboardType}
-            style={this.props.inputStyle}
-            onChange={this.handleChange}
-            onFocus={this._scrollToInput}
-            placeholder={this.props.placeholder}
-            value={this.state.value}
-            />
-          {(this.props.iconRight)
-              ? this.props.iconRight
+    return(
+      <TestPathSegment name={`Field[${this.props.fieldRef}]` || 'Input'}>
+        <Field {...this.props}>
+          <View
+            onLayout={this.handleLayoutChange}
+            style={this.props.containerStyle}>
+            {(this.props.iconLeft)
+              ? this.props.iconLeft
               : null
             }
-        </View>
-      </Field>
+            {(this.props.label)
+              ?
+              <TText tid='Label' style={this.props.labelStyle}
+                onLayout={this.handleLabelLayoutChange}
+                onPress={this.handleFieldPress}
+                suppressHighlighting={true}
+                >{this.props.label}</TText>
+              : null
+            }
+            <TTextInput
+              {...this.props}
+              ref='inputBox'
+              tid='TextInput'
+              keyboardType = {this.props.keyboardType}
+              style={this.props.inputStyle}
+              onChange={this.handleChange}
+              onFocus={this._scrollToInput}
+              placeholder={this.props.placeholder}
+              value={this.state.value}
+              />
+            {(this.props.iconRight)
+                ? this.props.iconRight
+                : null
+              }
+          </View>
+        </Field>
+      </TestPathSegment>
     )
   }
 

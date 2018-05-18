@@ -11,6 +11,8 @@ import {
 import {Field} from './Field';
 import DateTimeSelector from './DateTimeSelector';
 
+import { TestPathSegment, TText } from '@axsy/testable';
+
 export class DatePickerComponent extends React.Component{
   constructor(props){
     super(props);
@@ -21,7 +23,7 @@ export class DatePickerComponent extends React.Component{
 
   componentDidMount() {
     const { date } = this.props;
-    
+
     this.setState({date: date ? new Date(date) : new Date()});
   }
 
@@ -84,34 +86,36 @@ export class DatePickerComponent extends React.Component{
     }
     let placeholderComponent = (this.props.placeholderComponent)
                       ? this.props.placeholderComponent
-                      : <Text style={this.props.placeholderStyle}>{this.props.placeholder}</Text>
-    return(<View><Field
-      {...this.props}
-      ref='inputBox'
-      onPress={this._togglePicker.bind(this)}>
-      <View style={this.props.containerStyle}
-          onLayout={this.handleLayoutChange.bind(this)}>
-          {(iconLeft)
-            ? iconLeft
-            : null
-          }
-          {placeholderComponent}
-          <View style={this.props.valueContainerStyle}>
-            <Text style={this.props.valueStyle}>{ valueString }</Text>
-
-            {(iconRight)
-              ? iconRight
+                      : <TText tid='Placeholder' style={this.props.placeholderStyle}>{this.props.placeholder}</TText>
+    return(<TestPathSegment name={`Field[${this.props.fieldRef}]` || 'DatePicker'}>
+        <View><Field
+        {...this.props}
+        ref='inputBox'
+        onPress={this._togglePicker.bind(this)}>
+        <View style={this.props.containerStyle}
+            onLayout={this.handleLayoutChange.bind(this)}>
+            {(iconLeft)
+              ? iconLeft
               : null
             }
+            {placeholderComponent}
+            <View style={this.props.valueContainerStyle}>
+              <TText tid='Value' style={this.props.valueStyle}>{ valueString }</TText>
+
+              {(iconRight)
+                ? iconRight
+                : null
+              }
+            </View>
+
           </View>
+        </Field>
+        {(this.state.isPickerVisible)?
+          pickerWrapper : null
+        }
 
-        </View>
-      </Field>
-      {(this.state.isPickerVisible)?
-        pickerWrapper : null
-      }
-
-    </View>
+      </View>
+    </TestPathSegment>
   )
 }
 

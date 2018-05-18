@@ -5,14 +5,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, StyleSheet, Text} from 'react-native';
+import { View, StyleSheet } from 'react-native';
+
+import { TText } from '@axsy/testable';
 
 export class HelpText extends React.Component{
   render(){
     if(!this.props.text) return null;
     return (
       <View style={formStyles.helpTextContainer}>
-        <Text style={formStyles.helpText}>{this.props.text}</Text>
+        <TText tid='HelpText' style={formStyles.helpText}>{this.props.text}</TText>
     </View>);
   }
 }

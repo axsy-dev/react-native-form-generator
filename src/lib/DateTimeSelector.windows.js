@@ -66,7 +66,7 @@ class TimeSelector extends Component {
 
     componentWillMount() {
         const { selectedTime } = this.props;
-        
+
         if (selectedTime) {
             const m = moment(selectedTime, 'hh:mm A');
             const hour = m.hour();
@@ -223,7 +223,7 @@ class DateTimeSelector extends Component {
                               maximumDate={maximumDate}
                               minuteSelector={minuteSelector}
                               selectedTime={selectedTime || moment().format('h:mm A')}
-                              onChange={this._setTime.bind(this)}/>                              
+                              onChange={this._setTime.bind(this)}/>
             </View>
         );
     }

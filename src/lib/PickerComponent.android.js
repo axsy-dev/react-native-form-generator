@@ -2,8 +2,10 @@
 
 import React from 'react';
 import ReactNative from 'react-native';
-let { View, StyleSheet, TextInput, Text, Picker} = ReactNative;
+let { View, StyleSheet, Picker} = ReactNative;
 import {Field} from '../lib/Field';
+
+import { TestPathSegment, TText } from '@axsy/testable';
 
 var PickerItem = Picker.Item;
 
@@ -49,36 +51,40 @@ var PickerItem = Picker.Item;
     }
     render(){
 
-      return(<View><Field
-        {...this.props}
-        ref='inputBox'
-        onPress={this.props.onPress}
-        >
-        <View style={this.props.containerStyle}
-          onLayout={this.handleLayoutChange.bind(this)}>
+      return(
+        <TestPathSegment name={`Field[${this.props.fieldRef}]` || 'Picker'}>
+          <View><Field
+            {...this.props}
+            ref='inputBox'
+            onPress={this.props.onPress}
+            >
+            <View style={this.props.containerStyle}
+              onLayout={this.handleLayoutChange.bind(this)}>
 
-          <Text style={this.props.labelStyle}>{this.props.label}</Text>
-            <Picker ref='picker'
-              {...this.props.pickerProps}
-              selectedValue={this.state.value}
-              onValueChange={this.handleValueChange.bind(this)}
-              >
-              {Object.keys(this.props.options).map((value) => (
-                <PickerItem
-                  key={value}
-                  value={value}
-                  label={this.props.options[value]}
-                />
-            ), this)}
+              <TText tid='Label' style={this.props.labelStyle}>{this.props.label}</TText>
+                <TPicker tid='Picker'
+                  {...this.props.pickerProps}
+                  selectedValue={this.state.value}
+                  onValueChange={this.handleValueChange.bind(this)}
+                  >
+                  {Object.keys(this.props.options).map((value, idx) => (
+                    <TPickerItem
+                      tid={`PickerItem[${idx}]`}
+                      key={value}
+                      value={value}
+                      label={this.props.options[value]}
+                    />
+                ), this)}
 
-            </Picker>
+                </TPicker>
+
+
+            </View>
+            </Field>
 
 
         </View>
-        </Field>
-
-
-    </View>
+      </TestPathSegment>
       )
     }
 

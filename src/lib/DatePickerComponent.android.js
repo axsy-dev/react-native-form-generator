@@ -3,9 +3,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-let { View, StyleSheet, TextInput, Text, DatePickerAndroid} = require('react-native');
+let { View, StyleSheet, TextInput, DatePickerAndroid} = require('react-native');
 import {Field} from './Field';
 
+import { TestPathSegment, TText } from '@axsy/testable';
 
   export class DatePickerComponent extends React.Component{
     constructor(props){
@@ -17,7 +18,7 @@ import {Field} from './Field';
 
     componentDidMount() {
       const { date } = this.props;
-      
+
       this.setState({data: date ? new Date(date) : new Date()});
     }
 
@@ -64,43 +65,45 @@ import {Field} from './Field';
     render(){
       let placeholderComponent = (this.props.placeholderComponent)
                         ? this.props.placeholderComponent
-                        : <Text style={this.props.placeholderStyle}>{this.props.placeholder}</Text>
-      return(<View><Field
-        {...this.props}
-        ref='inputBox'
-        onPress={this._togglePicker.bind(this)}>
-        <View style={this.props.containerStyle}
-          onLayout={this.handleLayoutChange.bind(this)}>
-		  {(this.props.iconLeft)
-            ? this.props.iconLeft
-            : null
-          }
-          {placeholderComponent}
-          <View style={this.props.valueContainerStyle}>
-            <Text style={this.props.valueStyle}>{
-            (this.state.date)?this.state.date.toLocaleDateString():""
-          }</Text>
-
-
-          </View>
-		  {(this.props.iconRight)
-              ? this.props.iconRight
+                        : <TText tid='Placeholder' style={this.props.placeholderStyle}>{this.props.placeholder}</TText>
+      return(<TestPathSegment name={`Field[${this.props.fieldRef}]` || 'DatePicker'}>
+        <View><Field
+          {...this.props}
+          ref='inputBox'
+          onPress={this._togglePicker.bind(this)}>
+          <View style={this.props.containerStyle}
+            onLayout={this.handleLayoutChange.bind(this)}>
+        {(this.props.iconLeft)
+              ? this.props.iconLeft
               : null
-          }
-        </View>
-        </Field>
-        {(this.state.isPickerVisible)?
-          <DatePickerAndroid
-            {...this.props}
-           date={this.state.date || new Date()}
+            }
+            {placeholderComponent}
+            <View style={this.props.valueContainerStyle}>
+              <TText tid='Value' style={this.props.valueStyle}>{
+              (this.state.date)?this.state.date.toLocaleDateString():""
+            }</TText>
 
-           onDateChange={this.handleValueChange.bind(this)}
-         />
 
-        : null
-      }
+            </View>
+        {(this.props.iconRight)
+                ? this.props.iconRight
+                : null
+            }
+          </View>
+          </Field>
+          {(this.state.isPickerVisible)?
+            <DatePickerAndroid
+              {...this.props}
+            date={this.state.date || new Date()}
 
-    </View>
+            onDateChange={this.handleValueChange.bind(this)}
+          />
+
+          : null
+        }
+
+      </View>
+    </TestPathSegment>
       )
     }
 
