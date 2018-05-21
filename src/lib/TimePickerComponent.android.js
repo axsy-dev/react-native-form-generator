@@ -99,11 +99,11 @@ export class TimePickerComponent extends React.Component {
     }
 }
 
-  }
-  TimePickerComponent.propTypes = {
+
+TimePickerComponent.propTypes = {
     dateTimeFormat: PropTypes.func,
     prettyPrint: PropTypes.bool
-  }
+}
 
 TimePickerComponent.defaultProps = {
     dateTimeFormat: (date)=>{
