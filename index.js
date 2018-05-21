@@ -8,7 +8,8 @@ import {SwitchField} from './src/fields/SwitchField';
 import {PickerField} from './src/fields/PickerField';
 import {DatePickerField} from './src/fields/DatePickerField';
 import {TimePickerField} from './src/fields/TimePickerField';
-import {CountDownField} from './src/fields/CountDownField';
+// Following not supported by android / windows
+// import {CountDownField} from './src/fields/CountDownField';
 
 import { TestPathContainer } from '@axsy/testable';
 
@@ -17,6 +18,5 @@ const Form = TestPathContainer(_Form, 'Form');
 export {
         Form,
         Separator, InputField, LinkField,
-        SwitchField, PickerField, DatePickerField,
-        CountDownField, TimePickerField
+        SwitchField, PickerField, DatePickerField, TimePickerField
       }
