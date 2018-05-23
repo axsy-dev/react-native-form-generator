@@ -5,7 +5,7 @@ import ReactNative from 'react-native';
 let { View, StyleSheet, TextInput, Text, Picker} = ReactNative;
 import {Field} from '../lib/Field';
 
-import { TestPathContainer, TText, TPicker, TPickerItem } from '@axsy/testable';
+import { TestPathContainer, TText, TPicker, TPickerItem, TestPathSegment } from '@axsy/testable';
 
 export class PickerComponent extends React.Component{
     constructor(props){
