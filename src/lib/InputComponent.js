@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactNative, { Platform } from 'react-native';
+import ReactNative, { Platform, ViewPropTypes } from 'react-native';
 import {Field} from './Field.js';
 
 const {View, StyleSheet, Text, TextInput } = ReactNative;
@@ -192,5 +192,5 @@ export class InputComponent extends React.Component{
 InputComponent.propTypes = {
   labelStyle: Text.propTypes.style,
   inputStyle: TextInput.propTypes.style,
-  containerStyle: View.propTypes.style
+  containerStyle: ViewPropTypes.style
 }

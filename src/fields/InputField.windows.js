@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactNative from 'react-native';
+import PropTypes from 'prop-types';
 import {InputComponent} from '../lib/InputComponent';
 
 const {StyleSheet} = ReactNative;
@@ -33,6 +34,6 @@ export class InputField extends React.Component{
 }
 
 InputField.propTypes = {
-  multiline: React.PropTypes.bool,
-  placeholder:React.PropTypes.string,
+  multiline: PropTypes.bool,
+  placeholder:PropTypes.string,
 }
