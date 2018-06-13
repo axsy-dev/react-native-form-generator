@@ -5,7 +5,7 @@ import ReactNative from 'react-native';
 let { View, StyleSheet, Picker} = ReactNative;
 import {Field} from '../lib/Field';
 
-import { TestPathSegment, TText } from '@axsy/testable';
+import { TestPathSegment, TText, TPicker, TPickerItem } from '@axsy/testable';
 
 var PickerItem = Picker.Item;
 
