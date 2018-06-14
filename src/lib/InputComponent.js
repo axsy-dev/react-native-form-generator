@@ -45,7 +45,7 @@ export class InputComponent extends React.Component{
     if(this.props.onValueChange) this.props.onValueChange(value);
   }
   focus(){
-    this.refs.inputBox.focus()
+    this.inputRef.focus()
   }
   triggerValidation() {
     this.setState({isValid:this.validate(this.state.value)});
@@ -130,7 +130,7 @@ export class InputComponent extends React.Component{
 
   _scrollToInput (event) {
     if (this.props.onFocus) {
-      let handle = ReactNative.findNodeHandle(this.refs.inputBox);
+      let handle = ReactNative.findNodeHandle(this.inputBox);
       this.props.onFocus(
         event,
         handle
@@ -138,7 +138,7 @@ export class InputComponent extends React.Component{
     }
   }
   handleFieldPress(event){
-    this.refs.inputBox.focus();
+    this.inputBox.focus();
   }
   render(){
 
@@ -163,7 +163,7 @@ export class InputComponent extends React.Component{
             }
             <TTextInput
               {...this.props}
-              ref='inputBox'
+              handleRef={(ref) => this.inputBox = ref}
               tid='TextInput'
               keyboardType = {this.props.keyboardType}
               style={this.props.inputStyle}
