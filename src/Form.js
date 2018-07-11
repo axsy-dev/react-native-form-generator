@@ -49,7 +49,7 @@ export class Form extends Component {
             }
             
             wrappedChildren.push(React.cloneElement(child, {
-                key: child.ref || child.type+i,
+                key: child.type+i,
                 fieldRef : child.ref,
                 ref: child.ref,
                 onFocus:this.handleFieldFocused.bind(this),
