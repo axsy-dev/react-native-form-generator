@@ -39,6 +39,12 @@ export class InputComponent extends React.Component{
     this._scrollToInput = this._scrollToInput.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.state.value !== nextProps.value) {
+        this.setState({value: nextProps.value});
+    }
+  }
+
   setValue(value){
     this.setState({value:value});
     if(this.props.onChange)      this.props.onChange(value);
