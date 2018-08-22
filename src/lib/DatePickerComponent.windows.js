@@ -23,9 +23,12 @@ export class DatePickerComponent extends React.Component{
   }
 
   componentDidMount() {
-    const { date } = this.props;
+    const { onChange, date, prettyPrint, dateTimeFormat, mode } = this.props;
+    const dateToSet = date ? new Date(date) : new Date();
 
-    this.setState({date: date ? new Date(date) : new Date()});
+    this.setState({ date: dateToSet }, () => {
+      onChange && onChange(dateTimeFormat(dateToSet, mode));
+    });
   }
 
   setDate(date){
@@ -130,18 +133,24 @@ DatePickerComponent.propTypes = {
 
 DatePickerComponent.defaultProps = {
   pickerWrapper: <View/>,
-  dateTimeFormat: (date, mode)=>{
-    if(!date) return "";
-    let value='';
-    switch(mode){
+  dateTimeFormat: (date, mode) => {
+    if (!date) return "";
+    let value = '';
+    switch (mode) {
       case 'datetime':
-       value = date.toLocaleDateString()
-              + ' '
-              + date.toLocaleTimeString()
-      break;
+        value = date.toLocaleDateString()
+          + ' '
+          + date.toLocaleTimeString()
+        break;
+      case 'date':
+        value = date.toLocaleDateString();
+        break;
       case 'time':
-        value = date.toLocaleTimeString()
-      break;
+        value = date.toLocaleTimeString();
+        break;
+      case 'countdown':
+        value = date.getHours() + ":" + date.getMinutes();
+        break;
       default:
         value = date.toLocaleDateString()
     }

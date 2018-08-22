@@ -17,9 +17,12 @@ import { TestPathSegment, TText } from '@axsy/testable';
     }
 
     componentDidMount() {
-      const { date } = this.props;
+      const { onChange, date, prettyPrint, dateTimeFormat, mode } = this.props;
+      const dateToSet = date ? new Date(date) : new Date();
 
-      this.setState({data: date ? new Date(date) : new Date()});
+      this.setState({ date: dateToSet }, () => {
+        onChange && onChange(dateTimeFormat(dateToSet, mode));
+      });
     }
 
 
@@ -114,8 +117,27 @@ import { TestPathSegment, TText } from '@axsy/testable';
   }
 
   DatePickerComponent.defaultProps = {
-    dateTimeFormat: (date)=>{
-      if(!date) return "";
-      return date.toLocaleDateString()
+    dateTimeFormat: (date, mode) => {
+      if (!date) return "";
+      let value = '';
+      switch (mode) {
+        case 'datetime':
+          value = date.toLocaleDateString()
+            + ' '
+            + date.toLocaleTimeString()
+          break;
+        case 'date':
+          value = date.toLocaleDateString();
+          break;
+        case 'time':
+          value = date.toLocaleTimeString();
+          break;
+        case 'countdown':
+          value = date.getHours() + ":" + date.getMinutes();
+          break;
+        default:
+          value = date.toLocaleDateString()
+      }
+      return value;
     }
   };
