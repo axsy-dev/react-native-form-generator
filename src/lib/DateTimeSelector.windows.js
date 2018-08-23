@@ -205,13 +205,15 @@ class DateTimeSelector extends Component {
         const { minimumDate, maximumDate, minuteSelector, mode, date, timeZoneOffsetInMinutes, onDateChange } = this.props;
         const { selectedDate, selectedTime, setDate } = this.state;
 
-        if (mode !== 'datetime') {
-            console.warn("Only 'datetime' mode is supported at the moment");
+        if (mode !== 'datetime' || mode !== 'date') {
+            console.warn("Only 'datetime' or 'date' modes are supported at the moment");
         }
 
         if (timeZoneOffsetInMinutes) {
             console.warn("'timeZoneOffsetInMinutes' property is not supported on Windows (yet)")
         }
+
+        const renderTimeSelector = mode === 'date' ? false : true;
 
         return (
             <View style={{height: 50, minWidth: 350, backgroundColor: '#fff', flexDirection: 'row'}}>
@@ -219,11 +221,11 @@ class DateTimeSelector extends Component {
                               maximumDate={maximumDate}
                               selectedDate={selectedDate || moment().format('YYYY-MM-DD')}
                               onChange={this._setDate.bind(this)}/>
-                <TimeSelector minimumDate={minimumDate}
+                {renderTimeSelector && <TimeSelector minimumDate={minimumDate}
                               maximumDate={maximumDate}
                               minuteSelector={minuteSelector}
                               selectedTime={selectedTime || moment().format('h:mm A')}
-                              onChange={this._setTime.bind(this)}/>
+                              onChange={this._setTime.bind(this)}/>}
             </View>
         );
     }

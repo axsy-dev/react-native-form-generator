@@ -27,7 +27,8 @@ export class DatePickerComponent extends React.Component{
     const dateToSet = date ? new Date(date) : new Date();
 
     this.setState({ date: dateToSet }, () => {
-      onChange && onChange(dateTimeFormat(dateToSet, mode));
+      onChange && onChange(mode === 'date' ? dateToSet.toDateString() :
+        dateToSet.toISOString());
     });
   }
 
