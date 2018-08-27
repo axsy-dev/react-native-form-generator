@@ -21,7 +21,13 @@ export class Form extends Component {
     }
     
     handleFieldChange(field_ref, value) {
-        this.values[field_ref] = value;
+        if (typeof field_ref === 'function') {
+            const ref = field_ref && field_ref();
+            this.values[ref] = value;
+        } else {
+            this.values[field_ref] = value;
+        }
+
         this.props.onChange && this.props.onChange(this.values);
     }
     

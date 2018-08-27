@@ -11,11 +11,15 @@ import { TText } from '@axsy/testable';
 
 export class HelpText extends React.Component{
   render(){
-    if(!this.props.text) return null;
+    const { text, color } = this.props;
+    if (!text) return null;
+
+    const textColor = !!color ? { color } : {};
+
     return (
       <View style={formStyles.helpTextContainer}>
-        <TText tid='HelpText' style={formStyles.helpText}>{this.props.text}</TText>
-    </View>);
+        <TText tid='HelpText' style={[formStyles.helpText, textColor]}>{text}</TText>
+      </View>);
   }
 }
 
