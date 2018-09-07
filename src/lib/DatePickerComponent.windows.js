@@ -14,6 +14,14 @@ import DateTimeSelector from './DateTimeSelector';
 
 import { TestPathSegment, TText } from '@axsy/testable';
 
+function formatDateResult(date, mode) {
+  return mode === 'date' ? new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  ) : date;
+}
+
 export class DatePickerComponent extends React.Component{
   constructor(props){
     super(props);
@@ -22,20 +30,21 @@ export class DatePickerComponent extends React.Component{
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { onChange, date, prettyPrint, dateTimeFormat, mode } = this.props;
     const dateToSet = date ? new Date(date) : new Date();
 
-    this.setState({ date: dateToSet }, () => {
-      onChange && onChange(mode === 'date' ? dateToSet.toDateString() :
-        dateToSet.toISOString());
+    this.setState({ date: formatDateResult(dateToSet) }, () => {
+      onChange && onChange(formatDateResult(dateToSet));
     });
   }
 
-  setDate(date){
-    this.setState({date:date});
-    if(this.props.onChange)      this.props.onChange((this.props.prettyPrint)?this.props.dateTimeFormat(date):date);
-    if(this.props.onValueChange) this.props.onValueChange(date);
+  setDate(date) {
+    const dateToSet = formatDateResult(date);
+    this.setState({ date: dateToSet });
+
+    if (this.props.onChange) this.props.onChange((this.props.prettyPrint) ? this.props.dateTimeFormat(dateToSet) : dateToSet);
+    if (this.props.onValueChange) this.props.onValueChange(dateToSet);
   }
   handleLayoutChange(e){
     let {x, y, width, height} = {... e.nativeEvent.layout};
@@ -43,13 +52,21 @@ export class DatePickerComponent extends React.Component{
     this.setState(e.nativeEvent.layout);
   }
 
-  handleValueChange(date){
+  handleValueChange(date) {
+    const {
+      mode,
+      dateTimeFormat,
+      onValueChange,
+      onChange,
+      prettyPrint
+    } = this.props;
 
-    this.setState({date:date});
+    const dateToSet = formatDateResult(date);
 
-    this.props.onChange && this.props.onChange((this.props.prettyPrint)?this.props.dateTimeFormat(date, this.props.mode):date);
-    this.props.onValueChange && this.props.onValueChange(date);
+    this.setState({ date: dateToSet });
 
+    onChange && onChange(prettyPrint ? dateTimeFormat(dateToSet, mode) : dateToSet);
+    onValueChange && onValueChange(dateToSet);
   }
 
   _togglePicker(event){
