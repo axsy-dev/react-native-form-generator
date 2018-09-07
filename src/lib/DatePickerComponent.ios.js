@@ -29,13 +29,14 @@ export class DatePickerComponent extends React.Component{
     const { onChange, date, prettyPrint, dateTimeFormat, mode } = this.props;
     const dateToSet = date ? new Date(date) : new Date();
 
-    this.setState({ date: formatDateResult(dateToSet) }, () => {
-      onChange && onChange(formatDateResult(dateToSet));
+    this.setState({ date: formatDateResult(dateToSet, mode) }, () => {
+      onChange && onChange(formatDateResult(dateToSet, mode));
     });
   }
 
   setDate(date) {
-    const dateToSet = formatDateResult(date);
+    const { mode } = this.props;
+    const dateToSet = formatDateResult(date, mode);
     this.setState({ date: dateToSet });
 
     if (this.props.onChange) this.props.onChange((this.props.prettyPrint) ? this.props.dateTimeFormat(dateToSet) : dateToSet);
@@ -56,7 +57,7 @@ export class DatePickerComponent extends React.Component{
       prettyPrint
     } = this.props;
 
-    const dateToSet = formatDateResult(date);
+    const dateToSet = formatDateResult(date, mode);
 
     this.setState({ date: dateToSet });
 
