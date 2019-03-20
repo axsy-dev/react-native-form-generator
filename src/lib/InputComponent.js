@@ -122,6 +122,11 @@ export class InputComponent extends React.Component{
   handleChange(event){
     const value = event.nativeEvent.text;
 
+    if (value === this.state.value) {
+      // Skip changeEvent if value is unchanged
+      return;
+    }
+
     this.validate(value);
 
     this.setState({value,
