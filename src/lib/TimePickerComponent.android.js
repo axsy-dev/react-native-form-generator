@@ -20,7 +20,7 @@ export class TimePickerComponent extends React.Component {
     componentDidMount() {
         const { date } = this.props;
 
-        this.setState({data: date ? new Date(date) : new Date()});
+        this.setState({date: date ? new Date(date) : new Date()});
     }
 
     handleLayoutChange(e) {
