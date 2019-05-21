@@ -6,6 +6,7 @@ import { View, StyleSheet, TextInput, Text, TimePickerAndroid } from 'react-nati
 
 import { Field } from './Field';
 
+import { TestPathSegment, TText } from '@axsy/testable';
 
 export class TimePickerComponent extends React.Component {
     constructor(props){
@@ -59,21 +60,20 @@ export class TimePickerComponent extends React.Component {
     render(){
       let placeholderComponent = (this.props.placeholderComponent)
                         ? this.props.placeholderComponent
-                        : <Text style={[formStyles.fieldText, this.props.placeholderStyle]}>{this.props.placeholder}</Text>
-      return(<View><Field
+                        : <TText tid='Placeholder' style={this.props.placeholderStyle}>{this.props.placeholder}</TText>
+      return(<TestPathSegment name={`Field[${this.props.fieldRef}]` || 'DatePicker'}>
+        <View><Field
         {...this.props}
         ref='inputBox'
         onPress={this._togglePicker.bind(this)}>
-        <View style={[formStyles.fieldContainer,
-            formStyles.horizontalContainer,
-            this.props.containerStyle]}
+        <View style={this.props.containerStyle}
           onLayout={this.handleLayoutChange.bind(this)}>
 
           {placeholderComponent}
-          <View style={[formStyles.alignRight, formStyles.horizontalContainer]}>
-            <Text style={[formStyles.fieldValue,this.props.valueStyle ]}>{
+          <View style={this.props.valueContainerStyle}>
+            <TText tid='Value' style={[this.props.valueStyle]}>{
             this.props.dateTimeFormat(this.state.date)
-          }</Text>
+          }</TText>
 
 
           </View>
@@ -95,6 +95,7 @@ export class TimePickerComponent extends React.Component {
       }
 
     </View>
+    </TestPathSegment>
       )
     }
 }
