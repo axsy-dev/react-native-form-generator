@@ -18,7 +18,7 @@ export class TimePickerField extends React.Component{
       ref='fieldComponent'
       labelStyle={this.props.labelStyle}
       valueStyle = {this.props.valueStyle}
-      valueContainerStyle = {his.props.valueContainerStyle}
+      valueContainerStyle = {this.props.valueContainerStyle}
       containerStyle={this.props.containerStyle}
       />)
     }
