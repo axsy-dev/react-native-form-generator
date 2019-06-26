@@ -1,234 +1,212 @@
-'use strict';
+"use strict";
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 import {
-    View,
-    Text,
-    Picker
-} from 'react-native'
+  View,
+  Text,
+  Picker,
+  requireNativeComponent,
+  ViewPropTypes
+} from "react-native";
 
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import _ from 'lodash';
+import Moment from "moment";
+import { extendMoment } from "moment-range";
+import _ from "lodash";
+
+import DatePickerWindows from "./DatePickerWindows";
+import TimePickerWindows from "./TimePickerWindows";
 
 const moment = extendMoment(Moment);
 
-function str_pad_left(string,pad,length) {
-    return (new Array(length+1).join(pad)+string).slice(-length);
-}
+import { PropTypes } from "prop-types";
+
+const datePickerWindowsInterface = {
+  name: "DatePickerWindows",
+  propTypes: {
+    date: PropTypes.datetime,
+    minDate: PropTypes.datetime,
+    maxDate: PropTypes.datetime,
+    onValueChange: PropTypes.func,
+    ...ViewPropTypes // include the default view properties
+  }
+};
+
+const DatePickerWindows = requireNativeComponent(
+  "RCTDatePicker",
+  datePickerWindowsInterface,
+  { nativeOnly: { onChange: true } }
+);
 
 class DateSelector extends Component {
-    _renderPickerItems() {
-        const { minimumDate, maximumDate } = this.props;
-
-        const range = moment.range(minimumDate, maximumDate);
-
-        const days = Array.from(range.by('days')).map((day) => {
-            const date = day.format('YYYY-MM-DD');
-            const dateFormat = day.format('ddd MMM D');
-            return {label: dateFormat, value: date}
-        });
-
-        return days.map((day) => {
-            return <Picker.Item key={`date-${day.value}`} label={day.label} value={day.value} />;
-        });
+  constructor(props: Object) {
+    super(props);
+    this._onChange = this._onChange.bind(this);
+  }
+  _onChange(event: Event) {
+    if (!this.props.onChange) {
+      return;
     }
-
-    render() {
-        return (
-            <Picker
-                style={{flex: 1, height: 50, maxWidth: 120}}
-                selectedValue={this.props.selectedDate}
-                onValueChange={(date) => this.props.onChange(date)}>
-                {this._renderPickerItems()}
-            </Picker>
-        );
-    }
+    event.persist();
+    this.props.onChange(event.nativeEvent.date);
+  }
+  render() {
+    return (
+      <DatePickerWindows
+        date={this.props.selectedDate}
+        minDate={this.props.minimumDate}
+        maxDate={this.props.maximumDate}
+        onValueChange={this._onChange}
+      />
+    );
+  }
 }
 
+const timePickerWindowsInterface = {
+  name: "TimePickerWindows",
+  propTypes: {
+    date: PropTypes.datetime,
+    onValueChange: PropTypes.func,
+    ...ViewPropTypes // include the default view properties
+  }
+};
+
+const TimePickerWindows = requireNativeComponent(
+  "RCTTimePicker",
+  timePickerWindowsInterface,
+  {
+    nativeOnly: { onChange: true }
+  }
+);
+
 class TimeSelector extends Component {
-    state: {
-        hours: 'string',
-        minutes: 'string',
-        ampm: 'string'
-    };
+  constructor(props: Object) {
+    super(props);
 
-    constructor(props: Object) {
-        super(props);
+    this._onChange = this._onChange.bind(this);
+  }
 
-        this.state = {
-            hours: '',
-            minutes: '',
-            ampm: ''
-        }
+  _onChange(event: Event) {
+    if (!this.props.onChange) {
+      return;
     }
+    event.persist();
+    this.props.onChange(event.nativeEvent.time);
+  }
 
-    componentWillMount() {
-        const { selectedTime } = this.props;
-
-        if (selectedTime) {
-            const m = moment(selectedTime, 'hh:mm A');
-            const hour = m.hour();
-            const hours = hour > 12 ? hour - 12 : hour;
-            const minutes = str_pad_left(m.minute(), '0', 2);
-            const ampm = hour > 11 ? 'PM' : 'AM';
-
-            this.setState({hours: String(hours), minutes: String(minutes), ampm});
-        }
-    }
-
-    _renderMinutes() {
-        const { minuteSelector } = this.props;
-        const minuteInterval = minuteSelector && minuteSelector !== undefined ? minuteSelector : 1;
-        const minutes = _.range(0, 60, minuteInterval);
-        return minutes.map((minute) => {
-            let min = str_pad_left(minute, '0', 2);
-            return <Picker.Item key={`minute-${minute}`} label={min} value={min} />;
-        });
-    }
-
-    _renderHours() {
-        const hours = _.range(1, 13);
-        return hours.map((hour) => {
-            let h = String(hour);
-            return <Picker.Item key={`hour-${hour}`} label={h} value={h} />;
-        });
-    }
-
-    _renderAMPM() {
-        const AMPM = ['AM', 'PM'];
-
-        return AMPM.map((meridiem) => {
-            return <Picker.Item key={`${meridiem}`} label={meridiem} value={meridiem} />;
-        });
-    }
-
-    _constructTime() {
-        const { hours, minutes, ampm } = this.state;
-        const time = `${hours}:${minutes} ${ampm}`;
-
-        this.props.onChange(time);
-    }
-
-    _onHourChange(hour: string) {
-        this.setState({hours: hour}, this._constructTime);
-    }
-
-    _onMinuteChange(minute: string) {
-        this.setState({minutes: minute}, this._constructTime);
-    }
-
-    _onAmPmChange(meridiem: string) {
-        this.setState({ampm: meridiem}, this._constructTime);
-    }
-
-    render() {
-        const { hours, minutes, ampm } = this.state;
-
-        return (
-            <View style={{flex: 1, height: 50, flexDirection: 'row'}}>
-                <Picker
-                    style={{flex: 1, height: 50}}
-                    selectedValue={hours}
-                    onValueChange={(hour) => this._onHourChange(hour)}>
-                    {this._renderHours()}
-                </Picker>
-                <Picker
-                    selectedValue={minutes}
-                    style={{flex: 1, height: 50}}
-                    onValueChange={(minute) => this._onMinuteChange(minute)}>
-                    {this._renderMinutes()}
-                </Picker>
-                <Picker
-                    selectedValue={ampm}
-                    style={{flex: 1, height: 50}}
-                    onValueChange={(meridiem) => this._onAmPmChange(meridiem)}>
-                    {this._renderAMPM()}
-                </Picker>
-            </View>
-        );
-    }
+  render() {
+    return (
+      <TimePickerWindows
+        time={this.props.selectedTime}
+        onValueChange={this._onChange}
+      />
+    );
+  }
 }
 
 class DateTimeSelector extends Component {
-    state: {
-        selectedDate: '',
-        selectedTime: '',
-        setDate: null
+  state: {
+    selectedDate: "",
+    selectedTime: "",
+    setDate: null
+  };
+
+  constructor(props: Object) {
+    super(props);
+
+    this.state = {
+      selectedTime: "",
+      selectedDate: "",
+      setDate: null
     };
+  }
 
-    constructor(props: Object) {
-        super(props);
+  componentWillMount() {
+    const { date } = this.props;
 
-        this.state = {
-            selectedTime: '',
-            selectedDate: '',
-            setDate: null
-        }
+    if (date) {
+      const m = moment(date);
+
+      const selectedDate = m.format("YYYY-MM-DD");
+      const selectedTime = m.format("h:mm A");
+      const setDate = m.format("MMMM DD, YYYY, h:mm A");
+
+      this.setState({ selectedDate, selectedTime, setDate });
+    }
+  }
+
+  _setDate(selectedDate: string) {
+    this.setState({ selectedDate }, this._setDateResult);
+  }
+
+  _setTime(selectedTime: string) {
+    this.setState({ selectedTime }, this._setDateResult);
+  }
+
+  _setDateResult() {
+    const { selectedDate, selectedTime } = this.state;
+    const setDate = moment(
+      `${selectedDate} ${selectedTime}`,
+      "YYYY-MM-DD h:mm A"
+    ).toDate();
+
+    this.setState({ setDate }, this._updateResult);
+  }
+
+  _updateResult() {
+    this.props.onDateChange && this.props.onDateChange(this.state.setDate);
+  }
+
+  render() {
+    const {
+      minimumDate,
+      maximumDate,
+      minuteSelector,
+      mode,
+      date,
+      timeZoneOffsetInMinutes,
+      onDateChange
+    } = this.props;
+    const { setDate } = this.state;
+
+    if (mode !== "datetime" && mode !== "date") {
+      console.warn(
+        "Only 'datetime' or 'date' modes are supported at the moment"
+      );
     }
 
-    componentWillMount() {
-        const { date } = this.props;
-
-        if (date) {
-            const m = moment(date);
-
-            const selectedDate = m.format('YYYY-MM-DD');
-            const selectedTime = m.format('h:mm A');
-            const setDate = m.format('MMMM DD, YYYY, h:mm A');
-
-            this.setState({selectedDate, selectedTime, setDate});
-        }
+    if (timeZoneOffsetInMinutes) {
+      console.warn(
+        "'timeZoneOffsetInMinutes' property is not supported on Windows (yet)"
+      );
     }
 
-    _setDate(selectedDate: string) {
-        this.setState({selectedDate}, this._setDateResult);
-    }
+    const renderTimeSelector = mode === "date" ? false : true;
 
-    _setTime(selectedTime: string) {
-        this.setState({selectedTime}, this._setDateResult);
-    }
-
-    _setDateResult() {
-        const { selectedDate, selectedTime } = this.state;
-        const setDate = moment(`${selectedDate} ${selectedTime}`, 'YYYY-MM-DD h:mm A').toDate();
-
-        this.setState({setDate}, this._updateResult);
-    }
-
-    _updateResult() {
-        this.props.onDateChange && this.props.onDateChange(this.state.setDate);
-    }
-
-    render() {
-        const { minimumDate, maximumDate, minuteSelector, mode, date, timeZoneOffsetInMinutes, onDateChange } = this.props;
-        const { selectedDate, selectedTime, setDate } = this.state;
-
-        if (mode !== 'datetime' || mode !== 'date') {
-            console.warn("Only 'datetime' or 'date' modes are supported at the moment");
-        }
-
-        if (timeZoneOffsetInMinutes) {
-            console.warn("'timeZoneOffsetInMinutes' property is not supported on Windows (yet)")
-        }
-
-        const renderTimeSelector = mode === 'date' ? false : true;
-
-        return (
-            <View style={{height: 50, minWidth: 350, backgroundColor: '#fff', flexDirection: 'row'}}>
-                <DateSelector minimumDate={minimumDate}
-                              maximumDate={maximumDate}
-                              selectedDate={selectedDate || moment().format('YYYY-MM-DD')}
-                              onChange={this._setDate.bind(this)}/>
-                {renderTimeSelector && <TimeSelector minimumDate={minimumDate}
-                              maximumDate={maximumDate}
-                              minuteSelector={minuteSelector}
-                              selectedTime={selectedTime || moment().format('h:mm A')}
-                              onChange={this._setTime.bind(this)}/>}
-            </View>
-        );
-    }
+    return (
+      <View style={{ flex: 1, flexDirection: "column" }}>
+        <View style={{ height: 40, flex: 1, flexDirection: "row" }}>
+          <DateSelector
+            minimumDate={minimumDate}
+            maximumDate={maximumDate}
+            selectedDate={setDate || moment().format("MMMM DD, YYYY, h:mm A")}
+            onChange={this._setDate.bind(this)}
+          />
+        </View>
+        {renderTimeSelector && (
+          <View style={{ height: 40, flex: 1, flexDirection: "row" }}>
+            <TimeSelector
+              minimumDate={minimumDate}
+              maximumDate={maximumDate}
+              minuteSelector={minuteSelector}
+              selectedTime={setDate || moment().format("MMMM DD, YYYY, h:mm A")}
+              onChange={this._setTime.bind(this)}
+            />
+          </View>
+        )}
+      </View>
+    );
+  }
 }
 
 export default DateTimeSelector;
