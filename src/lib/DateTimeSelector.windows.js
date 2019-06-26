@@ -14,9 +14,6 @@ import Moment from "moment";
 import { extendMoment } from "moment-range";
 import _ from "lodash";
 
-import DatePickerWindows from "./DatePickerWindows";
-import TimePickerWindows from "./TimePickerWindows";
-
 const moment = extendMoment(Moment);
 
 import { PropTypes } from "prop-types";
