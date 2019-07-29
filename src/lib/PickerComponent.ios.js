@@ -8,6 +8,43 @@ import {Field} from '../lib/Field';
 
 import { TestPathSegment, TText, TPicker, TPickerItem } from '@axsy/testable';
 
+class RenderedSelector extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      value: props.value
+    }
+  }
+
+  handleValueChange(value) {
+    this.setState({ value: value });
+
+    if (this.props.onChange) this.props.onChange(value);
+  }
+
+  render() {
+    let picker = <TPicker
+      tid='Picker'
+      {...this.props.pickerProps}
+      selectedValue={this.state.value}
+      onValueChange={this.handleValueChange.bind(this)}
+      mode='dropdown'
+    >
+      {Object.keys(this.props.options).map((value, idx) => (
+        <TPickerItem
+          tid={`PickerItem[${idx}]`}
+          key={value}
+          value={value}
+          label={this.props.options[value]}
+        />
+      ), this)}
+    </TPicker>;
+
+    return React.cloneElement(this.props.pickerWrapper, { onHidePicker: this.props.onHidePicker }, picker);
+  }
+}
+
 export class PickerComponent extends React.Component{
     constructor(props){
       super(props);
@@ -28,17 +65,14 @@ export class PickerComponent extends React.Component{
       this.setState(e.nativeEvent.layout);
     }
 
-    handleValueChange(value){
+    handleValueChange(value) {
+      this.setState({ value: value });
 
-      this.setState({value:value});
-
-      if(this.props.onChange)      this.props.onChange(value);
-      if(this.props.onValueChange) this.props.onValueChange(value);
-      if(this.props.autoclose)     this._togglePicker();
+      if (this.props.onChange) this.props.onChange(value);
+      if (this.props.onValueChange) this.props.onValueChange(value);
     }
 
     _scrollToInput (event) {
-
       if (this.props.onFocus) {
         let handle = ReactNative.findNodeHandle(this.refs.inputBox);
 
@@ -47,33 +81,31 @@ export class PickerComponent extends React.Component{
           handle
         )
       }
-
-
     }
+
+    _renderContent() {
+      const picker = <RenderedSelector
+        {...this.props}
+        value={this.state.value}
+        onChange={this.handleValueChange.bind(this)}
+        onHidePicker={() => this.setState({ isPickerVisible: false })}
+      />
+
+      return picker;
+    }
+
     _togglePicker(event){
+      if (this.context.actionSheet) {
+        this.context.actionSheet.showContent(this._renderContent())
+      }
+      else {
         this.setState({isPickerVisible:!this.state.isPickerVisible});
-        this.props.onPress && this.props.onPress(event);
+      }
+
+      this.props.onPress && this.props.onPress(event);
     }
 
     render(){
-      let picker = <TPicker
-        tid='Picker'
-        {...this.props.pickerProps}
-        selectedValue={this.state.value}
-        onValueChange={this.handleValueChange.bind(this)}
-        mode='dropdown'
-        >
-        {Object.keys(this.props.options).map((value, idx) => (
-          <TPickerItem
-            tid={`PickerItem[${idx}]`}
-            key={value}
-            value={value}
-            label={this.props.options[value]}
-          />
-      ), this)}
-
-      </TPicker>;
-      let pickerWrapper = React.cloneElement(this.props.pickerWrapper,{ onHidePicker:()=>{this.setState({isPickerVisible:false})}}, picker);
       let iconLeft = this.props.iconLeft,
           iconRight = this.props.iconRight;
 
@@ -114,7 +146,7 @@ export class PickerComponent extends React.Component{
             </View>
             </Field>
             {(this.state.isPickerVisible)?
-              pickerWrapper : null
+              this._renderContent() : null
             }
 
           </View>
@@ -131,3 +163,7 @@ export class PickerComponent extends React.Component{
   PickerComponent.defaultProps = {
     pickerWrapper: <View/>
   }
+
+  PickerComponent.contextTypes = {
+    actionSheet: PropTypes.object
+  };

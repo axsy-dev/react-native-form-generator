@@ -67,9 +67,28 @@ export class DatePickerComponent extends React.Component{
     onValueChange && onValueChange(dateToSet);
   }
 
+  _renderContent() {
+    let datePicker = <DatePickerIOS
+      maximumDate={this.props.maximumDate}
+      minimumDate={this.props.minimumDate}
+      minuteInterval={this.props.minuteInterval}
+      mode={this.props.mode}
+      timeZoneOffsetInMinutes={this.props.timeZoneOffsetInMinutes}
+      date={this.state.date || new Date()}
+      onDateChange={this.handleValueChange.bind(this)}
+    />
+
+    return React.cloneElement(this.props.pickerWrapper, { onHidePicker: () => { this.setState({ isPickerVisible: false }) } }, datePicker);
+  }
+
   _togglePicker(event){
-    this.setState({isPickerVisible:!this.state.isPickerVisible});
-    //this._scrollToInput(event);
+    if (this.context.actionSheet) {
+      this.context.actionSheet.showContent(this._renderContent())
+    }
+    else {
+      this.setState({isPickerVisible:!this.state.isPickerVisible});
+    }
+
     this.props.onPress && this.props.onPress(event);
   }
 
@@ -79,18 +98,6 @@ export class DatePickerComponent extends React.Component{
           onDateChange,   timeZoneOffsetInMinutes } = this.props;
 
     let  valueString = this.props.dateTimeFormat(this.state.date, this.props.mode);
-
-    let datePicker= <DatePickerIOS
-      maximumDate = {maximumDate}
-      minimumDate = {minimumDate}
-      minuteInterval = {minuteInterval}
-      mode = {mode}
-      timeZoneOffsetInMinutes = {timeZoneOffsetInMinutes}
-      date = {this.state.date || new Date()}
-      onDateChange = {this.handleValueChange.bind(this)}
-    />
-
-    let pickerWrapper = React.cloneElement(this.props.pickerWrapper,{onHidePicker:()=>{this.setState({isPickerVisible:false})}},datePicker);
 
     let iconLeft = this.props.iconLeft,
         iconRight = this.props.iconRight;
@@ -131,7 +138,7 @@ export class DatePickerComponent extends React.Component{
         </View>
       </Field>
       {(this.state.isPickerVisible)?
-        pickerWrapper : null
+        this._renderContent() : null
       }
 
     </View></TestPathSegment>
@@ -171,4 +178,8 @@ DatePickerComponent.defaultProps = {
     }
     return value;
   }
+};
+
+DatePickerComponent.contextTypes = {
+  actionSheet: PropTypes.object,
 };
