@@ -13,7 +13,7 @@ var PickerItem = Picker.Item;
     constructor(props){
       super(props);
       this.state = {
-        value: props.value || props.label,
+        value: props.value,
       }
       this.pickerMeasures = {};
     }
