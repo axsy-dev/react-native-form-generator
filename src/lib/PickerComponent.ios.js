@@ -96,7 +96,7 @@ export class PickerComponent extends React.Component{
 
     _togglePicker(event){
       if (this.context.actionSheet) {
-        this.context.actionSheet.showContent(this._renderContent())
+        this.context.actionSheet.showContent(this._renderContent(), "actions.done")
       }
       else {
         this.setState({isPickerVisible:!this.state.isPickerVisible});
