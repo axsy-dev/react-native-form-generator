@@ -6,6 +6,7 @@ let { View, StyleSheet, Picker } = ReactNative;
 import { Field } from "../lib/Field";
 
 import { TestPathSegment, TText, TPicker, TPickerItem } from "@axsy/testable";
+import _ from "lodash";
 
 var PickerItem = Picker.Item;
 
@@ -44,6 +45,7 @@ export class PickerComponent extends React.Component {
   }
   _togglePicker(event) {}
   render() {
+    const selectedOption = _.find(this.props.options, o => o.value === this.state.value);
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>
@@ -59,16 +61,16 @@ export class PickerComponent extends React.Component {
                 <TPicker
                   tid="Picker"
                   {...this.props.pickerProps}
-                  selectedValue={this.state.value}
+                  selectedValue={selectedOption ? selectedOption.value : null}
                   onValueChange={this.handleValueChange.bind(this)}
                 >
-                  {Object.keys(this.props.options).map(
-                    (value, idx) => (
+                  {this.props.options.map(
+                    ({value, label}, idx) => (
                       <TPickerItem
                         tid={`PickerItem[${idx}]`}
                         key={value}
                         value={value}
-                        label={this.props.options[value]}
+                        label={label}
                       />
                     ),
                     this

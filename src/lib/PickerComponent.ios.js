@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import _ from "lodash";
 import PropTypes from 'prop-types';
 import ReactNative from 'react-native';
 let { View, StyleSheet } = ReactNative;
@@ -24,6 +25,7 @@ class RenderedSelector extends React.Component {
   }
 
   render() {
+    console.log("HI")
     let picker = <TPicker
       tid='Picker'
       {...this.props.pickerProps}
@@ -31,12 +33,12 @@ class RenderedSelector extends React.Component {
       onValueChange={this.handleValueChange.bind(this)}
       mode='dropdown'
     >
-      {Object.keys(this.props.options).map((value, idx) => (
+      {this.props.options.map(({value, label}, idx) => (
         <TPickerItem
           tid={`PickerItem[${idx}]`}
           key={value}
           value={value}
-          label={this.props.options[value]}
+          label={label}
         />
       ), this)}
     </TPicker>;
@@ -119,6 +121,7 @@ export class PickerComponent extends React.Component{
                     ? iconRight[0]
                     : iconRight[1]
       }
+      const selectedOption = _.find(this.props.options, o => o.value === this.state.value);
       return(
         <TestPathSegment name={`Field[${this.props.fieldRef}]` || 'Picker'}>
           <View><Field
@@ -134,7 +137,7 @@ export class PickerComponent extends React.Component{
               <TText tid='Label' style={this.props.labelStyle}>{this.props.label}</TText>
               <View style={this.props.valueContainerStyle}>
                 <TText tid='Value' style={this.props.valueStyle}>
-                  {(this.state.value)?this.props.options[this.state.value]:''}
+                  {selectedOption ? selectedOption.label : ""}
                 </TText>
 
               </View>

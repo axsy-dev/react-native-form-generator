@@ -177,11 +177,7 @@ export class FormView extends React.Component{
         <PickerField ref='gender'
           label='Gender'
           value='female'
-          options={{
-            "": '',
-            male: 'Male',
-            female: 'Female'
-          }}
+          options={[{value:"", label: ""}, {value: "male", label:"Male"}, {value: "female", label:"Female"}]}
 
           />
           <DatePickerField ref='birthday'
