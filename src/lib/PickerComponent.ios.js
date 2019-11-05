@@ -25,7 +25,6 @@ class RenderedSelector extends React.Component {
   }
 
   render() {
-    console.log("HI")
     let picker = <TPicker
       tid='Picker'
       {...this.props.pickerProps}
