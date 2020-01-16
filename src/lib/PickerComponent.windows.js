@@ -38,6 +38,13 @@ export class PickerComponent extends React.Component{
       if(this.props.autoclose)     this._togglePicker();
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+      const value = prevProps.value;
+      if(this.state.value !== value) {
+        this.setState({value});
+      }
+    }
+
     _scrollToInput (event) {
 
       if (this.props.onFocus) {

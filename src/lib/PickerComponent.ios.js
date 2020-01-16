@@ -84,7 +84,14 @@ export class PickerComponent extends React.Component{
       }
     }
 
-    _renderContent() {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+      const value = prevProps.value;
+      if(this.state.value !== value) {
+        this.setState({value});
+      }
+    }
+
+  _renderContent() {
       const picker = <RenderedSelector
         {...this.props}
         value={this.state.value}

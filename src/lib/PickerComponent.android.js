@@ -31,6 +31,13 @@ export class PickerComponent extends React.Component {
     if (this.props.onValueChange) this.props.onValueChange(value);
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const value = prevProps.value;
+    if(this.state.value !== value) {
+      this.setState({value});
+    }
+  }
+
   render() {
     const selectedOption = _.find(this.props.options, o => o.value === this.state.value);
     return (
