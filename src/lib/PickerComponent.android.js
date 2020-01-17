@@ -10,36 +10,26 @@ import _ from "lodash";
 export class PickerComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: props.value
-    };
+    this.state = {};
     this.pickerMeasures = {};
   }
   setValue(value) {
-    this.setState({ value: value });
-    if (this.props.onChange) this.props.onChange(value);
-    if (this.props.onValueChange) this.props.onValueChange(value);
   }
   handleLayoutChange = (e) => {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
     this.setState(e.nativeEvent.layout);
   }
   handleValueChange = (value) => {
-    this.setState({ value: value && value !== "" ? value : this.props.label });
+    this.setState({ value});
 
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const value = prevProps.value;
-    if(this.state.value !== value) {
-      this.setState({value});
-    }
-  }
-
   render() {
-    const selectedOption = _.find(this.props.options, o => o.value === this.state.value);
+    // prefer state value if set
+    const value = this.state.value? this.state.value : this.props.value;
+    const selectedOption = _.find(this.props.options, o => o.value === value);
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>
