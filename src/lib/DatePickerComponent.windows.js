@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import { Field } from "./Field";
 import DateTimeSelector from "./DateTimeSelector";
 
-import { TestPathSegment, TText } from "@axsy/testable";
+import { TestPathSegment, TText } from "@axsy-dev/testable";
 
 function formatDateResult(date, mode) {
   return mode === "date"
@@ -22,8 +22,6 @@ export class DatePickerComponent extends React.Component {
     };
   }
 
-
-
   componentWillMount() {
     const { date, mode } = this.props;
     const dateNormalized = date ? new Date(date) : new Date();
@@ -32,13 +30,12 @@ export class DatePickerComponent extends React.Component {
     this.setState({ date: dateToSet });
   }
 
-
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const {date, mode, dateTimeFormat} = this.props;
+    const { date, mode, dateTimeFormat } = this.props;
     const dateNormalized = date ? new Date(date) : new Date();
     const dateToSet = formatDateResult(dateNormalized, mode);
-    if(this.state.date.getTime() !== dateToSet.getTime()) {
-      this.setState({date:dateToSet});
+    if (this.state.date.getTime() !== dateToSet.getTime()) {
+      this.setState({ date: dateToSet });
     }
   }
 

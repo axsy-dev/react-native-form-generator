@@ -4,7 +4,12 @@ import React from "react";
 import ReactNative, { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Field } from "../lib/Field";
 
-import { TestPathSegment, TText, TPicker, TPickerItem } from "@axsy/testable";
+import {
+  TestPathSegment,
+  TText,
+  TPicker,
+  TPickerItem
+} from "@axsy-dev/testable";
 import _ from "lodash";
 
 export class PickerComponent extends React.Component {
@@ -13,22 +18,21 @@ export class PickerComponent extends React.Component {
     this.state = {};
     this.pickerMeasures = {};
   }
-  setValue(value) {
-  }
-  handleLayoutChange = (e) => {
+  setValue(value) {}
+  handleLayoutChange = e => {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
     this.setState(e.nativeEvent.layout);
-  }
-  handleValueChange = (value) => {
-    this.setState({ value});
+  };
+  handleValueChange = value => {
+    this.setState({ value });
 
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
-  }
+  };
 
   render() {
     // prefer state value if set
-    const value = this.state.value? this.state.value : this.props.value;
+    const value = this.state.value ? this.state.value : this.props.value;
     const selectedOption = _.find(this.props.options, o => o.value === value);
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
@@ -49,7 +53,7 @@ export class PickerComponent extends React.Component {
                   onValueChange={this.handleValueChange}
                 >
                   {this.props.options.map(
-                    ({value, label}, idx) => (
+                    ({ value, label }, idx) => (
                       <TPickerItem
                         tid={`PickerItem[${idx}]`}
                         key={value}
@@ -76,4 +80,4 @@ const pickerCoverStyle = {
   right: "20%",
   bottom: 0,
   left: 0
-}
+};
