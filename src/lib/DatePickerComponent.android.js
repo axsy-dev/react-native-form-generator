@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 let {
   View,
   StyleSheet,
-  TextInput,
-  DatePickerAndroid
+  TextInput
 } = require("react-native");
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Field } from "./Field";
 
 import { TestPathSegment, TText } from "@axsy-dev/testable";
@@ -22,7 +22,8 @@ export class DatePickerComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isPickerVisible: false
+      isDatePickerVisible: false,
+      isTimePickerVisible: false
     };
   }
 
@@ -34,22 +35,17 @@ export class DatePickerComponent extends React.Component {
     this.setState({ date: dateToSet });
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const { date, mode, dateTimeFormat } = this.props;
-    const dateNormalized = date ? new Date(date) : new Date();
-    const dateToSet = formatDateResult(dateNormalized, mode);
-    if (this.state.date.getTime() !== dateToSet.getTime()) {
-      this.setState({ date: dateToSet });
-    }
-  }
-
   handleLayoutChange(e) {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
 
     this.setState(e.nativeEvent.layout);
   }
+  
+  handleTimeValueChange(event, date) {
+    if (date === undefined) {
+      return;
+    }
 
-  handleValueChange(date) {
     const {
       mode,
       dateTimeFormat,
@@ -60,12 +56,47 @@ export class DatePickerComponent extends React.Component {
 
     const dateToSet = formatDateResult(date, mode);
 
-    this.setState({ date: dateToSet });
+    this.setState({
+      date: dateToSet,
+      isTimePickerVisible: false
+    })
 
     onChange &&
       onChange(prettyPrint ? dateTimeFormat(dateToSet, mode) : dateToSet);
     onValueChange && onValueChange(dateToSet);
   }
+
+  handleDateValueChange(event, date) {
+    if (date === undefined) {
+      return;
+    }
+
+    const {
+      mode,
+      dateTimeFormat,
+      onValueChange,
+      onChange,
+      prettyPrint
+    } = this.props;
+
+    const dateToSet = formatDateResult(date, mode);
+
+    this.setState({
+      date: dateToSet,
+      isDatePickerVisible: false
+    }, () => {
+      if (mode === "datetime") {
+        this.setState({
+          isTimePickerVisible: true
+        });
+      }
+    });
+
+    onChange &&
+      onChange(prettyPrint ? dateTimeFormat(dateToSet, mode) : dateToSet);
+    onValueChange && onValueChange(dateToSet);
+  }
+  
   setDate(date) {
     const { mode } = this.props;
     const dateToSet = formatDateResult(date, mode);
@@ -81,20 +112,13 @@ export class DatePickerComponent extends React.Component {
   }
 
   async _togglePicker(event) {
-    try {
-      const { action, year, month, day } = await DatePickerAndroid.open({
-        date: this.props.date || new Date(),
-        minDate: this.props.minimumDate,
-
-        maxDate: this.props.maximumDate
-      });
-      if (action !== DatePickerAndroid.dismissedAction) {
-        this.handleValueChange(new Date(year, month, day));
-        // Selected year, month (0-11), day
-      }
-    } catch ({ code, message }) {
-      console.warn("Cannot open time picker", message);
+    if (this.props.mode === "time") {
+      this.setState({ isTimePickerVisible: true });
     }
+    else {
+      this.setState({ isDatePickerVisible: true });
+    }
+
     this.props.onPress && this.props.onPress(event);
   }
 
@@ -106,6 +130,14 @@ export class DatePickerComponent extends React.Component {
         {this.props.placeholder}
       </TText>
     );
+
+    const valueString = this.props.dateTimeFormat(
+      this.state.date,
+      this.props.mode
+    );    
+
+    const timeValue = this.state.date || new Date();
+
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "DatePicker"}>
         <View>
@@ -122,17 +154,30 @@ export class DatePickerComponent extends React.Component {
               {placeholderComponent}
               <View style={this.props.valueContainerStyle}>
                 <TText tid="Value" style={this.props.valueStyle}>
-                  {this.state.date ? this.state.date.toLocaleDateString() : ""}
+                  {valueString}
                 </TText>
               </View>
               {this.props.iconRight ? this.props.iconRight : null}
             </View>
           </Field>
-          {this.state.isPickerVisible ? (
-            <DatePickerAndroid
+          {this.state.isDatePickerVisible ? (
+            <DateTimePicker
               {...this.props}
-              date={this.state.date || new Date()}
-              onDateChange={this.handleValueChange.bind(this)}
+              mode="date"
+              value={timeValue}
+              minDate={this.props.minimumDate}
+              maxDate={this.props.maximumDate}
+              onChange={this.handleDateValueChange.bind(this)}
+            />
+          ) : null}
+          {this.state.isTimePickerVisible ? (
+            <DateTimePicker
+              {...this.props}
+              mode="time"
+              value={timeValue}
+              minDate={this.props.minimumDate}
+              maxDate={this.props.maximumDate}
+              onChange={this.handleTimeValueChange.bind(this)}
             />
           ) : null}
         </View>
