@@ -175,8 +175,9 @@ export class DatePickerComponent extends React.Component {
               {...this.props}
               mode="time"
               value={timeValue}
-              minDate={this.props.minimumDate}
-              maxDate={this.props.maximumDate}
+              style={{width: 300, opacity: 1, height: 30, marginTop: 10}}
+              is24Hour={true}
+              minuteInterval={5}
               onChange={this.handleTimeValueChange.bind(this)}
             />
           ) : null}
