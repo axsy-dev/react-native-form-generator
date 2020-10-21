@@ -40,8 +40,7 @@ export class PickerComponent extends React.Component {
 
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
-    // if (this.props.autoclose) 
-    this._togglePicker();
+    if (this.props.autoclose) this._togglePicker();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -69,7 +68,7 @@ export class PickerComponent extends React.Component {
         {...this.props.pickerProps}
         selectedValue={this.state.value}
         onValueChange={this.handleValueChange.bind(this)}
-        mode="dialog"
+        mode="dropdown"
       >
         {this.props.options.map(
           ({ value, label }, idx) => (
@@ -110,7 +109,7 @@ export class PickerComponent extends React.Component {
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>
-        
+
           <Field
             {...this.props}
             ref="inputBox"
@@ -134,7 +133,7 @@ export class PickerComponent extends React.Component {
               {this.state.isPickerVisible ? pickerWrapper : null}
             </View>
           </Field>
-          
+
         </View>
       </TestPathSegment>
     );
