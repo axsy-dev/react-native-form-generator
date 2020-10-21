@@ -109,7 +109,6 @@ export class PickerComponent extends React.Component {
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>
-
           <Field
             {...this.props}
             ref="inputBox"
@@ -133,7 +132,6 @@ export class PickerComponent extends React.Component {
               {this.state.isPickerVisible ? pickerWrapper : null}
             </View>
           </Field>
-
         </View>
       </TestPathSegment>
     );
