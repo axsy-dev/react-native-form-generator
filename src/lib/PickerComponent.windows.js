@@ -122,15 +122,16 @@ export class PickerComponent extends React.Component {
               <TText tid="Label" style={this.props.labelStyle}>
                 {this.props.label}
               </TText>
+              {!this.state.isPickerVisible &&
               <View style={this.props.valueContainerStyle}>
                 <TText tid="Value" style={this.props.valueStyle}>
                   {selectedOption ? selectedOption.label : ""}
                 </TText>
-              </View>
-              {this.props.iconRight ? this.props.iconRight : null}
+              </View>}
+              {!this.state.isPickerVisible && this.props.iconRight ? this.props.iconRight : null}
+              {this.state.isPickerVisible ? pickerWrapper : null}
             </View>
           </Field>
-          {this.state.isPickerVisible ? pickerWrapper : null}
         </View>
       </TestPathSegment>
     );
