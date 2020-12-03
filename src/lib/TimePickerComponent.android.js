@@ -7,8 +7,9 @@ import {
   StyleSheet,
   TextInput,
   Text,
-  TimePickerAndroid
 } from "react-native";
+
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { Field } from "./Field";
 
@@ -19,7 +20,7 @@ export class TimePickerComponent extends React.Component {
     super(props);
 
     this.state = {
-      isPickerVisible: false
+      isTimePickerVisible: false
     };
   }
 
@@ -43,8 +44,8 @@ export class TimePickerComponent extends React.Component {
     this.setState(e.nativeEvent.layout);
   }
 
-  handleValueChange(date) {
-    this.setState({ date: date });
+  handleValueChange(event, date) {
+    this.setState({ date: date, isTimePickerVisible: false});
 
     if (this.props.onChange) this.props.onChange(date);
     if (this.props.onValueChange) this.props.onValueChange(date);
@@ -61,22 +62,14 @@ export class TimePickerComponent extends React.Component {
   }
 
   async _togglePicker(event) {
-    try {
-      const { action, hour, minute } = await TimePickerAndroid.open({
-        ...this.props.options
-      });
-
-      if (action !== TimePickerAndroid.dismissedAction) {
-        let date = new Date(0, 0, 0, hour, minute);
-
-        this.handleValueChange(date);
-        // Selected year, month (0-11), day
-      }
-    } catch ({ code, message }) {
-      console.warn("Cannot open time picker", message);
-    }
+    this.setState({ isTimePickerVisible: true });
+    this.props.onPress && this.props.onPress(event);
   }
+
   render() {
+
+    const timeValue = this.state.date || new Date(0, 0, 0);
+
     let placeholderComponent = this.props.placeholderComponent ? (
       this.props.placeholderComponent
     ) : (
@@ -105,11 +98,12 @@ export class TimePickerComponent extends React.Component {
               {this.props.iconRight ? this.props.iconRight : null}
             </View>
           </Field>
-          {this.state.isPickerVisible ? (
-            <DatePickerAndroid
+          {this.state.isTimePickerVisible ? (
+            <DateTimePicker
               {...this.props}
-              date={this.state.date || new Date()}
-              onDateChange={this.handleValueChange.bind(this)}
+              mode="time"
+              value={timeValue}
+              onChange={this.handleValueChange.bind(this)}
             />
           ) : null}
         </View>
