@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { View, StyleSheet, TextInput, Text, DatePickerIOS } from "react-native";
 import { Field } from "./Field";
 
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { TestPathSegment, TText } from "@axsy-dev/testable";
 
 function formatDateResult(date, mode) {
@@ -25,7 +26,6 @@ export class DatePickerComponent extends React.Component {
     const { date, mode } = this.props;
     const dateNormalized = date ? new Date(date) : new Date();
     const dateToSet = formatDateResult(dateNormalized, mode);
-
     this.setState({ date: dateToSet });
   }
 
@@ -57,7 +57,7 @@ export class DatePickerComponent extends React.Component {
     this.setState(e.nativeEvent.layout);
   }
 
-  handleValueChange(date) {
+  handleValueChange(event, date) {
     const {
       mode,
       dateTimeFormat,
@@ -77,14 +77,15 @@ export class DatePickerComponent extends React.Component {
 
   _renderContent() {
     let datePicker = (
-      <DatePickerIOS
+      <DateTimePicker
+        display={"spinner"}
         maximumDate={this.props.maximumDate}
         minimumDate={this.props.minimumDate}
         minuteInterval={this.props.minuteInterval}
         mode={this.props.mode}
         timeZoneOffsetInMinutes={this.props.timeZoneOffsetInMinutes}
-        date={this.state.date || new Date()}
-        onDateChange={this.handleValueChange.bind(this)}
+        value={this.state.date || new Date()}
+        onChange={this.handleValueChange.bind(this)}
       />
     );
 
