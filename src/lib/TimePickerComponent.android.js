@@ -33,7 +33,7 @@ export class TimePickerComponent extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { date } = this.props;
     const dateToSet = date ? new Date(date) : new Date();
-    if (this.state.date.getTime() !== dateToSet.getTime()) {
+    if (this.state.date && this.state.date.getTime() !== dateToSet.getTime()) {
       this.setState({ date: dateToSet });
     }
   }
@@ -45,10 +45,13 @@ export class TimePickerComponent extends React.Component {
   }
 
   handleValueChange(event, date) {
-    this.setState({ date: date, isTimePickerVisible: false});
 
-    if (this.props.onChange) this.props.onChange(date);
-    if (this.props.onValueChange) this.props.onValueChange(date);
+    if (event.type !== 'dismissed') {
+      this.setState({ date: date, isTimePickerVisible: false });
+
+      if (this.props.onChange) this.props.onChange(date);
+      if (this.props.onValueChange) this.props.onValueChange(date);
+    }
   }
 
   setTime(date) {
