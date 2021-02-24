@@ -24,24 +24,24 @@ export class PickerComponent extends React.Component {
     };
     this.pickerMeasures = {};
   }
-  setValue(value) {
+  setValue = value => {
     this.setState({ value: value });
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
-  }
-  handleLayoutChange(e) {
+  };
+  handleLayoutChange = e => {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
 
     this.setState(e.nativeEvent.layout);
-  }
+  };
 
-  handleValueChange(value) {
+  handleValueChange = value => {
     this.setState({ value: value });
 
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
     if (this.props.autoclose) this._togglePicker();
-  }
+  };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const value = prevProps.value;
@@ -50,48 +50,18 @@ export class PickerComponent extends React.Component {
     }
   }
 
-  _scrollToInput(event) {
+  _scrollToInput = event => {
     if (this.props.onFocus) {
       let handle = ReactNative.findNodeHandle(this.refs.inputBox);
 
       this.props.onFocus(event, handle);
     }
-  }
-  _togglePicker(event) {
+  };
+  _togglePicker = event => {
     this.setState({ isPickerVisible: !this.state.isPickerVisible });
     this.props.onPress && this.props.onPress(event);
-  }
+  };
   render() {
-    let picker = (
-      <TPicker
-        tid="Picker"
-        {...this.props.pickerProps}
-        selectedValue={this.state.value}
-        onValueChange={this.handleValueChange.bind(this)}
-        mode="dropdown"
-      >
-        {this.props.options.map(
-          ({ value, label }, idx) => (
-            <TPickerItem
-              tid={`PickerItem[${idx}]`}
-              key={value}
-              value={value}
-              label={label}
-            />
-          ),
-          this
-        )}
-      </TPicker>
-    );
-    let pickerWrapper = React.cloneElement(
-      this.props.pickerWrapper,
-      {
-        onHidePicker: () => {
-          this.setState({ isPickerVisible: false });
-        }
-      },
-      picker
-    );
     let iconLeft = this.props.iconLeft,
       iconRight = this.props.iconRight;
 
@@ -109,27 +79,30 @@ export class PickerComponent extends React.Component {
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>
-          <Field
-            {...this.props}
-            ref="inputBox"
-            onPress={this._togglePicker.bind(this)}
-          >
+          <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
             <View
               style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange.bind(this)}
+              onLayout={this.handleLayoutChange}
             >
               {iconLeft ? iconLeft : null}
               <TText tid="Label" style={this.props.labelStyle}>
                 {this.props.label}
               </TText>
-              {!this.state.isPickerVisible &&
-              <View style={this.props.valueContainerStyle}>
-                <TText tid="Value" style={this.props.valueStyle}>
-                  {selectedOption ? selectedOption.label : ""}
-                </TText>
-              </View>}
-              {!this.state.isPickerVisible && this.props.iconRight ? this.props.iconRight : null}
-              {this.state.isPickerVisible ? pickerWrapper : null}
+              <TPicker
+                tid="Picker"
+                {...this.props.pickerProps}
+                selectedValue={selectedOption ? selectedOption.value : null}
+                onValueChange={this.handleValueChange}
+              >
+                {this.props.options.map(({ value, label }, idx) => (
+                  <TPickerItem
+                    tid={`PickerItem[${idx}]`}
+                    key={value}
+                    value={value}
+                    label={label}
+                  />
+                ))}
+              </TPicker>
             </View>
           </Field>
         </View>
