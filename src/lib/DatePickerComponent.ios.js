@@ -86,6 +86,7 @@ export class DatePickerComponent extends React.Component {
         timeZoneOffsetInMinutes={this.props.timeZoneOffsetInMinutes}
         value={this.state.date || new Date()}
         onChange={this.handleValueChange.bind(this)}
+        locale={this.props.locale}
       />
     );
 
