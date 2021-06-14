@@ -71,9 +71,11 @@ export class PickerComponent extends React.Component {
   }
   
   componentDidMount() {
-    this.handleValueChange(this.props.value);
+    const { value } = this.props;
+    
+    !!value && this.handleValueChange(value);
   }
-  
+    
   setValue(value) {
     this.setState({ value: value });
     if (this.props.onChange) this.props.onChange(value);
