@@ -33,7 +33,15 @@ export class PickerComponent extends React.Component {
   render() {
     // prefer state value if set
     const value = this.state.value ? this.state.value : this.props.value;
-    const selectedOption = _.find(this.props.options, o => o.value === value);
+    
+    const selectedOption = _.find(
+      this.props.options,
+      o => (
+        o.value === this.state.value ||
+        o.constant === this.state.value
+      )
+    );
+    
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>

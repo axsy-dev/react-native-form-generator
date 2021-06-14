@@ -71,9 +71,13 @@ export class PickerComponent extends React.Component {
     if (iconRight && iconRight.constructor === Array) {
       iconRight = !this.state.isPickerVisible ? iconRight[0] : iconRight[1];
     }
+    
     const selectedOption = _.find(
       this.props.options,
-      o => o.value === this.state.value
+      o => (
+        o.value === this.state.value ||
+        o.constant === this.state.value
+      )
     );
 
     return (
