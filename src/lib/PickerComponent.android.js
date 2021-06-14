@@ -22,7 +22,9 @@ export class PickerComponent extends React.Component {
   setValue(value) {}
 
   componentDidMount() {
-    this.handleValueChange(this.props.value);
+    const { value } = this.props;
+    
+    !!value && this.handleValueChange(value);
   }
   
   handleLayoutChange = e => {
