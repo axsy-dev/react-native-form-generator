@@ -24,11 +24,17 @@ export class PickerComponent extends React.Component {
     };
     this.pickerMeasures = {};
   }
+
+  componentDidMount() {
+    this.handleValueChange(this.props.value);
+  }
+  
   setValue = value => {
     this.setState({ value: value });
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
   };
+  
   handleLayoutChange = e => {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
 
@@ -57,10 +63,12 @@ export class PickerComponent extends React.Component {
       this.props.onFocus(event, handle);
     }
   };
+  
   _togglePicker = event => {
     this.setState({ isPickerVisible: !this.state.isPickerVisible });
     this.props.onPress && this.props.onPress(event);
   };
+  
   render() {
     let iconLeft = this.props.iconLeft,
       iconRight = this.props.iconRight;
