@@ -18,11 +18,18 @@ export class PickerComponent extends React.Component {
     this.state = {};
     this.pickerMeasures = {};
   }
+  
   setValue(value) {}
+
+  componentDidMount() {
+    this.handleValueChange(this.props.value);
+  }
+  
   handleLayoutChange = e => {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
     this.setState(e.nativeEvent.layout);
   };
+  
   handleValueChange = value => {
     this.setState({ value });
 
