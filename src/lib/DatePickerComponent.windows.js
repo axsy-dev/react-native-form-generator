@@ -62,8 +62,6 @@ export class DatePickerComponent extends React.Component {
     if (mode === "datetime") {
       const selectedHours = date.getHours();
       const selectedMinutes = date.getMinutes();
-      const timezoneOffsetInHours = new Date().getTimezoneOffset() / 60;
-      const selectedHoursWithOffset = selectedHours + timezoneOffsetInHours;
 
       // Due to some weird time results with offsets returned on Windows 
       // We need to manually setDate to make sure that it stays the same as was originally selected.
@@ -73,7 +71,7 @@ export class DatePickerComponent extends React.Component {
       const selectedMonth = dateToSet.getMonth();
       const selectedFullYear = dateToSet.getFullYear();
 
-      dateToSet.setHours(selectedHoursWithOffset);
+      dateToSet.setHours(selectedHours);
       dateToSet.setMinutes(selectedMinutes);
       dateToSet.setDate(selectedDate);
       dateToSet.setMonth(selectedMonth);
