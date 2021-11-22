@@ -46,8 +46,8 @@ export class PickerComponent extends React.Component {
     const selectedOption = _.find(
       this.props.options,
       o => (
-        o.value === this.state.value ||
-        o.constant === this.state.value
+        o.value === value ||
+        o.constant === value
       )
     );
     
