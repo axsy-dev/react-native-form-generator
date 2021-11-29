@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactNative from 'react-native';
-let { View, StyleSheet, TextInput, Text, PickerIOS} = ReactNative;
+let { StyleSheet } = ReactNative;
 
 
 import {DatePickerComponent} from '../lib/DatePickerComponent';

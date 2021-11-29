@@ -1,8 +1,6 @@
 'use strict';
 
 import React from 'react';
-import { View, StyleSheet, TextInput, Text, PickerIOS} from 'react-native';
-
 
 import { DatePickerComponent } from '../lib/DatePickerComponent';
 
