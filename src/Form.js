@@ -36,7 +36,7 @@ export class Form extends Component {
     }
 
     underscoreToSpaced(str) {
-        var words = str.split('_');
+        var words = str.split('_');  
         var res=[];
 
         words.map(function(word, i) {
@@ -54,19 +54,41 @@ export class Form extends Component {
                 return;
             }
 
-            wrappedChildren.push(React.cloneElement(child, {
-                key: child.props.fieldKey ? child.props.fieldKey : child.type+i,
-                fieldRef : child.ref,
-                ref: child.ref,
+            console.log(`child ${i} found`);
+    
+            const { isTestWrapped } = child.props;
+            
+            let testableComponent = isTestWrapped ? child.props.testableComponent : child; 
+
+            testableComponent = React.cloneElement(testableComponent, {
+                key: testableComponent.props.fieldKey ? testableComponent.props.fieldKey : testableComponent.type+i,
+                fieldRef : testableComponent.ref,
+                ref: testableComponent.ref,
                 onFocus:this.handleFieldFocused.bind(this),
-                onChange:this.handleFieldChange.bind(this, child.ref)
-            }));
+                onChange:this.handleFieldChange.bind(this, testableComponent.ref)
+            })
+
+            if(isTestWrapped){
+                child = React.cloneElement(child, {
+                    children: testableComponent
+                })
+            }
+
+            console.log(
+                {
+                    child, testableComponent
+                }
+            )
+
+            wrappedChildren.push(child);
         }, this);
 
-    return (
-      <View style={this.props.style}>
-          {wrappedChildren}
-      </View>
-    );
+        
+        console.log(wrappedChildren)
+        return (
+        <View style={this.props.style}>
+            {wrappedChildren}
+        </View>
+        );
     }
 }
