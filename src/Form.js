@@ -54,7 +54,6 @@ export class Form extends Component {
                 return;
             }
 
-            console.log(`child ${i} found`);
     
             const { isTestWrapped } = child.props;
             
@@ -74,17 +73,9 @@ export class Form extends Component {
                 })
             }
 
-            console.log(
-                {
-                    child, testableComponent
-                }
-            )
-
             wrappedChildren.push(child);
         }, this);
 
-        
-        console.log(wrappedChildren)
         return (
         <View style={this.props.style}>
             {wrappedChildren}
