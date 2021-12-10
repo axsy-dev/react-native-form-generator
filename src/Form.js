@@ -77,10 +77,10 @@ export class Form extends Component {
             wrappedChildren.push(child);
         }, this);
 
-        return (
-            <View style={this.props.style}>
-                {wrappedChildren}
-            </View>
-          );
+    return (
+      <View style={this.props.style}>
+          {wrappedChildren}
+      </View>
+    );
     }
 }
