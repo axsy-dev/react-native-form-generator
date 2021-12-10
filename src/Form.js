@@ -36,7 +36,7 @@ export class Form extends Component {
     }
 
     underscoreToSpaced(str) {
-        var words = str.split('_');  
+        var words = str.split('_');
         var res=[];
 
         words.map(function(word, i) {
@@ -48,7 +48,7 @@ export class Form extends Component {
 
     render() {
         let wrappedChildren = [];
-        
+
         React.Children.map(this.props.children, (child, i) => {
             if (!child) {
                 return;
@@ -78,9 +78,9 @@ export class Form extends Component {
         }, this);
 
         return (
-        <View style={this.props.style}>
-            {wrappedChildren}
-        </View>
-        );
+            <View style={this.props.style}>
+                {wrappedChildren}
+            </View>
+          );
     }
 }
