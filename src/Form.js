@@ -48,29 +48,30 @@ export class Form extends Component {
 
     render() {
         let wrappedChildren = [];
-
+        
         React.Children.map(this.props.children, (child, i) => {
             if (!child) {
                 return;
             }
 
-    
-            const { isTestWrapped } = child.props;
+            const isTestable = Boolean(child?.key.startsWith("TestWrap["));
             
-            let testableComponent = isTestWrapped ? child.props.testableComponent : child; 
+            let formElement = isTestable ? child.props.children : child; 
 
-            testableComponent = React.cloneElement(testableComponent, {
-                key: testableComponent.props.fieldKey ? testableComponent.props.fieldKey : testableComponent.type+i,
-                fieldRef : testableComponent.ref,
-                ref: testableComponent.ref,
+            formElement = React.cloneElement(formElement, {
+                key: formElement.props.fieldKey ? formElement.props.fieldKey : formElement.type+i,
+                fieldRef : formElement.ref,
+                ref: formElement.ref,
                 onFocus:this.handleFieldFocused.bind(this),
-                onChange:this.handleFieldChange.bind(this, testableComponent.ref)
-            })
-
-            if(isTestWrapped){
+                onChange:this.handleFieldChange.bind(this, formElement.ref)
+            });
+        
+            if (isTestable){
                 child = React.cloneElement(child, {
-                    children: testableComponent
+                    children: formElement
                 })
+            } else {
+                child = formElement;
             }
 
             wrappedChildren.push(child);
