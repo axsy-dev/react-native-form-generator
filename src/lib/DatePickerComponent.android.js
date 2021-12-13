@@ -153,7 +153,7 @@ export class DatePickerComponent extends React.Component {
               {this.props.iconLeft ? this.props.iconLeft : null}
               {placeholderComponent}
               <View style={this.props.valueContainerStyle}>
-                <TText tid="Value" style={this.props.valueStyle}>
+                <TText tid={`Value[${this.state?.date?.getTime() || "unknown"}]`} style={this.props.valueStyle}>
                   {valueString}
                 </TText>
               </View>

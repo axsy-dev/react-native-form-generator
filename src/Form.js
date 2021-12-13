@@ -54,7 +54,7 @@ export class Form extends Component {
                 return;
             }
 
-            const isTestable = Boolean(child?.key.startsWith("TestWrap["));
+            const isTestable = "hasTestableWrappers" in this.props && this.props.hasTestableWrappers === true;
             
             let formElement = isTestable ? child.props.children : child; 
 
