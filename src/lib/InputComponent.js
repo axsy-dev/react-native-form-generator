@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import ReactNative, { Platform, ViewPropTypes } from "react-native";
 import { Field } from "./Field.js";
 
-const { View, StyleSheet, Text, TextInput } = ReactNative;
+const { View, Text, TextInput } = ReactNative;
 
 import { TestPathSegment, TText, TTextInput } from "@axsy-dev/testable";
 

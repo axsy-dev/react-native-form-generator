@@ -3,7 +3,6 @@
 import React from "react";
 import ReactNative from "react-native";
 import PropTypes from "prop-types";
-let { View, StyleSheet, TextInput, Text, Picker } = ReactNative;
 import { Field } from "../lib/Field";
 
 import {

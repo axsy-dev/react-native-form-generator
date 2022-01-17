@@ -4,8 +4,6 @@ import React, { Component } from "react";
 
 import {
   View,
-  Text,
-  Picker,
   requireNativeComponent,
   ViewPropTypes
 } from "react-native";
