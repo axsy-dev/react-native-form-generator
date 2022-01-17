@@ -54,13 +54,27 @@ export class Form extends Component {
                 return;
             }
 
-            wrappedChildren.push(React.cloneElement(child, {
-                key: child.props.fieldKey ? child.props.fieldKey : child.type+i,
-                fieldRef : child.ref,
-                ref: child.ref,
+            const isTestable = this.props.hasTestableWrappers === true;
+            
+            let formElement = isTestable ? child.props.children : child; 
+
+            formElement = React.cloneElement(formElement, {
+                key: formElement.props.fieldKey ? formElement.props.fieldKey : formElement.type+i,
+                fieldRef : formElement.ref,
+                ref: formElement.ref,
                 onFocus:this.handleFieldFocused.bind(this),
-                onChange:this.handleFieldChange.bind(this, child.ref)
-            }));
+                onChange:this.handleFieldChange.bind(this, formElement.ref)
+            });
+        
+            if (isTestable){
+                child = React.cloneElement(child, {
+                    children: formElement
+                })
+            } else {
+                child = formElement;
+            }
+
+            wrappedChildren.push(child);
         }, this);
 
     return (
