@@ -3,8 +3,7 @@
 import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
-import ReactNative from "react-native";
-let { View, StyleSheet } = ReactNative;
+import { View } from "react-native";
 import { Field } from "../lib/Field";
 
 import {

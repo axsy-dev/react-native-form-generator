@@ -1,7 +1,7 @@
 "use strict";
 
 import React from "react";
-import ReactNative, { View, StyleSheet, TouchableOpacity } from "react-native";
+import ReactNative, { View, TouchableOpacity } from "react-native";
 import { Field } from "../lib/Field";
 
 import {

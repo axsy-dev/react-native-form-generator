@@ -2,7 +2,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { View, StyleSheet, TextInput, Text, DatePickerIOS } from "react-native";
+import { View } from "react-native";
 import { Field } from "./Field";
 
 import DateTimePicker from '@react-native-community/datetimepicker';

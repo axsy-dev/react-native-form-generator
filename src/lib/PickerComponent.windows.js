@@ -3,7 +3,6 @@
 import React from "react";
 import ReactNative from "react-native";
 import PropTypes from "prop-types";
-let { StyleSheet } = ReactNative;
 import { Field } from "../lib/Field";
 
 import {
