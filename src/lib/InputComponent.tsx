@@ -20,7 +20,7 @@ type Props = TextInputProps & {
   height: number;
   containerStyle: Record<string, any>;
   isDecimal: boolean;
-  numberFormats: { decimalSeparator: string; groupingSeparator: string };
+  numberSeparators: { decimalSeparator: string; groupingSeparator: string };
   validationFunction: ValidationFunction | ValidationFunction[];
   iconLeft?: any;
   iconRight?: any;
@@ -59,15 +59,15 @@ function validateEmail(email: State["value"]) {
   return "Invalid email";
 }
 
-const DefaultNumberFormats: Props["numberFormats"] = {
+const DefaultNumberFormats: Props["numberSeparators"] = {
   decimalSeparator: ".",
   groupingSeparator: ","
 };
 
 export class InputComponent extends React.Component<Props, State> {
-  static defaultProps: Pick<Props, "isDecimal" | "numberFormats"> = {
+  static defaultProps: Pick<Props, "isDecimal" | "numberSeparators"> = {
     isDecimal: false,
-    numberFormats: {
+    numberSeparators: {
       decimalSeparator: DefaultNumberFormats.decimalSeparator,
       groupingSeparator: DefaultNumberFormats.groupingSeparator
     }
@@ -209,7 +209,7 @@ export class InputComponent extends React.Component<Props, State> {
   };
 
   private handleLocale = (value: string) => {
-    const { decimalSeparator, groupingSeparator } = this.props.numberFormats;
+    const { decimalSeparator, groupingSeparator } = this.props.numberSeparators;
     const { decimalSeparator: defaultDecimal } = DefaultNumberFormats;
 
     let converted = value;
