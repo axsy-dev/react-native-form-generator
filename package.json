@@ -23,7 +23,6 @@
   "license": "MIT",
   "main": "index.js",
   "name": "@axsy-dev/react-native-form-generator",
-  "optionalDependencies": {},
   "peerDependencies": {
     "@axsy-dev/testable": "^1.0.15",
     "@react-native-community/datetimepicker": "^3.0.2"
@@ -33,5 +32,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.9.29"
+  "version": "0.9.30",
+  "devDependencies": {
+    "@tsconfig/react-native": "^1.0.4",
+    "@types/react": "^17.0.39",
+    "@types/react-native": "^0.66.15"
+  }
 }
