@@ -225,7 +225,7 @@ export class InputComponent extends React.Component<Props, State> {
 
     return {
       display: value,
-      converted: converted.replace(DefaultNumberFormats.groupingSeparator, "") // commas to form a valid parsable number
+      converted: converted.replace(DefaultNumberFormats.groupingSeparator, "") // Ensure a valid parsable number
     };
   };
 
