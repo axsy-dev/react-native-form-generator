@@ -32,7 +32,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.9.30",
+  "version": "0.9.31",
   "devDependencies": {
     "@tsconfig/react-native": "^1.0.4",
     "@types/react": "^17.0.39",
