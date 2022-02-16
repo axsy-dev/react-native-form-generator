@@ -210,7 +210,10 @@ export class InputComponent extends React.Component<Props, State> {
 
   private handleLocale = (value: string) => {
     const { decimalSeparator, groupingSeparator } = this.props.numberSeparators;
-    const { decimalSeparator: defaultDecimal } = DefaultNumberFormats;
+    const {
+      decimalSeparator: defaultDecimal,
+      groupingSeparator: defaultGrouping
+    } = DefaultNumberFormats;
 
     let converted = value;
 
@@ -219,13 +222,13 @@ export class InputComponent extends React.Component<Props, State> {
       // e.g. for a european number: 120.000,99 would become 120,000.99
       converted = value
         .replace(groupingSeparator, "___")
-        .replace(decimalSeparator, groupingSeparator)
-        .replace("___", decimalSeparator);
+        .replace(decimalSeparator, defaultDecimal)
+        .replace("___", defaultGrouping);
     }
 
     return {
       display: value,
-      converted: converted.replace(DefaultNumberFormats.groupingSeparator, "") // Ensure a valid parsable number
+      converted: converted.replace(defaultGrouping, "") // Ensure a valid parsable number
     };
   };
 
