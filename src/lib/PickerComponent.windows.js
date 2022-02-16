@@ -1,7 +1,7 @@
 "use strict";
 
 import React from "react";
-import ReactNative from "react-native";
+import { View, findNodeHandle } from "react-native";
 import PropTypes from "prop-types";
 import { Field } from "../lib/Field";
 
@@ -26,16 +26,16 @@ export class PickerComponent extends React.Component {
 
   componentDidMount() {
     const { value } = this.props;
-    
+
     !!value && this.handleValueChange(value);
   }
-  
+
   setValue = value => {
     this.setState({ value: value });
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
   };
-  
+
   handleLayoutChange = e => {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
 
@@ -59,17 +59,17 @@ export class PickerComponent extends React.Component {
 
   _scrollToInput = event => {
     if (this.props.onFocus) {
-      let handle = ReactNative.findNodeHandle(this.refs.inputBox);
+      const handle = findNodeHandle(this.refs.inputBox);
 
       this.props.onFocus(event, handle);
     }
   };
-  
+
   _togglePicker = event => {
     this.setState({ isPickerVisible: !this.state.isPickerVisible });
     this.props.onPress && this.props.onPress(event);
   };
-  
+
   render() {
     let iconLeft = this.props.iconLeft,
       iconRight = this.props.iconRight;
@@ -80,13 +80,10 @@ export class PickerComponent extends React.Component {
     if (iconRight && iconRight.constructor === Array) {
       iconRight = !this.state.isPickerVisible ? iconRight[0] : iconRight[1];
     }
-    
+
     const selectedOption = _.find(
       this.props.options,
-      o => (
-        o.value === this.state.value ||
-        o.constant === this.state.value
-      )
+      o => o.value === this.state.value || o.constant === this.state.value
     );
 
     return (
