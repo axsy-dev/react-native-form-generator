@@ -59,7 +59,7 @@ export class PickerComponent extends React.Component {
 
   _scrollToInput = event => {
     if (this.props.onFocus) {
-      let handle = findNodeHandle(this.refs.inputBox);
+      const handle = findNodeHandle(this.refs.inputBox);
 
       this.props.onFocus(event, handle);
     }
