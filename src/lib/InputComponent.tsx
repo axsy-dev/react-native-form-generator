@@ -183,7 +183,7 @@ export class InputComponent extends React.Component<Props, State> {
       return;
     }
 
-    let displayValue: string = this.state.displayValue;
+    let displayValue: string | undefined = undefined;
 
     if (this.props.isDecimal) {
       const localedValues = this.handleLocale(value);
@@ -195,7 +195,7 @@ export class InputComponent extends React.Component<Props, State> {
 
     this.setState({
       value,
-      displayValue,
+      displayValue: displayValue ?? value,
       inputHeight: Math.max(
         this.state.minFieldHeight,
         event.nativeEvent.contentSize && this.props.multiline
