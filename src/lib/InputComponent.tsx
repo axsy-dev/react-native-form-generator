@@ -175,20 +175,21 @@ export class InputComponent extends React.Component<Props, State> {
     }
   };
 
-  handleChangeFromInput  = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+  handleChangeFromInput = (
+    event: NativeSyntheticEvent<TextInputChangeEventData>
+  ) => {
     this.handleChange(event.nativeEvent.text);
     this.setState({
-        inputHeight: Math.max(
-          this.state.minFieldHeight,
-          event.nativeEvent.contentSize && this.props.multiline
-            ? event.nativeEvent.contentSize.height
-            : 0
-        )
-      });
-  }
+      inputHeight: Math.max(
+        this.state.minFieldHeight,
+        event.nativeEvent.contentSize && this.props.multiline
+          ? event.nativeEvent.contentSize.height
+          : 0
+      )
+    });
+  };
 
   handleChange = (value: string) => {
-
     if (value === this.state.displayValue) {
       // Skip changeEvent if value is unchanged
       return;
