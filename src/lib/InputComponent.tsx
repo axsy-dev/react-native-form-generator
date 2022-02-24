@@ -95,7 +95,7 @@ export class InputComponent extends React.Component<Props, State> {
 
   componentWillReceiveProps(nextProps: Props) {
     if (this.state.value !== nextProps.value) {
-      this.setState({ value: nextProps.value });
+      this.handleChange(nextProps.value || "");
     }
   }
 
@@ -175,8 +175,19 @@ export class InputComponent extends React.Component<Props, State> {
     }
   };
 
-  handleChange = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    let value = event.nativeEvent.text;
+  handleChangeFromInput  = (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    this.handleChange(event.nativeEvent.text);
+    this.setState({
+        inputHeight: Math.max(
+          this.state.minFieldHeight,
+          event.nativeEvent.contentSize && this.props.multiline
+            ? event.nativeEvent.contentSize.height
+            : 0
+        )
+      });
+  }
+
+  handleChange = (value: string) => {
 
     if (value === this.state.displayValue) {
       // Skip changeEvent if value is unchanged
@@ -195,13 +206,7 @@ export class InputComponent extends React.Component<Props, State> {
 
     this.setState({
       value,
-      displayValue: displayValue ?? value,
-      inputHeight: Math.max(
-        this.state.minFieldHeight,
-        event.nativeEvent.contentSize && this.props.multiline
-          ? event.nativeEvent.contentSize.height
-          : 0
-      )
+      displayValue: displayValue ?? value
     });
 
     this.props.onChange?.(value, this.valid);
@@ -269,7 +274,7 @@ export class InputComponent extends React.Component<Props, State> {
               tid="TextInput"
               keyboardType={this.props.keyboardType}
               style={this.props.inputStyle}
-              onChange={this.handleChange}
+              onChange={this.handleChangeFromInput}
               onFocus={this._scrollToInput}
               placeholder={this.props.placeholder}
               value={this.state.displayValue}
