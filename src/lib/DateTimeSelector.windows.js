@@ -2,11 +2,7 @@
 
 import React, { Component } from "react";
 
-import {
-  View,
-  requireNativeComponent,
-  ViewPropTypes
-} from "react-native";
+import { View, requireNativeComponent, ViewPropTypes } from "react-native";
 
 import Moment from "moment";
 import { extendMoment } from "moment-range";

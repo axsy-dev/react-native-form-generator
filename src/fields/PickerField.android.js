@@ -1,24 +1,24 @@
-'use strict';
+"use strict";
 
-import React from 'react';
-import ReactNative from 'react-native';
+import React from "react";
+import ReactNative from "react-native";
 let { StyleSheet } = ReactNative;
 
+import { PickerComponent } from "../lib/PickerComponent";
 
-import {PickerComponent} from '../lib/PickerComponent';
-
-export class PickerField extends React.Component{
-  setValue(value){
-    this.refs.fieldComponent.setValue(value)
+export class PickerField extends React.Component {
+  setValue(value) {
+    this.refs.fieldComponent.setValue(value);
   }
-  render(){
-    return(<PickerComponent
-      {...this.props}
-      ref='fieldComponent'
-      pickerProps={{
-        style: this.props.containerStyle
-      }}
-      />)
-    }
-
+  render() {
+    return (
+      <PickerComponent
+        {...this.props}
+        ref="fieldComponent"
+        pickerProps={{
+          style: this.props.containerStyle
+        }}
+      />
+    );
   }
+}

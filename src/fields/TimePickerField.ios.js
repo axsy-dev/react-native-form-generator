@@ -1,25 +1,25 @@
-'use strict';
+"use strict";
 
-import React from 'react';
-import ReactNative from 'react-native';
+import React from "react";
+import ReactNative from "react-native";
 let { StyleSheet } = ReactNative;
 
+import { DatePickerComponent } from "../lib/DatePickerComponent";
 
-import {DatePickerComponent} from '../lib/DatePickerComponent';
-
-export class TimePickerField extends React.Component{
-  setTime(date){
+export class TimePickerField extends React.Component {
+  setTime(date) {
     this.refs.datePickerComponent.setDate(date);
   }
-  render(){
-    return(<DatePickerComponent
-      {...this.props}
-      mode="time"
-      labelStyle={this.props.labelStyle}
-      valueStyle = {this.props.valueStyle}
-      valueContainerStyle = {this.props.valueContainerStyle}
-      containerStyle={this.props.containerStyle}
-      />)
-    }
-
+  render() {
+    return (
+      <DatePickerComponent
+        {...this.props}
+        mode="time"
+        labelStyle={this.props.labelStyle}
+        valueStyle={this.props.valueStyle}
+        valueContainerStyle={this.props.valueContainerStyle}
+        containerStyle={this.props.containerStyle}
+      />
+    );
   }
+}

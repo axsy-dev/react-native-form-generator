@@ -68,19 +68,19 @@ export class PickerComponent extends React.Component {
     };
     this.pickerMeasures = {};
   }
-  
+
   componentDidMount() {
     const { value } = this.props;
-    
+
     !!value && this.handleValueChange(value);
   }
-    
+
   setValue(value) {
     this.setState({ value: value });
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
   }
-  
+
   handleLayoutChange(e) {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
 
@@ -142,15 +142,12 @@ export class PickerComponent extends React.Component {
     if (iconRight && iconRight.constructor === Array) {
       iconRight = !this.state.isPickerVisible ? iconRight[0] : iconRight[1];
     }
-    
+
     const selectedOption = _.find(
       this.props.options,
-      o => (
-        o.value === this.state.value ||
-        o.constant === this.state.value
-      )
+      o => o.value === this.state.value || o.constant === this.state.value
     );
-    
+
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>

@@ -40,8 +40,7 @@ export class TimePickerComponent extends React.Component {
   }
 
   handleValueChange(event, date) {
-
-    if (event.type !== 'dismissed') {
+    if (event.type !== "dismissed") {
       this.setState({ date: date, isTimePickerVisible: false });
 
       if (this.props.onChange) this.props.onChange(date);
@@ -65,7 +64,6 @@ export class TimePickerComponent extends React.Component {
   }
 
   render() {
-
     const timeValue = this.state.date || new Date(0, 0, 0);
 
     let placeholderComponent = this.props.placeholderComponent ? (
