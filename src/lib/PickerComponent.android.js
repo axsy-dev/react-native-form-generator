@@ -18,20 +18,20 @@ export class PickerComponent extends React.Component {
     this.state = {};
     this.pickerMeasures = {};
   }
-  
+
   setValue(value) {}
 
   componentDidMount() {
     const { value } = this.props;
-    
+
     !!value && this.handleValueChange(value);
   }
-  
+
   handleLayoutChange = e => {
     let { x, y, width, height } = { ...e.nativeEvent.layout };
     this.setState(e.nativeEvent.layout);
   };
-  
+
   handleValueChange = value => {
     this.setState({ value });
 
@@ -42,15 +42,12 @@ export class PickerComponent extends React.Component {
   render() {
     // prefer state value if set
     const value = this.state.value ? this.state.value : this.props.value;
-    
+
     const selectedOption = _.find(
       this.props.options,
-      o => (
-        o.value === value ||
-        o.constant === value
-      )
+      o => o.value === value || o.constant === value
     );
-    
+
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>

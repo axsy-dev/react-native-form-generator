@@ -1,77 +1,87 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { ScrollView, DeviceEventEmitter } from 'react-native'
-import StyleSheetPropType from 'react-native/Libraries/StyleSheet/StyleSheetPropType'
-import ViewStylePropTypes from 'react-native/Libraries/Components/View/ViewStylePropTypes'
+import React from "react";
+import PropTypes from "prop-types";
+import { ScrollView, DeviceEventEmitter } from "react-native";
+import StyleSheetPropType from "react-native/Libraries/StyleSheet/StyleSheetPropType";
+import ViewStylePropTypes from "react-native/Libraries/Components/View/ViewStylePropTypes";
 
 export class KeyboardAwareScrollView extends React.Component {
-    constructor (props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-          keyboardSpace: 0,
-        }
+    this.state = {
+      keyboardSpace: 0
+    };
 
-        this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
-        this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
-    }
+    this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
+    this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
+  }
 
-    // Keyboard actions
-    updateKeyboardSpace(frames) {
-        let coordinatesHeight = frames.endCoordinates.height;
-        const keyboardSpace = (this.props.viewIsInsideTabBar) ? coordinatesHeight - 49 : coordinatesHeight
+  // Keyboard actions
+  updateKeyboardSpace(frames) {
+    let coordinatesHeight = frames.endCoordinates.height;
+    const keyboardSpace = this.props.viewIsInsideTabBar
+      ? coordinatesHeight - 49
+      : coordinatesHeight;
 
-        this.setState({
-          keyboardSpace: keyboardSpace
-        });
+    this.setState({
+      keyboardSpace: keyboardSpace
+    });
 
-        return {};
-    }
+    return {};
+  }
 
-    resetKeyboardSpace() {
-        this.setState({
-          keyboardSpace: 0
-        });
-    }
+  resetKeyboardSpace() {
+    this.setState({
+      keyboardSpace: 0
+    });
+  }
 
-    componentDidMount() {
-        // Keyboard events
-        DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
-        DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
-    }
+  componentDidMount() {
+    // Keyboard events
+    DeviceEventEmitter.addListener(
+      "keyboardWillShow",
+      this.updateKeyboardSpace
+    );
+    DeviceEventEmitter.addListener("keyboardWillHide", this.resetKeyboardSpace);
+  }
 
-    componentWillUnmount() {
-        DeviceEventEmitter.removeAllListeners('keyboardWillShow');
-        DeviceEventEmitter.removeAllListeners('keyboardWillHide');
-    }
+  componentWillUnmount() {
+    DeviceEventEmitter.removeAllListeners("keyboardWillShow");
+    DeviceEventEmitter.removeAllListeners("keyboardWillHide");
+  }
 
-    /**
-    * @param extraHeight: takes an extra height in consideration.
-    */
-    scrollToFocusedInput(event, reactNode, extraHeight = 69) {
-        const scrollView = this.refs.keyboardScrollView.getScrollResponder();
-        setTimeout(() => {
-          scrollView.scrollResponderScrollNativeHandleToKeyboard(
-            reactNode, extraHeight, true
-          )
-        }, 220);
-    }
+  /**
+   * @param extraHeight: takes an extra height in consideration.
+   */
+  scrollToFocusedInput(event, reactNode, extraHeight = 69) {
+    const scrollView = this.refs.keyboardScrollView.getScrollResponder();
+    setTimeout(() => {
+      scrollView.scrollResponderScrollNativeHandleToKeyboard(
+        reactNode,
+        extraHeight,
+        true
+      );
+    }, 220);
+  }
 
-    render () {
-        return <ScrollView
-                    keyboardShouldPersistTaps={false}
-                    ref='keyboardScrollView'
-                    keyboardDismissMode='interactive'
-                    contentInset={{bottom: this.state.keyboardSpace}}
-                    showsVerticalScrollIndicator={true}
-                    style={this.props.style}>
-                    {this.props.children}
-              </ScrollView>;
-    }
+  render() {
+    return (
+      <ScrollView
+        keyboardShouldPersistTaps={false}
+        ref="keyboardScrollView"
+        keyboardDismissMode="interactive"
+        contentInset={{ bottom: this.state.keyboardSpace }}
+        showsVerticalScrollIndicator={true}
+        style={this.props.style}
+      >
+        {this.props.children}
+      </ScrollView>
+    );
+  }
 }
 
 KeyboardAwareScrollView.propTypes = {
   style: StyleSheetPropType(ViewStylePropTypes),
   children: PropTypes.node,
   viewIsInsideTabBar: PropTypes.bool
-}
+};
