@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { View } from "react-native";
 import { Field } from "./Field";
 
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { TestPathSegment, TText } from "@axsy-dev/testable";
 
 function formatDateResult(date, mode) {
@@ -58,13 +58,8 @@ export class DatePickerComponent extends React.Component {
   }
 
   handleValueChange(event, date) {
-    const {
-      mode,
-      dateTimeFormat,
-      onValueChange,
-      onChange,
-      prettyPrint
-    } = this.props;
+    const { mode, dateTimeFormat, onValueChange, onChange, prettyPrint } =
+      this.props;
 
     const dateToSet = formatDateResult(date, mode);
 
