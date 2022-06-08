@@ -7,12 +7,13 @@ import { Field } from "./Field";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { TestPathSegment, TText } from "@axsy-dev/testable";
-
-function formatDateResult(date, mode) {
-  return mode === "date"
-    ? new Date(date.getFullYear(), date.getMonth(), date.getDate())
-    : date;
-}
+import {
+  formatDateResult,
+  normalizeAndFormat,
+  handleSetDate,
+  dateTimeFormat
+} from "./datePickerHelpers";
+import { DatePickerPlaceholder } from "./DatePickerPlaceholder";
 
 export class DatePickerComponent extends React.Component {
   constructor(props) {
@@ -23,9 +24,7 @@ export class DatePickerComponent extends React.Component {
   }
 
   componentWillMount() {
-    const { date, mode } = this.props;
-    const dateNormalized = date ? new Date(date) : new Date();
-    const dateToSet = formatDateResult(dateNormalized, mode);
+    const dateToSet = normalizeAndFormat(this.props);
     this.setState({ date: dateToSet });
   }
 
@@ -43,17 +42,10 @@ export class DatePickerComponent extends React.Component {
     const dateToSet = formatDateResult(date, mode);
     this.setState({ date: dateToSet });
 
-    if (this.props.onChange)
-      this.props.onChange(
-        this.props.prettyPrint
-          ? this.props.dateTimeFormat(dateToSet)
-          : dateToSet
-      );
-    if (this.props.onValueChange) this.props.onValueChange(dateToSet);
+    handleSetDate(dateToSet, this.props);
   }
-  handleLayoutChange(e) {
-    let { x, y, width, height } = { ...e.nativeEvent.layout };
 
+  handleLayoutChange(e) {
     this.setState(e.nativeEvent.layout);
   }
 
@@ -113,7 +105,8 @@ export class DatePickerComponent extends React.Component {
       minuteInterval,
       mode,
       onDateChange,
-      timeZoneOffsetInMinutes
+      timeZoneOffsetInMinutes,
+      placeholderComponent
     } = this.props;
 
     let valueString = this.props.dateTimeFormat(
@@ -130,13 +123,8 @@ export class DatePickerComponent extends React.Component {
     if (iconRight && iconRight.constructor === Array) {
       iconRight = !this.state.isPickerVisible ? iconRight[0] : iconRight[1];
     }
-    let placeholderComponent = this.props.placeholderComponent ? (
-      this.props.placeholderComponent
-    ) : (
-      <TText tid="placeholder" style={this.props.placeholderStyle}>
-        {this.props.placeholder}
-      </TText>
-    );
+    const valueTestId = "Value";
+
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "DatePicker"}>
         <View>
@@ -150,12 +138,15 @@ export class DatePickerComponent extends React.Component {
               onLayout={this.handleLayoutChange.bind(this)}
             >
               {iconLeft ? iconLeft : null}
-              {placeholderComponent}
+              {placeholderComponent ? (
+                placeholderComponent
+              ) : (
+                <DatePickerPlaceholder {...this.props} />
+              )}
               <View style={[this.props.valueContainerStyle]}>
-                <TText tid="Value" style={[this.props.valueStyle]}>
+                <TText tid={valueTestId} style={[this.props.valueStyle]}>
                   {valueString}
                 </TText>
-
                 {iconRight ? iconRight : null}
               </View>
             </View>
@@ -175,27 +166,7 @@ DatePickerComponent.propTypes = {
 
 DatePickerComponent.defaultProps = {
   pickerWrapper: <View />,
-  dateTimeFormat: (date, mode) => {
-    if (!date) return "";
-    let value = "";
-    switch (mode) {
-      case "datetime":
-        value = date.toLocaleDateString() + " " + date.toLocaleTimeString();
-        break;
-      case "date":
-        value = date.toLocaleDateString();
-        break;
-      case "time":
-        value = date.toLocaleTimeString();
-        break;
-      case "countdown":
-        value = date.getHours() + ":" + date.getMinutes();
-        break;
-      default:
-        value = date.toLocaleDateString();
-    }
-    return value;
-  }
+  dateTimeFormat: dateTimeFormat
 };
 
 DatePickerComponent.contextTypes = {
