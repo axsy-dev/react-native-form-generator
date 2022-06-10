@@ -15,100 +15,110 @@ import {
   dateTimeFormat
 } from "./datePickerHelpers";
 import { DatePickerPlaceholder } from "./DatePickerPlaceholder";
+import { TouchableContainer } from "./TouchableContainer";
 
 export class DatePickerComponent extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isDatePickerVisible: false,
       isTimePickerVisible: false
     };
+
+    this._togglePicker = this._togglePicker.bind(this);
+    this.handleClear = this.handleClear.bind(this);
+    this.handleDateValueChange = this.handleDateValueChange.bind(this);
+    this.handleLayoutChange = this.handleLayoutChange.bind(this);
+    this.handleTimeValueChange = this.handleTimeValueChange.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.setDate = this.setDate.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const dateToSet = normalizeAndFormat(this.props);
 
     this.setState({ date: dateToSet });
   }
 
-  handleLayoutChange(e) {
-    this.setState(e.nativeEvent.layout);
+  handleLayoutChange(event) {
+    this.setState(event.nativeEvent.layout);
   }
 
   handleTimeValueChange(event, date) {
-    if (date === undefined) {
-      return;
+    if (date) {
+      const { mode, dateTimeFormat, onValueChange, onChange } = this.props;
+      let dateToSet, dateTimeFormatted;
+
+      // If it's datetime - use existing date set,
+      // Only extract the time part here
+      if (mode === "datetime") {
+        const selectedHours = date.getHours();
+        const selectedMinutes = date.getMinutes();
+
+        // Due to some weird time results with offsets returned on Windows
+        // We need to manually setDate to make sure that it stays the same as was originally selected.
+        dateToSet = new Date(this.state.date);
+
+        const selectedDate = dateToSet.getDate();
+        const selectedMonth = dateToSet.getMonth();
+        const selectedFullYear = dateToSet.getFullYear();
+
+        dateToSet.setHours(selectedHours);
+        dateToSet.setMinutes(selectedMinutes);
+        dateToSet.setDate(selectedDate);
+        dateToSet.setMonth(selectedMonth);
+        dateToSet.setFullYear(selectedFullYear);
+
+        dateTimeFormatted = dateTimeFormat(dateToSet, mode);
+      } else {
+        dateToSet = formatDateResult(date, mode);
+        dateTimeFormatted = dateTimeFormat(dateToSet, mode);
+      }
+
+      this.setState({
+        date: dateToSet,
+        isTimePickerVisible: false
+      });
+
+      if (onChange) {
+        onChange(formatOnPretty(dateToSet, this.props));
+      }
+
+      if (onValueChange) {
+        onValueChange(dateToSet);
+      }
     }
-
-    const { mode, dateTimeFormat, onValueChange, onChange, prettyPrint } =
-      this.props;
-
-    let dateToSet, dateTimeFormatted;
-
-    // If it's datetime - use existing date set,
-    // Only extract the time part here
-    if (mode === "datetime") {
-      const selectedHours = date.getHours();
-      const selectedMinutes = date.getMinutes();
-
-      // Due to some weird time results with offsets returned on Windows
-      // We need to manually setDate to make sure that it stays the same as was originally selected.
-      dateToSet = new Date(this.state.date);
-
-      const selectedDate = dateToSet.getDate();
-      const selectedMonth = dateToSet.getMonth();
-      const selectedFullYear = dateToSet.getFullYear();
-
-      dateToSet.setHours(selectedHours);
-      dateToSet.setMinutes(selectedMinutes);
-      dateToSet.setDate(selectedDate);
-      dateToSet.setMonth(selectedMonth);
-      dateToSet.setFullYear(selectedFullYear);
-
-      dateTimeFormatted = dateTimeFormat(dateToSet, mode);
-    } else {
-      dateToSet = formatDateResult(date, mode);
-      dateTimeFormatted = dateTimeFormat(dateToSet, mode);
-    }
-
-    this.setState({
-      date: dateToSet,
-      isTimePickerVisible: false
-    });
-
-    onChange &&
-      onChange(prettyPrint ? dateTimeFormat(dateToSet, mode) : dateToSet);
-    onValueChange && onValueChange(dateToSet);
   }
 
   handleDateValueChange(event, date) {
-    if (date === undefined) {
-      return;
-    }
+    if (date) {
+      const { mode, dateTimeFormat, onValueChange, onChange } = this.props;
+      const dateToSet = formatDateResult(date, mode);
+      const dateTimeFormatted = dateTimeFormat(dateToSet, mode);
 
-    const { mode, dateTimeFormat, onValueChange, onChange, prettyPrint } =
-      this.props;
-
-    const dateToSet = formatDateResult(date, mode);
-    const dateTimeFormatted = dateTimeFormat(dateToSet, mode);
-
-    this.setState(
-      {
-        date: dateToSet,
-        isDatePickerVisible: false
-      },
-      () => {
-        if (mode === "datetime") {
-          this.setState({
-            isTimePickerVisible: true
-          });
+      this.setState(
+        {
+          date: dateToSet,
+          isDatePickerVisible: false
+        },
+        () => {
+          if (mode === "datetime") {
+            this.setState({
+              isTimePickerVisible: true
+            });
+          }
         }
-      }
-    );
+      );
 
-    onChange &&
-      onChange(prettyPrint ? dateTimeFormat(dateToSet, mode) : dateToSet);
-    onValueChange && onValueChange(dateToSet);
+      if (onChange) {
+        onChange(formatOnPretty(dateToSet, this.props));
+      }
+
+      if (onValueChange) {
+        onValueChange(dateToSet);
+      }
+    }
   }
 
   setDate(date) {
@@ -120,30 +130,45 @@ export class DatePickerComponent extends React.Component {
   }
 
   async _togglePicker(event) {
-    if (this.props.mode === "time") {
-      this.setState({ isTimePickerVisible: true });
-    } else {
-      this.setState({ isDatePickerVisible: true });
-    }
+    const key =
+      this.props.mode === "time"
+        ? "isTimePickerVisible"
+        : "isDatePickerVisible";
 
-    this.props.onPress && this.props.onPress(event);
+    this.setState({ [key]: true });
+
+    if (this.props.onPress) {
+      this.props.onPress(event);
+    }
   }
 
-  onChange = (event, date) => {
+  onChange(event, date) {
     if (this.state.isTimePickerVisible) {
       this.handleTimeValueChange(event, date);
-      return;
+    } else {
+      this.handleDateValueChange(event, date);
+    }
+  }
+
+  handleClear() {
+    const { onChange, onValueChange } = this.props;
+
+    this.setState({ date: "" });
+
+    if (onChange) {
+      onChange("");
     }
 
-    this.handleDateValueChange(event, date);
-  };
+    if (onValueChange) {
+      onValueChange("");
+    }
+  }
 
   render() {
-    const { placeholderComponent } = this.props;
-    const valueString = this.props.dateTimeFormat(
-      this.state.date,
-      this.props.mode
-    );
+    const { placeholderComponent, iconRight, iconClear } = this.props;
+    const valueString = this.state.date
+      ? this.props.dateTimeFormat(this.state.date, this.props.mode)
+      : "";
 
     const timeValue = this.state.date || new Date();
 
@@ -158,14 +183,10 @@ export class DatePickerComponent extends React.Component {
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "DatePicker"}>
         <View>
-          <Field
-            {...this.props}
-            ref="inputBox"
-            onPress={this._togglePicker.bind(this)}
-          >
+          <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
             <View
               style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange.bind(this)}
+              onLayout={this.handleLayoutChange}
             >
               {this.props.iconLeft ? this.props.iconLeft : null}
               {placeholderComponent ? (
@@ -177,8 +198,17 @@ export class DatePickerComponent extends React.Component {
                 <TText tid="Value" style={this.props.valueStyle}>
                   {valueString}
                 </TText>
+                {iconClear && valueString ? (
+                  <TouchableContainer onPress={this.handleClear}>
+                    {iconClear}
+                  </TouchableContainer>
+                ) : null}
+                {iconRight ? (
+                  <TouchableContainer onPress={this._togglePicker}>
+                    {iconRight}
+                  </TouchableContainer>
+                ) : null}
               </View>
-              {this.props.iconRight ? this.props.iconRight : null}
             </View>
           </Field>
           {isPickerVisible ? (
