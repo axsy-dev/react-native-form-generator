@@ -15,6 +15,7 @@ import {
   formatOnPretty
 } from "./datePickerHelpers";
 import { DatePickerPlaceholder } from "./DatePickerPlaceholder";
+import { TouchableContainer } from "./TouchableContainer";
 
 export class DatePickerComponent extends React.Component {
   constructor(props) {
@@ -151,7 +152,7 @@ export class DatePickerComponent extends React.Component {
   }
 
   render() {
-    const { placeholderComponent } = this.props;
+    const { placeholderComponent, iconClear, iconRight, iconLeft } = this.props;
 
     const valueString = this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
@@ -170,7 +171,7 @@ export class DatePickerComponent extends React.Component {
               style={this.props.containerStyle}
               onLayout={this.handleLayoutChange}
             >
-              {this.props.iconLeft ? this.props.iconLeft : null}
+              {iconLeft ? iconLeft : null}
               {placeholderComponent ? (
                 placeholderComponent
               ) : (
@@ -180,10 +181,16 @@ export class DatePickerComponent extends React.Component {
                 <TText tid={valueTestId} style={this.props.valueStyle}>
                   {valueString}
                 </TText>
-                {valueString ? (
-                  <Button onPress={this.handleClear} title="Clear" />
+                {iconClear && valueString ? (
+                  <TouchableContainer onPress={this.handleClear}>
+                    {iconClear}
+                  </TouchableContainer>
                 ) : null}
-                {this.props.iconRight ? this.props.iconRight : null}
+                {iconRight ? (
+                  <TouchableContainer onPress={this._togglePicker}>
+                    {iconRight}
+                  </TouchableContainer>
+                ) : null}
               </View>
             </View>
           </Field>

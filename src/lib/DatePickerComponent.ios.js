@@ -6,7 +6,7 @@ import { View, Text, Button } from "react-native";
 import { Field } from "./Field";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { TestPathSegment, TText } from "@axsy-dev/testable";
+import { TestPathSegment, TText, TTouchableOpacity } from "@axsy-dev/testable";
 import {
   formatDateResult,
   normalizeAndFormat,
@@ -15,6 +15,7 @@ import {
   formatOnPretty
 } from "./datePickerHelpers";
 import { DatePickerPlaceholder } from "./DatePickerPlaceholder";
+import { TouchableContainer } from "./TouchableContainer";
 
 export class DatePickerComponent extends React.Component {
   constructor(props) {
@@ -26,6 +27,7 @@ export class DatePickerComponent extends React.Component {
 
     this._renderContent = this._renderContent.bind(this);
     this._togglePicker = this._togglePicker.bind(this);
+    this.handleClear = this.handleClear.bind(this);
     this.handleLayoutChange = this.handleLayoutChange.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
     this.setDate = this.setDate.bind(this);
@@ -137,6 +139,10 @@ export class DatePickerComponent extends React.Component {
     this.props.onPress && this.props.onPress(event);
   }
 
+  handleClear(e) {
+    this.handleValueChange(e, "");
+  }
+
   render() {
     let {
       maximumDate,
@@ -145,25 +151,16 @@ export class DatePickerComponent extends React.Component {
       mode,
       onDateChange,
       timeZoneOffsetInMinutes,
-      placeholderComponent
+      placeholderComponent,
+      iconClear
     } = this.props;
 
-    let valueString = this.state.date
+    const valueString = this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
       : "";
 
-    console.log("DatePickerComponent: render: state: date: ", this.state.date);
-
-    let iconLeft = this.props.iconLeft,
-      iconRight = this.props.iconRight;
-
-    if (iconLeft && iconLeft.constructor === Array) {
-      iconLeft = !this.state.isPickerVisible ? iconLeft[0] : iconLeft[1];
-    }
-
-    if (iconRight && iconRight.constructor === Array) {
-      iconRight = !this.state.isPickerVisible ? iconRight[0] : iconRight[1];
-    }
+    const iconLeft = getIcon(this.state.isPickerVisible, this.props.iconLeft);
+    const iconRight = getIcon(this.state.isPickerVisible, this.props.iconRight);
 
     const valueTestId = "Value";
 
@@ -172,7 +169,7 @@ export class DatePickerComponent extends React.Component {
         <View>
           <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
             <View
-              style={this.props.containerStyle}
+              style={[this.props.containerStyle]}
               onLayout={this.handleLayoutChange}
             >
               {iconLeft ? iconLeft : null}
@@ -185,13 +182,16 @@ export class DatePickerComponent extends React.Component {
                 <TText tid={valueTestId} style={[this.props.valueStyle]}>
                   {valueString}
                 </TText>
-                {valueString ? (
-                  <Button
-                    onPress={e => this.handleValueChange(e, "")}
-                    title="Clear"
-                  />
+                {iconClear && valueString ? (
+                  <TouchableContainer onPress={this.handleClear}>
+                    {iconClear}
+                  </TouchableContainer>
                 ) : null}
-                {iconRight ? iconRight : null}
+                {iconRight ? (
+                  <TouchableContainer onPress={this._togglePicker}>
+                    {iconRight}
+                  </TouchableContainer>
+                ) : null}
               </View>
             </View>
           </Field>
@@ -200,6 +200,13 @@ export class DatePickerComponent extends React.Component {
       </TestPathSegment>
     );
   }
+}
+
+function getIcon(isPickerVisible, icons) {
+  if (icons && icons.constructor === Array) {
+    return !isPickerVisible ? icons[0] : icons[1];
+  }
+  return icons;
 }
 
 DatePickerComponent.propTypes = {
