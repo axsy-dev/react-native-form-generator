@@ -204,6 +204,7 @@ export class DatePickerComponent extends React.Component {
               minDate={this.props.minimumDate}
               maxDate={this.props.maximumDate}
               is24Hour={false}
+              dateFormat={"month day year"}
               minuteInterval={5}
               onChange={this.onChange}
               timeZoneOffsetInSeconds={0} // This is necessary since DateTimePicker for some reason adds -1 hr timezone offset
