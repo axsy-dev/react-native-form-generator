@@ -8,161 +8,167 @@ let { View, StyleSheet, TextInput } = require("react-native");
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Field } from "./Field";
 import { TestPathSegment, TText } from "@axsy-dev/testable";
-
-function formatDateResult(date, mode) {
-  return mode === "date"
-    ? new Date(date.getFullYear(), date.getMonth(), date.getDate())
-    : date;
-}
+import {
+  formatDateResult,
+  normalizeAndFormat,
+  handleSetDate,
+  dateTimeFormat
+} from "./datePickerHelpers";
+import { DatePickerPlaceholder } from "./DatePickerPlaceholder";
+import { TouchableContainer } from "./TouchableContainer";
 
 export class DatePickerComponent extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isDatePickerVisible: false,
       isTimePickerVisible: false
     };
+
+    this._togglePicker = this._togglePicker.bind(this);
+    this.handleClear = this.handleClear.bind(this);
+    this.handleDateValueChange = this.handleDateValueChange.bind(this);
+    this.handleLayoutChange = this.handleLayoutChange.bind(this);
+    this.handleTimeValueChange = this.handleTimeValueChange.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.setDate = this.setDate.bind(this);
   }
 
-  componentWillMount() {
-    const { date, mode } = this.props;
-    const dateNormalized = date ? new Date(date) : new Date();
-    const dateToSet = formatDateResult(dateNormalized, mode);
+  UNSAFE_componentWillMount() {
+    const dateToSet = normalizeAndFormat(this.props);
 
     this.setState({ date: dateToSet });
   }
 
-  handleLayoutChange(e) {
-    let { x, y, width, height } = { ...e.nativeEvent.layout };
-
-    this.setState(e.nativeEvent.layout);
+  handleLayoutChange(event) {
+    this.setState(event.nativeEvent.layout);
   }
 
   handleTimeValueChange(event, date) {
-    if (date === undefined) {
-      return;
+    if (date) {
+      const { mode, dateTimeFormat, onValueChange, onChange } = this.props;
+      let dateToSet, dateTimeFormatted;
+
+      // If it's datetime - use existing date set,
+      // Only extract the time part here
+      if (mode === "datetime") {
+        const selectedHours = date.getHours();
+        const selectedMinutes = date.getMinutes();
+
+        // Due to some weird time results with offsets returned on Windows
+        // We need to manually setDate to make sure that it stays the same as was originally selected.
+        dateToSet = new Date(this.state.date);
+
+        const selectedDate = dateToSet.getDate();
+        const selectedMonth = dateToSet.getMonth();
+        const selectedFullYear = dateToSet.getFullYear();
+
+        dateToSet.setHours(selectedHours);
+        dateToSet.setMinutes(selectedMinutes);
+        dateToSet.setDate(selectedDate);
+        dateToSet.setMonth(selectedMonth);
+        dateToSet.setFullYear(selectedFullYear);
+
+        dateTimeFormatted = dateTimeFormat(dateToSet, mode);
+      } else {
+        dateToSet = formatDateResult(date, mode);
+        dateTimeFormatted = dateTimeFormat(dateToSet, mode);
+      }
+
+      this.setState({
+        date: dateToSet,
+        isTimePickerVisible: false
+      });
+
+      if (onChange) {
+        onChange(formatOnPretty(dateToSet, this.props));
+      }
+
+      if (onValueChange) {
+        onValueChange(dateToSet);
+      }
     }
-
-    const { mode, dateTimeFormat, onValueChange, onChange, prettyPrint } =
-      this.props;
-
-    let dateToSet, dateTimeFormatted;
-
-    // If it's datetime - use existing date set,
-    // Only extract the time part here
-    if (mode === "datetime") {
-      const selectedHours = date.getHours();
-      const selectedMinutes = date.getMinutes();
-
-      // Due to some weird time results with offsets returned on Windows
-      // We need to manually setDate to make sure that it stays the same as was originally selected.
-      dateToSet = new Date(this.state.date);
-
-      const selectedDate = dateToSet.getDate();
-      const selectedMonth = dateToSet.getMonth();
-      const selectedFullYear = dateToSet.getFullYear();
-
-      dateToSet.setHours(selectedHours);
-      dateToSet.setMinutes(selectedMinutes);
-      dateToSet.setDate(selectedDate);
-      dateToSet.setMonth(selectedMonth);
-      dateToSet.setFullYear(selectedFullYear);
-
-      dateTimeFormatted = dateTimeFormat(dateToSet, mode);
-    } else {
-      dateToSet = formatDateResult(date, mode);
-      dateTimeFormatted = dateTimeFormat(dateToSet, mode);
-    }
-
-    this.setState({
-      date: dateToSet,
-      isTimePickerVisible: false
-    });
-
-    onChange &&
-      onChange(prettyPrint ? dateTimeFormat(dateToSet, mode) : dateToSet);
-    onValueChange && onValueChange(dateToSet);
   }
 
   handleDateValueChange(event, date) {
-    if (date === undefined) {
-      return;
-    }
+    if (date) {
+      const { mode, dateTimeFormat, onValueChange, onChange } = this.props;
+      const dateToSet = formatDateResult(date, mode);
+      const dateTimeFormatted = dateTimeFormat(dateToSet, mode);
 
-    const { mode, dateTimeFormat, onValueChange, onChange, prettyPrint } =
-      this.props;
-
-    const dateToSet = formatDateResult(date, mode);
-    const dateTimeFormatted = dateTimeFormat(dateToSet, mode);
-
-    this.setState(
-      {
-        date: dateToSet,
-        isDatePickerVisible: false
-      },
-      () => {
-        if (mode === "datetime") {
-          this.setState({
-            isTimePickerVisible: true
-          });
+      this.setState(
+        {
+          date: dateToSet,
+          isDatePickerVisible: false
+        },
+        () => {
+          if (mode === "datetime") {
+            this.setState({
+              isTimePickerVisible: true
+            });
+          }
         }
-      }
-    );
+      );
 
-    onChange &&
-      onChange(prettyPrint ? dateTimeFormat(dateToSet, mode) : dateToSet);
-    onValueChange && onValueChange(dateToSet);
+      if (onChange) {
+        onChange(formatOnPretty(dateToSet, this.props));
+      }
+
+      if (onValueChange) {
+        onValueChange(dateToSet);
+      }
+    }
   }
 
   setDate(date) {
     const { mode } = this.props;
-
     const dateToSet = formatDateResult(date, mode);
-
     this.setState({ date: dateToSet });
 
-    if (this.props.onChange)
-      this.props.onChange(
-        this.props.prettyPrint
-          ? this.props.dateTimeFormat(dateToSet)
-          : dateToSet
-      );
-
-    if (this.props.onValueChange) this.props.onValueChange(dateToSet);
+    handleSetDate(dateToSet, this.props);
   }
 
   async _togglePicker(event) {
-    if (this.props.mode === "time") {
-      this.setState({ isTimePickerVisible: true });
-    } else {
-      this.setState({ isDatePickerVisible: true });
-    }
+    const key =
+      this.props.mode === "time"
+        ? "isTimePickerVisible"
+        : "isDatePickerVisible";
 
-    this.props.onPress && this.props.onPress(event);
+    this.setState({ [key]: true });
+
+    if (this.props.onPress) {
+      this.props.onPress(event);
+    }
   }
 
-  onChange = (event, date) => {
+  onChange(event, date) {
     if (this.state.isTimePickerVisible) {
       this.handleTimeValueChange(event, date);
-      return;
+    } else {
+      this.handleDateValueChange(event, date);
+    }
+  }
+
+  handleClear() {
+    const { onChange, onValueChange } = this.props;
+
+    this.setState({ date: "" });
+
+    if (onChange) {
+      onChange("");
     }
 
-    this.handleDateValueChange(event, date);
-  };
+    if (onValueChange) {
+      onValueChange("");
+    }
+  }
 
   render() {
-    let placeholderComponent = this.props.placeholderComponent ? (
-      this.props.placeholderComponent
-    ) : (
-      <TText tid="Placeholder" style={this.props.placeholderStyle}>
-        {this.props.placeholder}
-      </TText>
-    );
-
-    const valueString = this.props.dateTimeFormat(
-      this.state.date,
-      this.props.mode
-    );
+    const { placeholderComponent, iconRight, iconClear } = this.props;
+    const valueString = this.state.date
+      ? this.props.dateTimeFormat(this.state.date, this.props.mode)
+      : "";
 
     const timeValue = this.state.date || new Date();
 
@@ -172,27 +178,43 @@ export class DatePickerComponent extends React.Component {
     const pickerStyle = this.state.isTimePickerVisible
       ? { width: 300, opacity: 1, height: 30, marginTop: 10 }
       : {};
+    const valueTestId = "Value";
 
     return (
       <TestPathSegment name={`Field[${this.props.fieldRef}]` || "DatePicker"}>
         <View>
-          <Field
-            {...this.props}
-            ref="inputBox"
-            onPress={this._togglePicker.bind(this)}
-          >
+          <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
             <View
               style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange.bind(this)}
+              onLayout={this.handleLayoutChange}
             >
               {this.props.iconLeft ? this.props.iconLeft : null}
-              {placeholderComponent}
+              {placeholderComponent ? (
+                placeholderComponent
+              ) : (
+                <DatePickerPlaceholder {...this.props} />
+              )}
               <View style={this.props.valueContainerStyle}>
                 <TText tid="Value" style={this.props.valueStyle}>
                   {valueString}
                 </TText>
+                {iconClear && valueString ? (
+                  <TouchableContainer
+                    tid="ClearDateValue"
+                    onPress={this.handleClear}
+                  >
+                    {iconClear}
+                  </TouchableContainer>
+                ) : null}
+                {iconRight ? (
+                  <TouchableContainer
+                    tid="ToggleDatePicker"
+                    onPress={this._togglePicker}
+                  >
+                    {iconRight}
+                  </TouchableContainer>
+                ) : null}
               </View>
-              {this.props.iconRight ? this.props.iconRight : null}
             </View>
           </Field>
           {isPickerVisible ? (
@@ -221,25 +243,5 @@ DatePickerComponent.propTypes = {
 };
 
 DatePickerComponent.defaultProps = {
-  dateTimeFormat: (date, mode) => {
-    if (!date) return "";
-    let value = "";
-    switch (mode) {
-      case "datetime":
-        value = date.toLocaleDateString() + " " + date.toLocaleTimeString();
-        break;
-      case "date":
-        value = date.toLocaleDateString();
-        break;
-      case "time":
-        value = date.toLocaleTimeString();
-        break;
-      case "countdown":
-        value = date.getHours() + ":" + date.getMinutes();
-        break;
-      default:
-        value = date.toLocaleDateString();
-    }
-    return value;
-  }
+  dateTimeFormat: dateTimeFormat
 };
