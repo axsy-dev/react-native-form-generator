@@ -183,12 +183,18 @@ export class DatePickerComponent extends React.Component {
                   {valueString}
                 </TText>
                 {iconClear && valueString ? (
-                  <TouchableContainer onPress={this.handleClear}>
+                  <TouchableContainer
+                    tid="RemoveDateValue"
+                    onPress={this.handleClear}
+                  >
                     {iconClear}
                   </TouchableContainer>
                 ) : null}
                 {iconRight ? (
-                  <TouchableContainer onPress={this._togglePicker}>
+                  <TouchableContainer
+                    tid="ToggleDatePicker"
+                    onPress={this._togglePicker}
+                  >
                     {iconRight}
                   </TouchableContainer>
                 ) : null}
