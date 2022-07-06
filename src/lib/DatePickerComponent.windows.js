@@ -12,7 +12,8 @@ import {
   formatDateResult,
   normalizeAndFormat,
   handleSetDate,
-  dateTimeFormat
+  dateTimeFormat,
+  formatOnPretty
 } from "./datePickerHelpers";
 import { DatePickerPlaceholder } from "./DatePickerPlaceholder";
 import { TouchableContainer } from "./TouchableContainer";
