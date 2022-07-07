@@ -47,7 +47,7 @@ export class Form extends Component {
   }
 
   render() {
-    let wrappedChildren = [];
+    let wrappedChildren = [(<Text>this is in the dev one!</Text>)];
 
     React.Children.map(
       this.props.children,
@@ -55,17 +55,17 @@ export class Form extends Component {
         if (!child) {
           return;
         }
-
         const isTestable = this.props.hasTestableWrappers === true;
+        const { tidRoot, field } = child.props;
 
         let formElement = isTestable ? child.props.children : child;
-
         formElement = React.cloneElement(formElement, {
           key: formElement.props.fieldKey
             ? formElement.props.fieldKey
             : formElement.type + i,
           fieldRef: formElement.ref,
           ref: formElement.ref,
+          tidRoot: `${tidRoot && `${tidRoot}/`}Field[${field?.name || "Unknown"}:${field?.type || "Unknown"}]`,
           onFocus: this.handleFieldFocused.bind(this),
           onChange: this.handleFieldChange.bind(this, formElement.ref)
         });

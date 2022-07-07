@@ -3,30 +3,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { HelpText } from "./HelpText";
-let { View, StyleSheet } = require("react-native");
-
-import { TTouchableOpacity } from "@axsy-dev/testable";
+let { View, StyleSheet, TouchableOpacity } = require("react-native");
 
 export class Field extends React.Component {
   render() {
+    const { tidRoot } = this.props;
     let fieldHelpText =
       this.props.helpTextComponent ||
       (this.props.helpText ? (
-        <HelpText text={this.props.helpText} color={this.props.helpTextColor} />
+        <HelpText tidRoot={tidRoot} text={this.props.helpText} color={this.props.helpTextColor} />
       ) : null);
 
     if (this.props.onPress) {
       return (
-        <TTouchableOpacity onPress={this.props.onPress} tid={"OnPress"}>
+        <TouchableOpacity onPress={this.props.onPress} testID={`${tidRoot ?? ""}/TapTarget`}>
           <View>
             {this.props.children}
             {fieldHelpText}
           </View>
-        </TTouchableOpacity>
+        </TouchableOpacity>
       );
     }
     return (
-      <View>
+      <View testID={`${tidRoot ?? ""}/Wrapper`}>
         {this.props.children}
         {fieldHelpText}
       </View>

@@ -1,15 +1,19 @@
 import React from "react";
-import { View, Platform, findNodeHandle } from "react-native";
+import {
+  View,
+  Platform,
+  findNodeHandle,
+  TextInputContentSizeChangeEventData
+} from "react-native";
 import { Field } from "./Field.js";
-import { TestPathSegment, TText, TTextInput } from "@axsy-dev/testable";
 import type {
   TextInputProps,
   LayoutChangeEvent,
   NativeSyntheticEvent,
   TextInputChangeEventData,
-  TextInput,
   TextInputFocusEventData
 } from "react-native";
+import { TextInput, Text } from "react-native";
 
 type ValidationFunction = (
   value: State["value"],
@@ -27,13 +31,17 @@ type Props = TextInputProps & {
   label?: string;
   inputStyle: Record<string, any>;
   labelStyle: Record<string, any>;
-  onChange?: (value: string) => void;
-  onValueChange?: (value: string) => void;
-  onValidation?: (isValid: boolean) => void;
+  onChange?: (value: string, valid?: boolean) => void;
+  onValueChange?: (value: string, valid?: boolean) => void;
+  onValidation?: (
+    isValid: boolean,
+    validationErrors: Array<string | boolean>
+  ) => void;
   onFocus?: (
     event: NativeSyntheticEvent<TextInputFocusEventData>,
     handle: ReturnType<typeof findNodeHandle>
   ) => void;
+  tidRoot: string;
 };
 
 type State = {
@@ -43,6 +51,10 @@ type State = {
   inputHeight: number;
   displayValue: string;
   isValid: boolean;
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
 };
 
 function validateEmail(email: State["value"]) {
@@ -74,9 +86,9 @@ export class InputComponent extends React.Component<Props, State> {
   };
 
   state: State;
-  validationErrors: boolean | string[] = [];
+  validationErrors: Array<string | boolean> = [];
   valid = true;
-  inputBox: React.LegacyRef<TextInput> | null = null;
+  inputBox: TextInput | null = null;
 
   constructor(props: Props) {
     super(props);
@@ -146,6 +158,8 @@ export class InputComponent extends React.Component<Props, State> {
         case "email-address":
           validationResult = validateEmail(value);
           break;
+        default:
+          validationResult = false;
       }
       if (validationResult === true) {
         this.valid = true;
@@ -161,15 +175,13 @@ export class InputComponent extends React.Component<Props, State> {
 
   handleLayoutChange = (e: LayoutChangeEvent) => {
     if (Platform.OS === "ios") {
-      let { x, y, width, height } = { ...e.nativeEvent.layout };
-
       this.setState(e.nativeEvent.layout);
     }
   };
 
-  handleLabelLayoutChange = e => {
+  handleLabelLayoutChange = (e: LayoutChangeEvent) => {
     if (Platform.OS === "ios") {
-      let { x, y, width, height } = { ...e.nativeEvent.layout };
+      let { width } = { ...e.nativeEvent.layout };
 
       this.setState({ labelWidth: width });
     }
@@ -179,6 +191,11 @@ export class InputComponent extends React.Component<Props, State> {
     event: NativeSyntheticEvent<TextInputChangeEventData>
   ) => {
     this.handleChange(event.nativeEvent.text);
+  };
+
+  handleContentSizeChange = (
+    event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
+  ) => {
     this.setState({
       inputHeight: Math.max(
         this.state.minFieldHeight,
@@ -245,45 +262,50 @@ export class InputComponent extends React.Component<Props, State> {
     }
   };
 
-  handleFieldPress = event => {
+  handleFieldPress = () => {
     this.inputBox?.focus();
   };
 
+  saveRef = (ref: TextInput) => {
+    this.inputBox = ref;
+  };
+
   render() {
+    const { tidRoot } = this.props;
+
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Input"}>
-        <Field {...this.props}>
-          <View
-            onLayout={this.handleLayoutChange}
-            style={this.props.containerStyle}
-          >
-            {this.props.iconLeft ? this.props.iconLeft : null}
-            {this.props.label ? (
-              <TText
-                tid="Label"
-                style={this.props.labelStyle}
-                onLayout={this.handleLabelLayoutChange}
-                onPress={this.handleFieldPress}
-                suppressHighlighting={true}
-              >
-                {this.props.label}
-              </TText>
-            ) : null}
-            <TTextInput
-              {...this.props}
-              handleRef={ref => (this.inputBox = ref)}
-              tid="TextInput"
-              keyboardType={this.props.keyboardType}
-              style={this.props.inputStyle}
-              onChange={this.handleChangeFromInput}
-              onFocus={this._scrollToInput}
-              placeholder={this.props.placeholder}
-              value={this.state.displayValue}
-            />
-            {this.props.iconRight ? this.props.iconRight : null}
-          </View>
-        </Field>
-      </TestPathSegment>
+      <Field {...this.props}>
+        <View
+          onLayout={this.handleLayoutChange}
+          style={this.props.containerStyle}
+        >
+          {this.props.iconLeft ? this.props.iconLeft : null}
+          {this.props.label ? (
+            <Text
+              testID={`${tidRoot ?? ""}/Label`}
+              style={this.props.labelStyle}
+              onLayout={this.handleLabelLayoutChange}
+              onPress={this.handleFieldPress}
+              suppressHighlighting={true}
+            >
+              {this.props.label}
+            </Text>
+          ) : null}
+          <TextInput
+            {...this.props}
+            ref={this.saveRef}
+            testID={`${tidRoot ?? ""}/Input`}
+            keyboardType={this.props.keyboardType}
+            style={this.props.inputStyle}
+            onChange={this.handleChangeFromInput}
+            onContentSizeChange={this.handleContentSizeChange}
+            onFocus={this._scrollToInput}
+            placeholder={this.props.placeholder}
+            value={this.state.displayValue}
+          />
+          {this.props.iconRight ? this.props.iconRight : null}
+        </View>
+      </Field>
     );
   }
 }
