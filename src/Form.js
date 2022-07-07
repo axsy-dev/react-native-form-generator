@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  Text,
-  SliderIOS,
-  TouchableWithoutFeedback
-} from "react-native";
+import { View } from "react-native";
 
 export class Form extends Component {
   constructor(props) {
@@ -47,7 +39,8 @@ export class Form extends Component {
   }
 
   render() {
-    let wrappedChildren = [(<Text>this is in the dev one!</Text>)];
+    const { tidRoot } = this.props;
+    let wrappedChildren = [];
 
     React.Children.map(
       this.props.children,
@@ -56,8 +49,7 @@ export class Form extends Component {
           return;
         }
         const isTestable = this.props.hasTestableWrappers === true;
-        const { tidRoot, field } = child.props;
-
+        const tidRoot = isTestable ? child.props.testID : `Element[${i}]`
         let formElement = isTestable ? child.props.children : child;
         formElement = React.cloneElement(formElement, {
           key: formElement.props.fieldKey
@@ -65,7 +57,7 @@ export class Form extends Component {
             : formElement.type + i,
           fieldRef: formElement.ref,
           ref: formElement.ref,
-          tidRoot: `${tidRoot && `${tidRoot}/`}Field[${field?.name || "Unknown"}:${field?.type || "Unknown"}]`,
+          tidRoot: `${tidRoot ?? ""}`,
           onFocus: this.handleFieldFocused.bind(this),
           onChange: this.handleFieldChange.bind(this, formElement.ref)
         });
@@ -83,6 +75,6 @@ export class Form extends Component {
       this
     );
 
-    return <View style={this.props.style}>{wrappedChildren}</View>;
+    return <View testID={`${tidRoot ?? ""}/Form`} style={this.props.style}>{wrappedChildren}</View>;
   }
 }

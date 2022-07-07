@@ -4,14 +4,9 @@ import React from "react";
 import { View, findNodeHandle } from "react-native";
 import PropTypes from "prop-types";
 import { Field } from "../lib/Field";
-
 import {
-  TestPathContainer,
-  TText,
-  TPicker,
-  TPickerItem,
-  TestPathSegment
-} from "@axsy-dev/testable";
+    Picker
+} from "@react-native-picker/picker";
 import _ from "lodash";
 
 export class PickerComponent extends React.Component {
@@ -71,6 +66,7 @@ export class PickerComponent extends React.Component {
   };
 
   render() {
+    const { tidRoot } = this.props;
     let iconLeft = this.props.iconLeft,
       iconRight = this.props.iconRight;
 
@@ -87,7 +83,6 @@ export class PickerComponent extends React.Component {
     );
 
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>
           <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
             <View
@@ -95,28 +90,27 @@ export class PickerComponent extends React.Component {
               onLayout={this.handleLayoutChange}
             >
               {iconLeft ? iconLeft : null}
-              <TText tid="Label" style={this.props.labelStyle}>
+              <Text testID={`${tidRoot ?? ""}/Label`} style={this.props.labelStyle}>
                 {this.props.label}
-              </TText>
-              <TPicker
-                tid="Picker"
+              </Text>
+              <Picker
+                testID={`${tidRoot ?? ""}/Picker`}
                 {...this.props.pickerProps}
                 selectedValue={selectedOption ? selectedOption.value : null}
                 onValueChange={this.handleValueChange}
               >
                 {this.props.options.map(({ value, label }, idx) => (
-                  <TPickerItem
-                    tid={`PickerItem[${idx}]`}
+                  <Picker.Item
+                    testID={`${tidRoot ?? ""}/PickerItem[${idx}]`}
                     key={value}
                     value={value}
                     label={label}
                   />
                 ))}
-              </TPicker>
+              </Picker>
             </View>
           </Field>
         </View>
-      </TestPathSegment>
     );
   }
 }

@@ -2,11 +2,10 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { View, Text, Button } from "react-native";
+import { View, Text } from "react-native";
 import { Field } from "./Field";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { TestPathSegment, TText, TTouchableOpacity } from "@axsy-dev/testable";
 import {
   formatDateResult,
   normalizeAndFormat,
@@ -144,20 +143,15 @@ export class DatePickerComponent extends React.Component {
   }
 
   render() {
-    let {
-      maximumDate,
-      minimumDate,
-      minuteInterval,
-      mode,
-      onDateChange,
-      timeZoneOffsetInMinutes,
+    const {
       placeholderComponent,
-      iconClear
+      iconClear,
+      tidRoot
     } = this.props;
 
-    const valueString = this.state.date
+    const valueString = `${tidRoot ?? ""}/` + this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
-      : "";
+      : "Unknown";
 
     const iconLeft = getIcon(this.state.isPickerVisible, this.props.iconLeft);
     const iconRight = getIcon(this.state.isPickerVisible, this.props.iconRight);
@@ -165,45 +159,43 @@ export class DatePickerComponent extends React.Component {
     const valueTestId = "Value";
 
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "DatePicker"}>
-        <View>
-          <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
-            <View
-              style={[this.props.containerStyle]}
-              onLayout={this.handleLayoutChange}
-            >
-              {iconLeft ? iconLeft : null}
-              {placeholderComponent ? (
-                placeholderComponent
-              ) : (
-                <DatePickerPlaceholder {...this.props} />
-              )}
-              <View style={[this.props.valueContainerStyle]}>
-                <TText tid={valueTestId} style={[this.props.valueStyle]}>
-                  {valueString}
-                </TText>
-                {iconClear && valueString ? (
-                  <TouchableContainer
-                    tid="RemoveDateValue"
-                    onPress={this.handleClear}
-                  >
-                    {iconClear}
-                  </TouchableContainer>
-                ) : null}
-                {iconRight ? (
-                  <TouchableContainer
-                    tid="ToggleDatePicker"
-                    onPress={this._togglePicker}
-                  >
-                    {iconRight}
-                  </TouchableContainer>
-                ) : null}
-              </View>
+      <View>
+        <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
+          <View
+            style={[this.props.containerStyle]}
+            onLayout={this.handleLayoutChange}
+          >
+            {iconLeft ? iconLeft : null}
+            {placeholderComponent ? (
+              placeholderComponent
+            ) : (
+              <DatePickerPlaceholder {...this.props} />
+            )}
+            <View style={[this.props.valueContainerStyle]}>
+              <Text tid={valueTestId} style={[this.props.valueStyle]}>
+                {valueString}
+              </Text>
+              {iconClear && valueString ? (
+                <TouchableContainer
+                  tid={`${tidRoot ?? ""}/RemoveDateValue`}
+                  onPress={this.handleClear}
+                >
+                  {iconClear}
+                </TouchableContainer>
+              ) : null}
+              {iconRight ? (
+                <TouchableContainer
+                  tid={`${tidRoot ?? ""}/ToggleDatePicker`}
+                  onPress={this._togglePicker}
+                >
+                  {iconRight}
+                </TouchableContainer>
+              ) : null}
             </View>
-          </Field>
-          {this.state.isPickerVisible ? this._renderContent() : null}
-        </View>
-      </TestPathSegment>
+          </View>
+        </Field>
+        {this.state.isPickerVisible ? this._renderContent() : null}
+      </View>
     );
   }
 }

@@ -1,15 +1,12 @@
 "use strict";
 
 import React from "react";
-import ReactNative, { View, TouchableOpacity } from "react-native";
+import ReactNative, { View, TouchableOpacity, Text } from "react-native";
 import { Field } from "../lib/Field";
-
 import {
-  TestPathSegment,
-  TText,
-  TPicker,
-  TPickerItem
-} from "@axsy-dev/testable";
+    Picker
+} from "@react-native-picker/picker";
+
 import _ from "lodash";
 
 export class PickerComponent extends React.Component {
@@ -40,6 +37,7 @@ export class PickerComponent extends React.Component {
   };
 
   render() {
+    const { tidRoot } = this.props;
     // prefer state value if set
     const value = this.state.value ? this.state.value : this.props.value;
 
@@ -49,27 +47,26 @@ export class PickerComponent extends React.Component {
     );
 
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
         <View>
           <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
             <View
               style={this.props.containerStyle}
               onLayout={this.handleLayoutChange}
             >
-              <TText tid="Label" style={this.props.labelStyle}>
+              <Text testID={`${tidRoot ?? ""}/Label`} style={this.props.labelStyle}>
                 {this.props.label}
-              </TText>
+              </Text>
               <View style={this.props.pickerWrapperStyle}>
-                <TPicker
-                  tid="Picker"
+                <Picker
+                  testID={`${tidRoot ?? ""}/Picker`}
                   {...this.props.pickerProps}
                   selectedValue={selectedOption ? selectedOption.value : null}
                   onValueChange={this.handleValueChange}
                 >
                   {this.props.options.map(
                     ({ value, label }, idx) => (
-                      <TPickerItem
-                        tid={`PickerItem[${idx}]`}
+                      <Picker.Item
+                        testID={`${tidRoot ?? ""}/PickerItem[${idx}]`}
                         key={value}
                         value={value}
                         label={label}
@@ -77,13 +74,12 @@ export class PickerComponent extends React.Component {
                     ),
                     this
                   )}
-                </TPicker>
+                </Picker>
                 <TouchableOpacity activeOpacity={0} style={pickerCoverStyle} />
               </View>
             </View>
           </Field>
         </View>
-      </TestPathSegment>
     );
   }
 }

@@ -8,8 +8,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { Field } from "./Field";
 
-import { TestPathSegment, TText } from "@axsy-dev/testable";
-
 export class TimePickerComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -64,46 +62,45 @@ export class TimePickerComponent extends React.Component {
   }
 
   render() {
+    const { tidRoot } = this.props;
     const timeValue = this.state.date || new Date(0, 0, 0);
 
     let placeholderComponent = this.props.placeholderComponent ? (
       this.props.placeholderComponent
     ) : (
-      <TText tid="Placeholder" style={this.props.placeholderStyle}>
+      <Text testID={`${tidRoot ?? ""}/Placeholder`} style={this.props.placeholderStyle}>
         {this.props.placeholder}
-      </TText>
+      </Text>
     );
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "DatePicker"}>
-        <View>
-          <Field
-            {...this.props}
-            ref="inputBox"
-            onPress={this._togglePicker.bind(this)}
+      <View>
+        <Field
+          {...this.props}
+          ref="inputBox"
+          onPress={this._togglePicker.bind(this)}
+        >
+          <View
+            style={this.props.containerStyle}
+            onLayout={this.handleLayoutChange.bind(this)}
           >
-            <View
-              style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange.bind(this)}
-            >
-              {placeholderComponent}
-              <View style={this.props.valueContainerStyle}>
-                <TText tid="Value" style={[this.props.valueStyle]}>
-                  {this.props.dateTimeFormat(this.state.date)}
-                </TText>
-              </View>
-              {this.props.iconRight ? this.props.iconRight : null}
+            {placeholderComponent}
+            <View style={this.props.valueContainerStyle}>
+              <Text testID={`${tidRoot ?? ""}/Value`} style={[this.props.valueStyle]}>
+                {this.props.dateTimeFormat(this.state.date)}
+              </Text>
             </View>
-          </Field>
-          {this.state.isTimePickerVisible ? (
-            <DateTimePicker
-              {...this.props}
-              mode="time"
-              value={timeValue}
-              onChange={this.handleValueChange.bind(this)}
-            />
-          ) : null}
-        </View>
-      </TestPathSegment>
+            {this.props.iconRight ? this.props.iconRight : null}
+          </View>
+        </Field>
+        {this.state.isTimePickerVisible ? (
+          <DateTimePicker
+            {...this.props}
+            mode="time"
+            value={timeValue}
+            onChange={this.handleValueChange.bind(this)}
+          />
+        ) : null}
+      </View>
     );
   }
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TTouchableOpacity } from "@axsy-dev/testable";
+import { TouchableOpacity } from "react-native";
 
 const style = {
   flex: 1,
@@ -11,9 +11,9 @@ const style = {
 };
 
 const TouchableContainer = props => (
-  <TTouchableOpacity tid={props.tid} style={style} onPress={props.onPress}>
+  <TouchableOpacity testID={props.tid} style={style} onPress={props.onPress}>
     {props.children}
-  </TTouchableOpacity>
+  </TouchableOpacity>
 );
 
 export { TouchableContainer };

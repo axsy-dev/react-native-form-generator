@@ -4,9 +4,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { View, StyleSheet, Text } from "react-native";
-
-import { TText } from "@axsy-dev/testable";
-
 export class HelpText extends React.Component {
   render() {
     const { text, color, tidRoot } = this.props;

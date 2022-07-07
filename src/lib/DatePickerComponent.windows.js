@@ -3,11 +3,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-let { View, StyleSheet, TextInput } = require("react-native");
+let { View, Text } = require("react-native");
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Field } from "./Field";
-import { TestPathSegment, TText } from "@axsy-dev/testable";
 import {
   formatDateResult,
   normalizeAndFormat,
@@ -166,7 +165,7 @@ export class DatePickerComponent extends React.Component {
   }
 
   render() {
-    const { placeholderComponent, iconRight, iconClear } = this.props;
+    const { placeholderComponent, iconRight, iconClear, tidRoot } = this.props;
     const valueString = this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
       : "";
@@ -182,7 +181,6 @@ export class DatePickerComponent extends React.Component {
     const valueTestId = "Value";
 
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "DatePicker"}>
         <View>
           <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
             <View
@@ -196,12 +194,12 @@ export class DatePickerComponent extends React.Component {
                 <DatePickerPlaceholder {...this.props} />
               )}
               <View style={this.props.valueContainerStyle}>
-                <TText tid="Value" style={this.props.valueStyle}>
+                <Text testID={`${tidRoot ?? ""}/Value`} style={this.props.valueStyle}>
                   {valueString}
-                </TText>
+                </Text>
                 {iconClear && valueString ? (
                   <TouchableContainer
-                    tid="ClearDateValue"
+                    tid={`${tidRoot ?? ""}/ClearDateValue`}
                     onPress={this.handleClear}
                   >
                     {iconClear}
@@ -209,7 +207,7 @@ export class DatePickerComponent extends React.Component {
                 ) : null}
                 {iconRight ? (
                   <TouchableContainer
-                    tid="ToggleDatePicker"
+                    tid={`${tidRoot ?? ""}/ToggleDatePicker`}
                     onPress={this._togglePicker}
                   >
                     {iconRight}
@@ -234,7 +232,6 @@ export class DatePickerComponent extends React.Component {
             />
           ) : null}
         </View>
-      </TestPathSegment>
     );
   }
 }

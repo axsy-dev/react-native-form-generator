@@ -1,11 +1,9 @@
 "use strict";
 
 import React from "react";
-let { View, StyleSheet, Text, Switch, ViewPropTypes } = require("react-native");
+let { View, Text, Switch, ViewPropTypes } = require("react-native");
 
 import { Field } from "./Field";
-
-import { TestPathSegment } from "@axsy-dev/testable";
 
 export class SwitchComponent extends React.Component {
   constructor(props) {
@@ -36,21 +34,19 @@ export class SwitchComponent extends React.Component {
 
   render() {
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Switch"}>
-        <Field {...this.props}>
-          <View
-            style={this.props.containerStyle}
-            onLayout={this.handleLayoutChange.bind(this)}
-          >
-            <Text style={this.props.labelStyle}>{this.props.label}</Text>
-            <Switch
-              onValueChange={this.handleValueChange.bind(this)}
-              style={this.props.switchStyle}
-              value={this.state.value}
-            />
-          </View>
-        </Field>
-      </TestPathSegment>
+      <Field {...this.props}>
+        <View
+          style={this.props.containerStyle}
+          onLayout={this.handleLayoutChange.bind(this)}
+        >
+          <Text style={this.props.labelStyle}>{this.props.label}</Text>
+          <Switch
+            onValueChange={this.handleValueChange.bind(this)}
+            style={this.props.switchStyle}
+            value={this.state.value}
+          />
+        </View>
+      </Field>
     );
   }
 }

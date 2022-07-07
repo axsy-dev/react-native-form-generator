@@ -3,9 +3,6 @@
 import React from "react";
 let { View, StyleSheet, Text, ViewPropTypes } = require("react-native");
 import { Field } from "./Field";
-
-import { TestPathContainer, TText } from "@axsy-dev/testable";
-
 export class LinkComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -18,6 +15,7 @@ export class LinkComponent extends React.Component {
   }
 
   render() {
+    const { tidRoot } = this.props;
     return (
       <Field {...this.props}>
         <View
@@ -25,9 +23,9 @@ export class LinkComponent extends React.Component {
           onLayout={this.handleLayoutChange.bind(this)}
         >
           {this.props.iconLeft ? this.props.iconLeft : null}
-          <TText tid="Label" style={this.props.labelStyle}>
+          <Text testID={`${tidRoot ?? ""}/Label`} style={this.props.labelStyle}>
             {this.props.label}
-          </TText>
+          </Text>
 
           {this.props.iconRight ? this.props.iconRight : null}
         </View>
