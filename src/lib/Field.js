@@ -7,16 +7,15 @@ let { View, StyleSheet, TouchableOpacity } = require("react-native");
 
 export class Field extends React.Component {
   render() {
-    const { tidRoot } = this.props;
     let fieldHelpText =
       this.props.helpTextComponent ||
       (this.props.helpText ? (
-        <HelpText tidRoot={tidRoot} text={this.props.helpText} color={this.props.helpTextColor} />
+        <HelpText text={this.props.helpText} color={this.props.helpTextColor} />
       ) : null);
 
     if (this.props.onPress) {
       return (
-        <TouchableOpacity onPress={this.props.onPress} testID={`${tidRoot ?? ""}/TapTarget`}>
+        <TouchableOpacity onPress={this.props.onPress} testID={`TapTarget`}>
           <View>
             {this.props.children}
             {fieldHelpText}
@@ -25,7 +24,7 @@ export class Field extends React.Component {
       );
     }
     return (
-      <View testID={`${tidRoot ?? ""}/Wrapper`}>
+      <View testID={`Wrapper`}>
         {this.props.children}
         {fieldHelpText}
       </View>

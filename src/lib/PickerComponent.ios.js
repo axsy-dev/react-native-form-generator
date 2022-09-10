@@ -25,10 +25,10 @@ class RenderedSelector extends React.Component {
   }
 
   render() {
-    const { tidRoot } = this.props;
+    
     let picker = (
       <Picker
-        testID={`${tidRoot ?? ""}/Picker`}
+        testID={`Picker`}
         {...this.props.pickerProps}
         selectedValue={this.state.value}
         onValueChange={this.handleValueChange.bind(this)}
@@ -37,7 +37,7 @@ class RenderedSelector extends React.Component {
         {this.props.options.map(
           ({ value, label }, idx) => (
             <Picker.Item
-                testID={`${tidRoot ?? ""}/PickerItem[${idx}]`}
+                testID={`PickerItem/${idx}`}
               key={value}
               value={value}
               label={label}
@@ -130,7 +130,7 @@ export class PickerComponent extends React.Component {
   }
 
   render() {
-    const { tidRoot } = this.props;
+    
     let iconLeft = this.props.iconLeft,
       iconRight = this.props.iconRight;
 
@@ -158,11 +158,11 @@ export class PickerComponent extends React.Component {
               onLayout={this.handleLayoutChange.bind(this)}
             >
               {iconLeft ? iconLeft : null}
-              <Text testID={`${tidRoot ?? ""}/Label`} style={this.props.labelStyle}>
+              <Text testID={`Label`} style={this.props.labelStyle}>
                 {this.props.label}
               </Text>
               <View style={this.props.valueContainerStyle}>
-                <Text testID={`${tidRoot ?? ""}/Value`} style={this.props.valueStyle}>
+                <Text testID={`Value`} style={this.props.valueStyle}>
                   {selectedOption ? selectedOption.label : ""}
                 </Text>
               </View>

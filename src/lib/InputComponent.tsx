@@ -41,7 +41,6 @@ type Props = TextInputProps & {
     event: NativeSyntheticEvent<TextInputFocusEventData>,
     handle: ReturnType<typeof findNodeHandle>
   ) => void;
-  tidRoot: string;
 };
 
 type State = {
@@ -271,8 +270,6 @@ export class InputComponent extends React.Component<Props, State> {
   };
 
   render() {
-    const { tidRoot } = this.props;
-
     return (
       <Field {...this.props}>
         <View
@@ -282,7 +279,7 @@ export class InputComponent extends React.Component<Props, State> {
           {this.props.iconLeft ? this.props.iconLeft : null}
           {this.props.label ? (
             <Text
-              testID={`${tidRoot ?? ""}/Label`}
+              testID={`Label`}
               style={this.props.labelStyle}
               onLayout={this.handleLabelLayoutChange}
               onPress={this.handleFieldPress}
@@ -294,7 +291,7 @@ export class InputComponent extends React.Component<Props, State> {
           <TextInput
             {...this.props}
             ref={this.saveRef}
-            testID={`${tidRoot ?? ""}/Input`}
+            testID={`Input`}
             keyboardType={this.props.keyboardType}
             style={this.props.inputStyle}
             onChange={this.handleChangeFromInput}

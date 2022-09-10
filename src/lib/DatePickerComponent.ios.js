@@ -143,20 +143,18 @@ export class DatePickerComponent extends React.Component {
   }
 
   render() {
-    const {
-      placeholderComponent,
-      iconClear,
-      tidRoot
-    } = this.props;
+    const { placeholderComponent, iconClear } = this.props;
 
-    const valueString = `${tidRoot ?? ""}/` + this.state.date
+    const valueString = this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
-      : "Unknown";
+      : "";
 
+    const valueTestId =
+      `Value/` + this.state.date
+        ? `Value/${this.state.date?.getTime()}`
+        : "Unknown";
     const iconLeft = getIcon(this.state.isPickerVisible, this.props.iconLeft);
     const iconRight = getIcon(this.state.isPickerVisible, this.props.iconRight);
-
-    const valueTestId = "Value";
 
     return (
       <View>
@@ -177,7 +175,7 @@ export class DatePickerComponent extends React.Component {
               </Text>
               {iconClear && valueString ? (
                 <TouchableContainer
-                  tid={`${tidRoot ?? ""}/RemoveDateValue`}
+                  tid={`RemoveDateValue`}
                   onPress={this.handleClear}
                 >
                   {iconClear}
@@ -185,7 +183,7 @@ export class DatePickerComponent extends React.Component {
               ) : null}
               {iconRight ? (
                 <TouchableContainer
-                  tid={`${tidRoot ?? ""}/ToggleDatePicker`}
+                  tid={`ToggleDatePicker`}
                   onPress={this._togglePicker}
                 >
                   {iconRight}

@@ -15,7 +15,7 @@ export class LinkComponent extends React.Component {
   }
 
   render() {
-    const { tidRoot } = this.props;
+    
     return (
       <Field {...this.props}>
         <View
@@ -23,7 +23,7 @@ export class LinkComponent extends React.Component {
           onLayout={this.handleLayoutChange.bind(this)}
         >
           {this.props.iconLeft ? this.props.iconLeft : null}
-          <Text testID={`${tidRoot ?? ""}/Label`} style={this.props.labelStyle}>
+          <Text testID={`Label`} style={this.props.labelStyle}>
             {this.props.label}
           </Text>
 

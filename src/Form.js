@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export class Form extends Component {
   constructor(props) {
@@ -39,7 +39,6 @@ export class Form extends Component {
   }
 
   render() {
-    const { tidRoot } = this.props;
     let wrappedChildren = [];
 
     React.Children.map(
@@ -49,7 +48,6 @@ export class Form extends Component {
           return;
         }
         const isTestable = this.props.hasTestableWrappers === true;
-        const tidRoot = isTestable ? child.props.testID : `Element[${i}]`
         let formElement = isTestable ? child.props.children : child;
         formElement = React.cloneElement(formElement, {
           key: formElement.props.fieldKey
@@ -57,7 +55,6 @@ export class Form extends Component {
             : formElement.type + i,
           fieldRef: formElement.ref,
           ref: formElement.ref,
-          tidRoot: `${tidRoot ?? ""}`,
           onFocus: this.handleFieldFocused.bind(this),
           onChange: this.handleFieldChange.bind(this, formElement.ref)
         });
@@ -75,6 +72,10 @@ export class Form extends Component {
       this
     );
 
-    return <View testID={`${tidRoot ?? ""}/Form`} style={this.props.style}>{wrappedChildren}</View>;
+    return (
+      <View testID={`Form`} style={this.props.style}>
+        {wrappedChildren}
+      </View>
+    );
   }
 }

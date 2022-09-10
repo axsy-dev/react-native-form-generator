@@ -62,13 +62,12 @@ export class TimePickerComponent extends React.Component {
   }
 
   render() {
-    const { tidRoot } = this.props;
     const timeValue = this.state.date || new Date(0, 0, 0);
 
     let placeholderComponent = this.props.placeholderComponent ? (
       this.props.placeholderComponent
     ) : (
-      <Text testID={`${tidRoot ?? ""}/Placeholder`} style={this.props.placeholderStyle}>
+      <Text testID={`Label`} style={this.props.placeholderStyle}>
         {this.props.placeholder}
       </Text>
     );
@@ -85,7 +84,7 @@ export class TimePickerComponent extends React.Component {
           >
             {placeholderComponent}
             <View style={this.props.valueContainerStyle}>
-              <Text testID={`${tidRoot ?? ""}/Value`} style={[this.props.valueStyle]}>
+              <Text testID={`Value`} style={[this.props.valueStyle]}>
                 {this.props.dateTimeFormat(this.state.date)}
               </Text>
             </View>

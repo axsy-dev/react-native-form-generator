@@ -37,7 +37,7 @@ export class PickerComponent extends React.Component {
   };
 
   render() {
-    const { tidRoot } = this.props;
+    
     // prefer state value if set
     const value = this.state.value ? this.state.value : this.props.value;
 
@@ -53,12 +53,12 @@ export class PickerComponent extends React.Component {
               style={this.props.containerStyle}
               onLayout={this.handleLayoutChange}
             >
-              <Text testID={`${tidRoot ?? ""}/Label`} style={this.props.labelStyle}>
+              <Text testID={`Label`} style={this.props.labelStyle}>
                 {this.props.label}
               </Text>
               <View style={this.props.pickerWrapperStyle}>
                 <Picker
-                  testID={`${tidRoot ?? ""}/Picker`}
+                  testID={`Picker`}
                   {...this.props.pickerProps}
                   selectedValue={selectedOption ? selectedOption.value : null}
                   onValueChange={this.handleValueChange}
@@ -66,7 +66,7 @@ export class PickerComponent extends React.Component {
                   {this.props.options.map(
                     ({ value, label }, idx) => (
                       <Picker.Item
-                        testID={`${tidRoot ?? ""}/PickerItem[${idx}]`}
+                        testID={`PickerItem/${idx}`}
                         key={value}
                         value={value}
                         label={label}

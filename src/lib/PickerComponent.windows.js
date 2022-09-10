@@ -66,7 +66,7 @@ export class PickerComponent extends React.Component {
   };
 
   render() {
-    const { tidRoot } = this.props;
+    
     let iconLeft = this.props.iconLeft,
       iconRight = this.props.iconRight;
 
@@ -90,18 +90,18 @@ export class PickerComponent extends React.Component {
               onLayout={this.handleLayoutChange}
             >
               {iconLeft ? iconLeft : null}
-              <Text testID={`${tidRoot ?? ""}/Label`} style={this.props.labelStyle}>
+              <Text testID={`Label`} style={this.props.labelStyle}>
                 {this.props.label}
               </Text>
               <Picker
-                testID={`${tidRoot ?? ""}/Picker`}
+                testID={`Picker`}
                 {...this.props.pickerProps}
                 selectedValue={selectedOption ? selectedOption.value : null}
                 onValueChange={this.handleValueChange}
               >
                 {this.props.options.map(({ value, label }, idx) => (
                   <Picker.Item
-                    testID={`${tidRoot ?? ""}/PickerItem[${idx}]`}
+                    testID={`PickerItem/${idx}`}
                     key={value}
                     value={value}
                     label={label}
