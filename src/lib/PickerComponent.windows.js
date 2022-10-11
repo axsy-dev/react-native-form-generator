@@ -1,7 +1,7 @@
 "use strict";
 
 import React from "react";
-import { View, findNodeHandle } from "react-native";
+import { View, findNodeHandle, Text } from "react-native";
 import PropTypes from "prop-types";
 import { Field } from "../lib/Field";
 import {
