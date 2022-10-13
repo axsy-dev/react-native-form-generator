@@ -5,9 +5,7 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import { View, Text } from "react-native";
 import { Field } from "../lib/Field";
-import {
-    Picker
-} from "@react-native-picker/picker";
+import { Picker } from "@react-native-picker/picker";
 
 class RenderedSelector extends React.Component {
   constructor(props) {
@@ -25,7 +23,6 @@ class RenderedSelector extends React.Component {
   }
 
   render() {
-    
     let picker = (
       <Picker
         testID="Picker"
@@ -37,7 +34,7 @@ class RenderedSelector extends React.Component {
         {this.props.options.map(
           ({ value, label }, idx) => (
             <Picker.Item
-                testID={`PickerItem/${idx}`}
+              testID={`PickerItem/${idx}`}
               key={value}
               value={value}
               label={label}
@@ -130,7 +127,6 @@ export class PickerComponent extends React.Component {
   }
 
   render() {
-    
     let iconLeft = this.props.iconLeft,
       iconRight = this.props.iconRight;
 
@@ -147,30 +143,30 @@ export class PickerComponent extends React.Component {
     );
 
     return (
-        <View>
-          <Field
-            {...this.props}
-            ref="inputBox"
-            onPress={this._togglePicker.bind(this)}
+      <View>
+        <Field
+          {...this.props}
+          ref="inputBox"
+          onPress={this._togglePicker.bind(this)}
+        >
+          <View
+            style={this.props.containerStyle}
+            onLayout={this.handleLayoutChange.bind(this)}
           >
-            <View
-              style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange.bind(this)}
-            >
-              {iconLeft ? iconLeft : null}
-              <Text testID="Label" style={this.props.labelStyle}>
-                {this.props.label}
+            {iconLeft ? iconLeft : null}
+            <Text testID="Label" style={this.props.labelStyle}>
+              {this.props.label}
+            </Text>
+            <View style={this.props.valueContainerStyle}>
+              <Text testID="Value" style={this.props.valueStyle}>
+                {selectedOption ? selectedOption.label : ""}
               </Text>
-              <View style={this.props.valueContainerStyle}>
-                <Text testID="Value" style={this.props.valueStyle}>
-                  {selectedOption ? selectedOption.label : ""}
-                </Text>
-              </View>
-              {this.props.iconRight ? this.props.iconRight : null}
             </View>
-          </Field>
-          {this.state.isPickerVisible ? this._renderContent() : null}
-        </View>
+            {this.props.iconRight ? this.props.iconRight : null}
+          </View>
+        </Field>
+        {this.state.isPickerVisible ? this._renderContent() : null}
+      </View>
     );
   }
 }

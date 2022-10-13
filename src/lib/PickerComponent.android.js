@@ -1,11 +1,9 @@
 "use strict";
 
 import React from "react";
-import ReactNative, { View, TouchableOpacity, Text } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { Field } from "../lib/Field";
-import {
-    Picker
-} from "@react-native-picker/picker";
+import { Picker } from "@react-native-picker/picker";
 
 import _ from "lodash";
 
@@ -37,7 +35,6 @@ export class PickerComponent extends React.Component {
   };
 
   render() {
-    
     // prefer state value if set
     const value = this.state.value ? this.state.value : this.props.value;
 
@@ -47,39 +44,39 @@ export class PickerComponent extends React.Component {
     );
 
     return (
-        <View>
-          <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
-            <View
-              style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange}
-            >
-              <Text testID="Label" style={this.props.labelStyle}>
-                {this.props.label}
-              </Text>
-              <View style={this.props.pickerWrapperStyle}>
-                <Picker
-                  testID="Picker"
-                  {...this.props.pickerProps}
-                  selectedValue={selectedOption ? selectedOption.value : null}
-                  onValueChange={this.handleValueChange}
-                >
-                  {this.props.options.map(
-                    ({ value, label }, idx) => (
-                      <Picker.Item
-                        testID={`PickerItem/${idx}`}
-                        key={value}
-                        value={value}
-                        label={label}
-                      />
-                    ),
-                    this
-                  )}
-                </Picker>
-                <TouchableOpacity activeOpacity={0} style={pickerCoverStyle} />
-              </View>
+      <View>
+        <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
+          <View
+            style={this.props.containerStyle}
+            onLayout={this.handleLayoutChange}
+          >
+            <Text testID="Label" style={this.props.labelStyle}>
+              {this.props.label}
+            </Text>
+            <View style={this.props.pickerWrapperStyle}>
+              <Picker
+                testID="Picker"
+                {...this.props.pickerProps}
+                selectedValue={selectedOption ? selectedOption.value : null}
+                onValueChange={this.handleValueChange}
+              >
+                {this.props.options.map(
+                  ({ value, label }, idx) => (
+                    <Picker.Item
+                      testID={`PickerItem/${idx}`}
+                      key={value}
+                      value={value}
+                      label={label}
+                    />
+                  ),
+                  this
+                )}
+              </Picker>
+              <TouchableOpacity activeOpacity={0} style={pickerCoverStyle} />
             </View>
-          </Field>
-        </View>
+          </View>
+        </Field>
+      </View>
     );
   }
 }

@@ -179,10 +179,9 @@ export class DatePickerComponent extends React.Component {
       ? { width: 300, opacity: 1, height: 30, marginTop: 10 }
       : {};
 
-    const valueTestId =
-      this.state.date
-        ? `Value/${this.state.date?.getTime()}`
-        : "Unknown";
+    const valueTestId = this.state.date
+      ? `Value/${this.state.date?.getTime()}`
+      : "Unknown";
 
     return (
       <View>

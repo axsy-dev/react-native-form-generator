@@ -15,7 +15,6 @@ export class LinkComponent extends React.Component {
   }
 
   render() {
-    
     return (
       <Field {...this.props}>
         <View
