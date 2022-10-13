@@ -73,7 +73,7 @@ export class Form extends Component {
     );
 
     return (
-      <View testID={`Form`} style={this.props.style}>
+      <View testID="Form" style={this.props.style}>
         {wrappedChildren}
       </View>
     );

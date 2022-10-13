@@ -53,12 +53,12 @@ export class PickerComponent extends React.Component {
               style={this.props.containerStyle}
               onLayout={this.handleLayoutChange}
             >
-              <Text testID={`Label`} style={this.props.labelStyle}>
+              <Text testID="Label" style={this.props.labelStyle}>
                 {this.props.label}
               </Text>
               <View style={this.props.pickerWrapperStyle}>
                 <Picker
-                  testID={`Picker`}
+                  testID="Picker"
                   {...this.props.pickerProps}
                   selectedValue={selectedOption ? selectedOption.value : null}
                   onValueChange={this.handleValueChange}

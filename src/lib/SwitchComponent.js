@@ -1,7 +1,7 @@
 "use strict";
 
 import React from "react";
-let { View, Text, Switch, ViewPropTypes } = require("react-native");
+import { View, Text, Switch, ViewPropTypes } from "react-native";
 
 import { Field } from "./Field";
 

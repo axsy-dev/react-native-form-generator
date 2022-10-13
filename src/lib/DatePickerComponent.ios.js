@@ -149,10 +149,9 @@ export class DatePickerComponent extends React.Component {
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
       : "";
 
-    const valueTestId =
-      `Value/` + this.state.date
-        ? `Value/${this.state.date?.getTime()}`
-        : "Unknown";
+    const valueTestId = this.state.date
+      ? `Value/${this.state.date?.getTime()}`
+      : "Unknown";
     const iconLeft = getIcon(this.state.isPickerVisible, this.props.iconLeft);
     const iconRight = getIcon(this.state.isPickerVisible, this.props.iconRight);
 

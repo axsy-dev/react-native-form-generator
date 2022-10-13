@@ -2,7 +2,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -67,7 +67,7 @@ export class TimePickerComponent extends React.Component {
     let placeholderComponent = this.props.placeholderComponent ? (
       this.props.placeholderComponent
     ) : (
-      <Text testID={`Label`} style={this.props.placeholderStyle}>
+      <Text testID="Label" style={this.props.placeholderStyle}>
         {this.props.placeholder}
       </Text>
     );

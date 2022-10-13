@@ -28,7 +28,7 @@ class RenderedSelector extends React.Component {
     
     let picker = (
       <Picker
-        testID={`Picker`}
+        testID="Picker"
         {...this.props.pickerProps}
         selectedValue={this.state.value}
         onValueChange={this.handleValueChange.bind(this)}
@@ -158,11 +158,11 @@ export class PickerComponent extends React.Component {
               onLayout={this.handleLayoutChange.bind(this)}
             >
               {iconLeft ? iconLeft : null}
-              <Text testID={`Label`} style={this.props.labelStyle}>
+              <Text testID="Label" style={this.props.labelStyle}>
                 {this.props.label}
               </Text>
               <View style={this.props.valueContainerStyle}>
-                <Text testID={`Value`} style={this.props.valueStyle}>
+                <Text testID="Value" style={this.props.valueStyle}>
                   {selectedOption ? selectedOption.label : ""}
                 </Text>
               </View>

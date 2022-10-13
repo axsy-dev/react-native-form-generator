@@ -1,7 +1,7 @@
 "use strict";
 
 import React from "react";
-let { View, StyleSheet, Text, ViewPropTypes } = require("react-native");
+import { View, Text, ViewPropTypes } from "react-native";
 import { Field } from "./Field";
 export class LinkComponent extends React.Component {
   constructor(props) {
@@ -23,7 +23,7 @@ export class LinkComponent extends React.Component {
           onLayout={this.handleLayoutChange.bind(this)}
         >
           {this.props.iconLeft ? this.props.iconLeft : null}
-          <Text testID={`Label`} style={this.props.labelStyle}>
+          <Text testID="Label" style={this.props.labelStyle}>
             {this.props.label}
           </Text>
 

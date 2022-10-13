@@ -3,7 +3,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-let { View, Text } = require("react-native");
+import { View, Text } from "react-native";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Field } from "./Field";
@@ -180,7 +180,7 @@ export class DatePickerComponent extends React.Component {
       : {};
 
     const valueTestId =
-      `Value/` + this.state.date
+      this.state.date
         ? `Value/${this.state.date?.getTime()}`
         : "Unknown";
 

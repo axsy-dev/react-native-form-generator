@@ -3,7 +3,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { HelpText } from "./HelpText";
-let { View, StyleSheet, TouchableOpacity } = require("react-native");
+import { View, TouchableOpacity } from "react-native";
 
 export class Field extends React.Component {
   render() {
@@ -15,7 +15,7 @@ export class Field extends React.Component {
 
     if (this.props.onPress) {
       return (
-        <TouchableOpacity onPress={this.props.onPress} testID={`TapTarget`}>
+        <TouchableOpacity onPress={this.props.onPress} testID="TapTarget">
           <View>
             {this.props.children}
             {fieldHelpText}
@@ -24,7 +24,7 @@ export class Field extends React.Component {
       );
     }
     return (
-      <View testID={`Wrapper`}>
+      <View testID="Wrapper">
         {this.props.children}
         {fieldHelpText}
       </View>

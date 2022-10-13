@@ -90,11 +90,11 @@ export class PickerComponent extends React.Component {
               onLayout={this.handleLayoutChange}
             >
               {iconLeft ? iconLeft : null}
-              <Text testID={`Label`} style={this.props.labelStyle}>
+              <Text testID="Label" style={this.props.labelStyle}>
                 {this.props.label}
               </Text>
               <Picker
-                testID={`Picker`}
+                testID="Picker"
                 {...this.props.pickerProps}
                 selectedValue={selectedOption ? selectedOption.value : null}
                 onValueChange={this.handleValueChange}

@@ -12,7 +12,7 @@ export class HelpText extends React.Component {
     const textColor = !!color ? { color } : {};
     return (
       <View style={formStyles.helpTextContainer}>
-        <Text testID={`HelpText`} style={[formStyles.helpText, textColor]}>
+        <Text testID="HelpText" style={[formStyles.helpText, textColor]}>
           {text}
         </Text>
       </View>

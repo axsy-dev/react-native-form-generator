@@ -279,7 +279,7 @@ export class InputComponent extends React.Component<Props, State> {
           {this.props.iconLeft ? this.props.iconLeft : null}
           {this.props.label ? (
             <Text
-              testID={`Label`}
+              testID="Label"
               style={this.props.labelStyle}
               onLayout={this.handleLabelLayoutChange}
               onPress={this.handleFieldPress}
@@ -291,7 +291,7 @@ export class InputComponent extends React.Component<Props, State> {
           <TextInput
             {...this.props}
             ref={this.saveRef}
-            testID={`Input`}
+            testID="Input"
             keyboardType={this.props.keyboardType}
             style={this.props.inputStyle}
             onChange={this.handleChangeFromInput}
