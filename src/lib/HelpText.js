@@ -3,22 +3,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { View, StyleSheet } from "react-native";
-
-import { TText } from "@axsy-dev/testable";
-
+import { View, StyleSheet, Text } from "react-native";
 export class HelpText extends React.Component {
   render() {
     const { text, color } = this.props;
     if (!text) return null;
 
     const textColor = !!color ? { color } : {};
-
     return (
       <View style={formStyles.helpTextContainer}>
-        <TText tid="HelpText" style={[formStyles.helpText, textColor]}>
+        <Text testID="HelpText" style={[formStyles.helpText, textColor]}>
           {text}
-        </TText>
+        </Text>
       </View>
     );
   }

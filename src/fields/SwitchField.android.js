@@ -1,7 +1,6 @@
 "use strict";
 
 import React from "react";
-let { View, StyleSheet, Text, Switch } = require("react-native");
 
 import { SwitchComponent } from "../lib/SwitchComponent";
 

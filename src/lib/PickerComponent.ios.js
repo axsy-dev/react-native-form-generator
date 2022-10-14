@@ -3,15 +3,9 @@
 import React from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { Field } from "../lib/Field";
-
-import {
-  TestPathSegment,
-  TText,
-  TPicker,
-  TPickerItem
-} from "@axsy-dev/testable";
+import { Picker } from "@react-native-picker/picker";
 
 class RenderedSelector extends React.Component {
   constructor(props) {
@@ -30,8 +24,8 @@ class RenderedSelector extends React.Component {
 
   render() {
     let picker = (
-      <TPicker
-        tid="Picker"
+      <Picker
+        testID="Picker"
         {...this.props.pickerProps}
         selectedValue={this.state.value}
         onValueChange={this.handleValueChange.bind(this)}
@@ -39,8 +33,8 @@ class RenderedSelector extends React.Component {
       >
         {this.props.options.map(
           ({ value, label }, idx) => (
-            <TPickerItem
-              tid={`PickerItem[${idx}]`}
+            <Picker.Item
+              testID={`PickerItem/${idx}`}
               key={value}
               value={value}
               label={label}
@@ -48,7 +42,7 @@ class RenderedSelector extends React.Component {
           ),
           this
         )}
-      </TPicker>
+      </Picker>
     );
 
     return React.cloneElement(
@@ -149,32 +143,30 @@ export class PickerComponent extends React.Component {
     );
 
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
-        <View>
-          <Field
-            {...this.props}
-            ref="inputBox"
-            onPress={this._togglePicker.bind(this)}
+      <View>
+        <Field
+          {...this.props}
+          ref="inputBox"
+          onPress={this._togglePicker.bind(this)}
+        >
+          <View
+            style={this.props.containerStyle}
+            onLayout={this.handleLayoutChange.bind(this)}
           >
-            <View
-              style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange.bind(this)}
-            >
-              {iconLeft ? iconLeft : null}
-              <TText tid="Label" style={this.props.labelStyle}>
-                {this.props.label}
-              </TText>
-              <View style={this.props.valueContainerStyle}>
-                <TText tid="Value" style={this.props.valueStyle}>
-                  {selectedOption ? selectedOption.label : ""}
-                </TText>
-              </View>
-              {this.props.iconRight ? this.props.iconRight : null}
+            {iconLeft ? iconLeft : null}
+            <Text testID="Label" style={this.props.labelStyle}>
+              {this.props.label}
+            </Text>
+            <View style={this.props.valueContainerStyle}>
+              <Text testID="Value" style={this.props.valueStyle}>
+                {selectedOption ? selectedOption.label : ""}
+              </Text>
             </View>
-          </Field>
-          {this.state.isPickerVisible ? this._renderContent() : null}
-        </View>
-      </TestPathSegment>
+            {this.props.iconRight ? this.props.iconRight : null}
+          </View>
+        </Field>
+        {this.state.isPickerVisible ? this._renderContent() : null}
+      </View>
     );
   }
 }

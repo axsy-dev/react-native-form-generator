@@ -3,11 +3,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-let { View, StyleSheet, TextInput } = require("react-native");
+import { View, Text } from "react-native";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Field } from "./Field";
-import { TestPathSegment, TText } from "@axsy-dev/testable";
 import {
   formatDateResult,
   normalizeAndFormat,
@@ -179,62 +178,63 @@ export class DatePickerComponent extends React.Component {
     const pickerStyle = this.state.isTimePickerVisible
       ? { width: 300, opacity: 1, height: 30, marginTop: 10 }
       : {};
-    const valueTestId = "Value";
+
+    const valueTestId = this.state.date
+      ? `Value/${this.state.date?.getTime()}`
+      : "Unknown";
 
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "DatePicker"}>
-        <View>
-          <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
-            <View
-              style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange}
-            >
-              {this.props.iconLeft ? this.props.iconLeft : null}
-              {placeholderComponent ? (
-                placeholderComponent
-              ) : (
-                <DatePickerPlaceholder {...this.props} />
-              )}
-              <View style={this.props.valueContainerStyle}>
-                <TText tid="Value" style={this.props.valueStyle}>
-                  {valueString}
-                </TText>
-                {iconClear && valueString ? (
-                  <TouchableContainer
-                    tid="ClearDateValue"
-                    onPress={this.handleClear}
-                  >
-                    {iconClear}
-                  </TouchableContainer>
-                ) : null}
-                {iconRight ? (
-                  <TouchableContainer
-                    tid="ToggleDatePicker"
-                    onPress={this._togglePicker}
-                  >
-                    {iconRight}
-                  </TouchableContainer>
-                ) : null}
-              </View>
+      <View>
+        <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
+          <View
+            style={this.props.containerStyle}
+            onLayout={this.handleLayoutChange}
+          >
+            {this.props.iconLeft ? this.props.iconLeft : null}
+            {placeholderComponent ? (
+              placeholderComponent
+            ) : (
+              <DatePickerPlaceholder {...this.props} />
+            )}
+            <View style={this.props.valueContainerStyle}>
+              <Text testID={valueTestId} style={this.props.valueStyle}>
+                {valueString}
+              </Text>
+              {iconClear && valueString ? (
+                <TouchableContainer
+                  tid={`ClearDateValue`}
+                  onPress={this.handleClear}
+                >
+                  {iconClear}
+                </TouchableContainer>
+              ) : null}
+              {iconRight ? (
+                <TouchableContainer
+                  tid={`ToggleDatePicker`}
+                  onPress={this._togglePicker}
+                >
+                  {iconRight}
+                </TouchableContainer>
+              ) : null}
             </View>
-          </Field>
-          {isPickerVisible ? (
-            <DateTimePicker
-              {...this.props}
-              mode={pickerMode}
-              value={timeValue}
-              style={pickerStyle}
-              minDate={this.props.minimumDate}
-              maxDate={this.props.maximumDate}
-              is24Hour={false}
-              dateFormat={"month day year"}
-              minuteInterval={5}
-              onChange={this.onChange}
-              timeZoneOffsetInSeconds={0} // This is necessary since DateTimePicker for some reason adds -1 hr timezone offset
-            />
-          ) : null}
-        </View>
-      </TestPathSegment>
+          </View>
+        </Field>
+        {isPickerVisible ? (
+          <DateTimePicker
+            {...this.props}
+            mode={pickerMode}
+            value={timeValue}
+            style={pickerStyle}
+            minDate={this.props.minimumDate}
+            maxDate={this.props.maximumDate}
+            is24Hour={false}
+            dateFormat={"month day year"}
+            minuteInterval={5}
+            onChange={this.onChange}
+            timeZoneOffsetInSeconds={0} // This is necessary since DateTimePicker for some reason adds -1 hr timezone offset
+          />
+        ) : null}
+      </View>
     );
   }
 }

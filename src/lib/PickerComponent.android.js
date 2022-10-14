@@ -1,15 +1,10 @@
 "use strict";
 
 import React from "react";
-import ReactNative, { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Text } from "react-native";
 import { Field } from "../lib/Field";
+import { Picker } from "@react-native-picker/picker";
 
-import {
-  TestPathSegment,
-  TText,
-  TPicker,
-  TPickerItem
-} from "@axsy-dev/testable";
 import _ from "lodash";
 
 export class PickerComponent extends React.Component {
@@ -49,41 +44,39 @@ export class PickerComponent extends React.Component {
     );
 
     return (
-      <TestPathSegment name={`Field[${this.props.fieldRef}]` || "Picker"}>
-        <View>
-          <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
-            <View
-              style={this.props.containerStyle}
-              onLayout={this.handleLayoutChange}
-            >
-              <TText tid="Label" style={this.props.labelStyle}>
-                {this.props.label}
-              </TText>
-              <View style={this.props.pickerWrapperStyle}>
-                <TPicker
-                  tid="Picker"
-                  {...this.props.pickerProps}
-                  selectedValue={selectedOption ? selectedOption.value : null}
-                  onValueChange={this.handleValueChange}
-                >
-                  {this.props.options.map(
-                    ({ value, label }, idx) => (
-                      <TPickerItem
-                        tid={`PickerItem[${idx}]`}
-                        key={value}
-                        value={value}
-                        label={label}
-                      />
-                    ),
-                    this
-                  )}
-                </TPicker>
-                <TouchableOpacity activeOpacity={0} style={pickerCoverStyle} />
-              </View>
+      <View>
+        <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
+          <View
+            style={this.props.containerStyle}
+            onLayout={this.handleLayoutChange}
+          >
+            <Text testID="Label" style={this.props.labelStyle}>
+              {this.props.label}
+            </Text>
+            <View style={this.props.pickerWrapperStyle}>
+              <Picker
+                testID="Picker"
+                {...this.props.pickerProps}
+                selectedValue={selectedOption ? selectedOption.value : null}
+                onValueChange={this.handleValueChange}
+              >
+                {this.props.options.map(
+                  ({ value, label }, idx) => (
+                    <Picker.Item
+                      testID={`PickerItem/${idx}`}
+                      key={value}
+                      value={value}
+                      label={label}
+                    />
+                  ),
+                  this
+                )}
+              </Picker>
+              <TouchableOpacity activeOpacity={0} style={pickerCoverStyle} />
             </View>
-          </Field>
-        </View>
-      </TestPathSegment>
+          </View>
+        </Field>
+      </View>
     );
   }
 }

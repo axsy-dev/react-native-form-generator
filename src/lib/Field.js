@@ -3,9 +3,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { HelpText } from "./HelpText";
-let { View, StyleSheet } = require("react-native");
-
-import { TTouchableOpacity } from "@axsy-dev/testable";
+import { View, TouchableOpacity } from "react-native";
 
 export class Field extends React.Component {
   render() {
@@ -17,16 +15,16 @@ export class Field extends React.Component {
 
     if (this.props.onPress) {
       return (
-        <TTouchableOpacity onPress={this.props.onPress} tid={"OnPress"}>
+        <TouchableOpacity onPress={this.props.onPress} testID="TapTarget">
           <View>
             {this.props.children}
             {fieldHelpText}
           </View>
-        </TTouchableOpacity>
+        </TouchableOpacity>
       );
     }
     return (
-      <View>
+      <View testID="Wrapper">
         {this.props.children}
         {fieldHelpText}
       </View>

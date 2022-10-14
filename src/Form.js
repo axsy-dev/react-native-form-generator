@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  Text,
-  SliderIOS,
-  TouchableWithoutFeedback
-} from "react-native";
+import { Text, View } from "react-native";
 
 export class Form extends Component {
   constructor(props) {
@@ -55,11 +47,8 @@ export class Form extends Component {
         if (!child) {
           return;
         }
-
         const isTestable = this.props.hasTestableWrappers === true;
-
         let formElement = isTestable ? child.props.children : child;
-
         formElement = React.cloneElement(formElement, {
           key: formElement.props.fieldKey
             ? formElement.props.fieldKey
@@ -83,6 +72,10 @@ export class Form extends Component {
       this
     );
 
-    return <View style={this.props.style}>{wrappedChildren}</View>;
+    return (
+      <View testID="Form" style={this.props.style}>
+        {wrappedChildren}
+      </View>
+    );
   }
 }
