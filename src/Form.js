@@ -38,36 +38,50 @@ export class Form extends Component {
     return res.join(" ");
   }
 
+  mapChildren(element, callback) {
+    return React.cloneElement(element, {
+      children: React.Children.map(element.props.children, callback)
+    });
+  }
+
+  addPropsToSection(sectionElement, isTestable) {
+    return this.mapChildren(sectionElement, columnElement =>
+      this.mapChildren(columnElement, (fieldElement, key) =>
+        this.addProps(fieldElement, isTestable, key)
+      )
+    );
+  }
+
+  addProps(element, isTestable, key) {
+    const target = isTestable ? element.props.children : element;
+    const fieldName =
+      target.props.fieldRef ??
+      target.props.fieldKey ??
+      target.props?.field?.name ??
+      "unknown-field-name";
+    return React.cloneElement(target, {
+      key,
+      fieldRef: target.ref,
+      ref: target.ref,
+      onFocus: this.handleFieldFocused.bind(this),
+      onChange: this.handleFieldChange.bind(this, fieldName)
+    });
+  }
+
   render() {
     let wrappedChildren = [];
 
     React.Children.map(
       this.props.children,
-      (child, i) => {
+      (child, key) => {
         if (!child) {
           return;
         }
         const isTestable = this.props.hasTestableWrappers === true;
-        let formElement = isTestable ? child.props.children : child;
-        formElement = React.cloneElement(formElement, {
-          key: formElement.props.fieldKey
-            ? formElement.props.fieldKey
-            : formElement.type + i,
-          fieldRef: formElement.ref,
-          ref: formElement.ref,
-          onFocus: this.handleFieldFocused.bind(this),
-          onChange: this.handleFieldChange.bind(this, formElement.ref)
-        });
-
-        if (isTestable) {
-          child = React.cloneElement(child, {
-            children: formElement
-          });
-        } else {
-          child = formElement;
-        }
-
-        wrappedChildren.push(child);
+        const formElement = child.props.isSection
+          ? this.addPropsToSection(child, isTestable)
+          : this.addProps(child, isTestable, key);
+        wrappedChildren.push(formElement);
       },
       this
     );
