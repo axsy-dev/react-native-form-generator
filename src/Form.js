@@ -54,17 +54,12 @@ export class Form extends Component {
 
   addProps(element, isTestable, key) {
     const target = isTestable ? element.props.children : element;
-    const fieldName =
-      target.props.fieldRef ??
-      target.props.fieldKey ??
-      target.props?.field?.name ??
-      "unknown-field-name";
     return React.cloneElement(target, {
       key,
       fieldRef: target.ref,
       ref: target.ref,
       onFocus: this.handleFieldFocused.bind(this),
-      onChange: this.handleFieldChange.bind(this, fieldName)
+      onChange: this.handleFieldChange.bind(this, target.ref)
     });
   }
 
