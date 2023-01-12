@@ -40,27 +40,36 @@ export class Form extends Component {
 
   mapChildren(element, callback) {
     return React.cloneElement(element, {
-      children: React.Children.map(element.props.children, callback)
+      children: React.Children.map(element.props.children, (child, index) =>
+        callback(child, index)
+      )
     });
   }
 
   addPropsToSection(sectionElement, isTestable) {
-    return this.mapChildren(sectionElement, columnElement =>
+    const target = isTestable ? sectionElement.props.children : sectionElement;
+    const connectedTarget = this.mapChildren(target, columnElement =>
       this.mapChildren(columnElement, (fieldElement, key) =>
         this.addProps(fieldElement, isTestable, key)
       )
     );
+    return isTestable
+      ? React.cloneElement(sectionElement, { children: connectedTarget })
+      : connectedTarget;
   }
 
   addProps(element, isTestable, key) {
     const target = isTestable ? element.props.children : element;
-    return React.cloneElement(target, {
+    const targetWithProps = React.cloneElement(target, {
       key,
       fieldRef: target.ref,
       ref: target.ref,
       onFocus: this.handleFieldFocused.bind(this),
       onChange: this.handleFieldChange.bind(this, target.ref)
     });
+    return isTestable
+      ? React.cloneElement(element, { children: targetWithProps })
+      : targetWithProps;
   }
 
   render() {
@@ -73,7 +82,9 @@ export class Form extends Component {
           return;
         }
         const isTestable = this.props.hasTestableWrappers === true;
-        const formElement = child.props.isSection
+        const isSection = (isTestable ? child.props.children : child).props
+          .isSection;
+        const formElement = isSection
           ? this.addPropsToSection(child, isTestable)
           : this.addProps(child, isTestable, key);
         wrappedChildren.push(formElement);
