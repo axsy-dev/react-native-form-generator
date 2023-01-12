@@ -154,7 +154,7 @@ export class DatePickerComponent extends React.Component {
       : "Unknown";
     const iconLeft = getIcon(this.state.isPickerVisible, this.props.iconLeft);
     const iconRight = getIcon(this.state.isPickerVisible, this.props.iconRight);
-
+    const showClear = !!(iconClear && valueString);
     return (
       <View>
         <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
@@ -172,7 +172,7 @@ export class DatePickerComponent extends React.Component {
               <Text tid={valueTestId} style={[this.props.valueStyle]}>
                 {valueString}
               </Text>
-              {iconClear && valueString ? (
+              {showClear ? (
                 <TouchableContainer
                   tid={`RemoveDateValue`}
                   onPress={this.handleClear}
@@ -180,7 +180,7 @@ export class DatePickerComponent extends React.Component {
                   {iconClear}
                 </TouchableContainer>
               ) : null}
-              {!iconClear && iconRight ? (
+              {!showClear && iconRight ? (
                 <TouchableContainer
                   tid={`ToggleDatePicker`}
                   onPress={this._togglePicker}
