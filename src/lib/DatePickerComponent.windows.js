@@ -182,7 +182,7 @@ export class DatePickerComponent extends React.Component {
     const valueTestId = this.state.date
       ? `Value/${this.state.date?.getTime()}`
       : "Unknown";
-
+    const showClear = !!(iconClear && valueString);
     return (
       <View>
         <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
@@ -200,7 +200,7 @@ export class DatePickerComponent extends React.Component {
               <Text testID={valueTestId} style={this.props.valueStyle}>
                 {valueString}
               </Text>
-              {iconClear && valueString ? (
+              {showClear ? (
                 <TouchableContainer
                   tid={`ClearDateValue`}
                   onPress={this.handleClear}
@@ -208,7 +208,7 @@ export class DatePickerComponent extends React.Component {
                   {iconClear}
                 </TouchableContainer>
               ) : null}
-              {iconRight ? (
+              {!showClear && iconRight ? (
                 <TouchableContainer
                   tid={`ToggleDatePicker`}
                   onPress={this._togglePicker}
