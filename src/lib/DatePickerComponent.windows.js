@@ -36,7 +36,7 @@ export class DatePickerComponent extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    const dateToSet = normalizeAndFormat(this.props);
+    const dateToSet = this.props.noInitialDate ? "" : normalizeAndFormat(this.props);
 
     this.setState({ date: dateToSet });
   }
