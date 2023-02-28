@@ -207,7 +207,8 @@ function getIcon(isPickerVisible, icons) {
 DatePickerComponent.propTypes = {
   dateTimeFormat: PropTypes.func,
   pickerWrapper: PropTypes.element,
-  prettyPrint: PropTypes.bool
+  prettyPrint: PropTypes.bool,
+  noInitialDate: PropTypes.bool
 };
 
 DatePickerComponent.defaultProps = {

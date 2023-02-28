@@ -240,7 +240,8 @@ export class DatePickerComponent extends React.Component {
 }
 
 DatePickerComponent.propTypes = {
-  dateTimeFormat: PropTypes.func
+  dateTimeFormat: PropTypes.func,
+  noInitialDate: PropTypes.bool
 };
 
 DatePickerComponent.defaultProps = {
