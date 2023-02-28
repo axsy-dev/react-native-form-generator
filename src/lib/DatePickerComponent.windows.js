@@ -36,7 +36,7 @@ export class DatePickerComponent extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    const dateToSet = normalizeAndFormat(this.props);
+    const dateToSet = this.props.noInitialDate ? "" : normalizeAndFormat(this.props);
 
     this.setState({ date: dateToSet });
   }
@@ -240,7 +240,8 @@ export class DatePickerComponent extends React.Component {
 }
 
 DatePickerComponent.propTypes = {
-  dateTimeFormat: PropTypes.func
+  dateTimeFormat: PropTypes.func,
+  noInitialDate: PropTypes.bool
 };
 
 DatePickerComponent.defaultProps = {
