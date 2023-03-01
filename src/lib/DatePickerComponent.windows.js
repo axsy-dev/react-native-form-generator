@@ -36,7 +36,7 @@ export class DatePickerComponent extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    const dateToSet = this.props.noInitialDate ? "" : normalizeAndFormat(this.props);
+    const dateToSet = this.props.noInitialDate ? null : normalizeAndFormat(this.props);
 
     this.setState({ date: dateToSet });
   }
@@ -153,14 +153,14 @@ export class DatePickerComponent extends React.Component {
   handleClear() {
     const { onChange, onValueChange } = this.props;
 
-    this.setState({ date: "" });
+    this.setState({ date: null });
 
     if (onChange) {
-      onChange("");
+      onChange(null);
     }
 
     if (onValueChange) {
-      onValueChange("");
+      onValueChange(null);
     }
   }
 
