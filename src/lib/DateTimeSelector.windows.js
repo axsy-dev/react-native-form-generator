@@ -112,7 +112,7 @@ class DateTimeSelector extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const { date } = this.props;
 
     if (date) {
