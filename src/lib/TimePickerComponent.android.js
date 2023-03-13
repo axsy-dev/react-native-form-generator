@@ -7,6 +7,7 @@ import { View, Text } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { Field } from "./Field";
+import { TouchableContainer } from "./TouchableContainer";
 
 export class TimePickerComponent extends React.Component {
   constructor(props) {
@@ -87,8 +88,15 @@ export class TimePickerComponent extends React.Component {
               <Text testID={`Value`} style={[this.props.valueStyle]}>
                 {this.props.dateTimeFormat(this.state.date)}
               </Text>
+              {this.props.iconRight ? (
+                <TouchableContainer
+                  tid={`ToggleDatePicker`}
+                  onPress={this._togglePicker.bind(this)}
+                >
+                  {this.props.iconRight}
+                </TouchableContainer>
+              ) : null}
             </View>
-            {this.props.iconRight ? this.props.iconRight : null}
           </View>
         </Field>
         {this.state.isTimePickerVisible ? (
