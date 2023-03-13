@@ -7,6 +7,7 @@ import { View, Text } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { Field } from "./Field";
+import { TouchableContainer } from "./TouchableContainer";
 
 export class TimePickerComponent extends React.Component {
   constructor(props) {
@@ -56,7 +57,7 @@ export class TimePickerComponent extends React.Component {
     if (this.props.onValueChange) this.props.onValueChange(date);
   }
 
-  async _togglePicker(event) {
+  _togglePicker = async (event) => {
     this.setState({ isTimePickerVisible: true });
     this.props.onPress && this.props.onPress(event);
   }
@@ -76,7 +77,7 @@ export class TimePickerComponent extends React.Component {
         <Field
           {...this.props}
           ref="inputBox"
-          onPress={this._togglePicker.bind(this)}
+          onPress={this._togglePicker}
         >
           <View
             style={this.props.containerStyle}
@@ -84,11 +85,18 @@ export class TimePickerComponent extends React.Component {
           >
             {placeholderComponent}
             <View style={this.props.valueContainerStyle}>
-              <Text testID={`Value`} style={[this.props.valueStyle]}>
+              <Text testID="Value" style={[this.props.valueStyle]}>
                 {this.props.dateTimeFormat(this.state.date)}
               </Text>
+              {this.props.iconRight ? (
+                <TouchableContainer
+                  tid="ToggleDatePicker"
+                  onPress={this._togglePicker}
+                >
+                  {this.props.iconRight}
+                </TouchableContainer>
+              ) : null}
             </View>
-            {this.props.iconRight ? this.props.iconRight : null}
           </View>
         </Field>
         {this.state.isTimePickerVisible ? (
