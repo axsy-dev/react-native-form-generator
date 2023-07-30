@@ -15,7 +15,7 @@ export class Field extends React.Component {
 
     if (this.props.onPress) {
       return (
-        <TouchableOpacity onPress={this.props.onPress} testID="TapTarget">
+        <TouchableOpacity onPress={this.props.onPress} testID="TapTarget" accessible={false}>
           <View>
             {this.props.children}
             {fieldHelpText}
