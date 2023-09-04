@@ -72,7 +72,7 @@ export class PickerComponent extends React.Component {
                   this
                 )}
               </Picker>
-              <TouchableOpacity activeOpacity={0} style={pickerCoverStyle} touchable={false} />
+              <TouchableOpacity activeOpacity={0} style={pickerCoverStyle} />
             </View>
           </View>
         </Field>
