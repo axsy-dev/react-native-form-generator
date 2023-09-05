@@ -25,6 +25,7 @@ class RenderedSelector extends React.Component {
   render() {
     let picker = (
       <Picker
+        testID="Picker"
         {...this.props.pickerProps}
         selectedValue={this.state.value}
         onValueChange={this.handleValueChange.bind(this)}
