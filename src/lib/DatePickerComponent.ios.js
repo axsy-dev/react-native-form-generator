@@ -169,7 +169,7 @@ export class DatePickerComponent extends React.Component {
               <DatePickerPlaceholder {...this.props} />
             )}
             <View style={[this.props.valueContainerStyle]}>
-              <Text tid={valueTestId} style={[this.props.valueStyle]}>
+              <Text testID={valueTestId} style={[this.props.valueStyle]}>
                 {valueString}
               </Text>
               {showClear ? (

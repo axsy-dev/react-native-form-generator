@@ -11,7 +11,7 @@ const style = {
 };
 
 const TouchableContainer = props => (
-  <TouchableOpacity testID={props.tid} style={style} onPress={props.onPress}>
+  <TouchableOpacity testID={props.tid} style={style} onPress={props.onPress} accessible={false}>
     {props.children}
   </TouchableOpacity>
 );
