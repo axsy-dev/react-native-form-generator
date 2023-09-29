@@ -39,7 +39,7 @@ export class DatePickerComponent extends React.Component {
     }
   }
 
-  UNSAFE_componentDidUpdate(_prevProps, _prevState, snapshot) {
+  componentDidUpdate(_prevProps, _prevState, snapshot) {
     const { date } = this.props;
 
     if (date) {
