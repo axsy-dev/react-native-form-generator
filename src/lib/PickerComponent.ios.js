@@ -96,12 +96,23 @@ export class PickerComponent extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const value = prevProps.value;
-    if (this.state.value !== value) {
+  componentDidUpdate = prevProps => {
+    const value = this.props.value;
+    const values = Array.isArray(value)
+      ? value
+      : !value || value === ""
+      ? []
+      : value.split(";");
+    let optionValues = this.props.options.map(o => o.value || o.constant);
+    const validValues = values.filter(v => optionValues.indexOf(v) !== -1);
+    const invalidValues = values.filter(v => optionValues.indexOf(v) === -1);
+    if (invalidValues.length) {
+      const nextValue = validValues.join(";");
+      this.handleValueChange(nextValue);
+    } else if (prevProps.value !== value) {
       this.setState({ value });
     }
-  }
+  };
 
   _renderContent() {
     const picker = (
