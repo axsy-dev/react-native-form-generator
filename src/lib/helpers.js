@@ -61,15 +61,18 @@ function dateTimeFormat(date, mode) {
 
 /**
  * A picklist value can be null or 0-many values either in a string separated by a semicolon or an array.
- * 
- * This will return the value as an array - null is turned into an empty array.
  */
-function normalisePicklistValue(value){
-  return Array.isArray(value)
-      ? value
-      : !value || value === ""
-      ? []
-      : value.split(";");
+function sanatisePicklistValues(value, options) {
+  const values = Array.isArray(value)
+    ? value
+    : !value || value === ""
+    ? []
+    : value.split(";");
+  let optionValues = options.map(o => o.value || o.constant);
+  const sanatised = values.filter(v => optionValues.indexOf(v) !== -1).join(";");
+  const requiresUpdate = !!values.find(v => optionValues.indexOf(v) === -1);
+  return [requiresUpdate, sanatised]
+  
 }
 
 module.exports = {
@@ -78,5 +81,5 @@ module.exports = {
   handleSetDate,
   dateTimeFormat,
   formatOnPretty,
-  normalisePicklistValue
+  sanatisePicklistValues
 };
