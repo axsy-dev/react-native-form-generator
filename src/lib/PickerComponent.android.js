@@ -6,6 +6,7 @@ import { Field } from "../lib/Field";
 import { Picker } from "@react-native-picker/picker";
 
 import _ from "lodash";
+import { sanatisePicklistValues } from "./helpers";
 
 export class PickerComponent extends React.Component {
   constructor(props) {
@@ -32,6 +33,16 @@ export class PickerComponent extends React.Component {
 
     if (this.props.onChange) this.props.onChange(value);
     if (this.props.onValueChange) this.props.onValueChange(value);
+  };
+
+  componentDidUpdate = () => {
+    const { value, options } = this.props;
+    const [requiresUpdate, sanatised] = sanatisePicklistValues(value, options);
+    if (requiresUpdate) {
+      this.handleValueChange(sanatised);
+    } else if (this.state.value !== value) {
+      this.setState({ value });
+    }
   };
 
   render() {

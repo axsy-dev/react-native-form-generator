@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { View, Text } from "react-native";
 import { Field } from "../lib/Field";
 import { Picker } from "@react-native-picker/picker";
+import { sanatisePicklistValues } from "./helpers";
 
 class RenderedSelector extends React.Component {
   constructor(props) {
@@ -96,12 +97,15 @@ export class PickerComponent extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const value = prevProps.value;
-    if (this.state.value !== value) {
+  componentDidUpdate = () => {
+    const { value, options } = this.props;
+    const [requiresUpdate, sanatised] = sanatisePicklistValues(value, options);
+    if (requiresUpdate) {
+      this.handleValueChange(sanatised);
+    } else if (this.state.value !== value) {
       this.setState({ value });
     }
-  }
+  };
 
   _renderContent() {
     const picker = (

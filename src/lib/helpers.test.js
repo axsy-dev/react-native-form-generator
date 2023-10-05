@@ -3,15 +3,16 @@ const {
   normalizeAndFormat,
   handleSetDate,
   dateTimeFormat,
-  formatOnPretty
-} = require("./datePickerHelpers");
+  formatOnPretty,
+  sanatisePicklistValues
+} = require("./helpers");
 
 jest.useFakeTimers();
 jest.setSystemTime(new Date("2022-06-03T10:34:20.897Z"));
 
 const testFormatter = date =>
   `${date.getFullYear()} -- ${date.getMonth()} -- ${date.getDate()}`;
-describe("datePickerHelpers", () => {
+describe("Date Picker Helpers", () => {
   const dates = ["2022-06-02T10:34:20.897Z", "2022-06-02T20:34:20.897Z"];
 
   describe("formatOnPretty", () => {
@@ -175,4 +176,41 @@ describe("datePickerHelpers", () => {
       });
     });
   });
+
 });
+
+describe("Picklist Helpers", () => {
+
+  describe("sanatisePicklistValues", () => {
+
+    const options = [
+      {value: "a"},
+      {value: "b"},
+      {value: "c"},
+    ]
+
+    test("null values are converted to empty strings", () => {
+      expect(sanatisePicklistValues(null, [])).toEqual([false, ""]);
+    });
+
+    test("values containing only valid options don't require an update", () => {
+      expect(sanatisePicklistValues("", options)).toEqual([false, ""]);
+      expect(sanatisePicklistValues("a", options)).toEqual([false, "a"]);
+      expect(sanatisePicklistValues("a;b;c", options)).toEqual([false, "a;b;c"]);
+      expect(sanatisePicklistValues([], options)).toEqual([false, ""]);
+      expect(sanatisePicklistValues(["a"], options)).toEqual([false, "a"]);
+      expect(sanatisePicklistValues(["a", "b", "c"], options)).toEqual([false, "a;b;c"]);
+    });
+
+    test("if the value contains invalid values, they are removed and require an update ", () => {
+      expect(sanatisePicklistValues("d", options)).toEqual([true, ""]);
+      expect(sanatisePicklistValues("a;b;c;d", options)).toEqual([true, "a;b;c"]);
+      expect(sanatisePicklistValues("d;e;f", options)).toEqual([true, ""]);
+      expect(sanatisePicklistValues(["d"], options)).toEqual([true, ""]);
+      expect(sanatisePicklistValues(["a", "b", "c", "d"], options)).toEqual([true, "a;b;c"]);
+      expect(sanatisePicklistValues(["d", "e", "f"], options)).toEqual([true, ""]);
+    });
+
+  })
+
+})

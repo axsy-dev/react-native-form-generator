@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { Field } from "../lib/Field";
 import { Picker } from "@react-native-picker/picker";
 import _ from "lodash";
+import { sanatisePicklistValues } from "./helpers";
 
 export class PickerComponent extends React.Component {
   constructor(props) {
@@ -43,12 +44,15 @@ export class PickerComponent extends React.Component {
     if (this.props.autoclose) this._togglePicker();
   };
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const value = prevProps.value;
-    if (this.state.value !== value) {
+  componentDidUpdate = () => {
+    const { value, options } = this.props;
+    const [requiresUpdate, sanatised] = sanatisePicklistValues(value, options);
+    if (requiresUpdate) {
+      this.handleValueChange(sanatised);
+    } else if (this.state.value !== value) {
       this.setState({ value });
     }
-  }
+  };
 
   _scrollToInput = event => {
     if (this.props.onFocus) {

@@ -13,7 +13,7 @@ import {
   handleSetDate,
   dateTimeFormat,
   formatOnPretty
-} from "./datePickerHelpers";
+} from "./helpers";
 import { DatePickerPlaceholder } from "./DatePickerPlaceholder";
 import { TouchableContainer } from "./TouchableContainer";
 
