@@ -59,10 +59,24 @@ function dateTimeFormat(date, mode) {
   }
 }
 
+/**
+ * A picklist value can be null or 0-many values either in a string seperated by a semicolon or an array.
+ * 
+ * This will return the value as an array - null is turned into an empty array.
+ */
+function normalisePicklistValue(value){
+  return Array.isArray(value)
+      ? value
+      : !value || value === ""
+      ? []
+      : value.split(";");
+}
+
 module.exports = {
   formatDateResult,
   normalizeAndFormat,
   handleSetDate,
   dateTimeFormat,
-  formatOnPretty
+  formatOnPretty,
+  normalisePicklistValue
 };

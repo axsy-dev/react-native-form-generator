@@ -4,14 +4,14 @@ const {
   handleSetDate,
   dateTimeFormat,
   formatOnPretty
-} = require("./datePickerHelpers");
+} = require("./helpers");
 
 jest.useFakeTimers();
 jest.setSystemTime(new Date("2022-06-03T10:34:20.897Z"));
 
 const testFormatter = date =>
   `${date.getFullYear()} -- ${date.getMonth()} -- ${date.getDate()}`;
-describe("datePickerHelpers", () => {
+describe("helpers", () => {
   const dates = ["2022-06-02T10:34:20.897Z", "2022-06-02T20:34:20.897Z"];
 
   describe("formatOnPretty", () => {

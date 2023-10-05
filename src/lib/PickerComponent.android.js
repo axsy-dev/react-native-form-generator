@@ -36,11 +36,7 @@ export class PickerComponent extends React.Component {
 
   componentDidUpdate = () => {
     const value = this.props.value;
-    const values = Array.isArray(value)
-      ? value
-      : !value || value === ""
-      ? []
-      : value.split(";");
+    const values = normalisePicklistValue(value);
     let optionValues = this.props.options.map(o => o.value || o.constant);
     const validValues = values.filter(v => optionValues.indexOf(v) !== -1);
     const invalidValues = values.filter(v => optionValues.indexOf(v) === -1);

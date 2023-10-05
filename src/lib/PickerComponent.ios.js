@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import { View, Text } from "react-native";
 import { Field } from "../lib/Field";
 import { Picker } from "@react-native-picker/picker";
+import { normalisePicklistValue } from "./helpers";
 
 class RenderedSelector extends React.Component {
   constructor(props) {
@@ -98,11 +99,7 @@ export class PickerComponent extends React.Component {
 
   componentDidUpdate = () => {
     const value = this.props.value;
-    const values = Array.isArray(value)
-      ? value
-      : !value || value === ""
-      ? []
-      : value.split(";");
+    const values = normalisePicklistValue(value);
     let optionValues = this.props.options.map(o => o.value || o.constant);
     const validValues = values.filter(v => optionValues.indexOf(v) !== -1);
     const invalidValues = values.filter(v => optionValues.indexOf(v) === -1);
