@@ -43,7 +43,7 @@ export class PickerComponent extends React.Component {
     if (this.props.autoclose) this._togglePicker();
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = () => {
     const value = this.props.value;
     const values = Array.isArray(value)
       ? value
@@ -56,7 +56,7 @@ export class PickerComponent extends React.Component {
     if (invalidValues.length) {
       const nextValue = validValues.join(";");
       this.handleValueChange(nextValue);
-    } else if (prevProps.value !== value) {
+    } else if (this.state.value !== value) {
       this.setState({ value });
     }
   };
