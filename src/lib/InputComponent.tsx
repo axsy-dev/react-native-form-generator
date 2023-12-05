@@ -291,7 +291,7 @@ export class InputComponent extends React.Component<Props, State> {
           <TextInput
             {...this.props}
             ref={this.saveRef}
-            testID="Input"
+            testID={this.props.testID ?? "Input"}
             keyboardType={this.props.keyboardType}
             style={this.props.inputStyle}
             onChange={this.handleChangeFromInput}
