@@ -13,18 +13,19 @@ export class Form extends Component {
   }
 
   handleFieldChange(field_ref, value) {
+    const values = {...this.getValues()};
     if (typeof field_ref === "function") {
       const ref = field_ref && field_ref();
-      this.values[ref] = value;
+      values[ref] = value;
     } else {
-      this.values[field_ref] = value;
+      values[field_ref] = value;
     }
 
-    this.props.onChange && this.props.onChange(this.values);
+    this.props.onChange && this.props.onChange(values);
   }
 
   getValues() {
-    return this.values;
+    return this.props.overrideValues ?? this.values;
   }
 
   underscoreToSpaced(str) {
