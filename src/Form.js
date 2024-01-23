@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export class Form extends Component {
   constructor(props) {
@@ -9,18 +9,14 @@ export class Form extends Component {
   }
 
   handleFieldFocused(event, inputHandle) {
-    this.props.onFocus && this.props.onFocus(event, inputHandle);
+    this.props.onFocus?.(event, inputHandle);
   }
 
   handleFieldChange(field_ref, value) {
-    if (typeof field_ref === "function") {
-      const ref = field_ref && field_ref();
-      this.values[ref] = value;
-    } else {
-      this.values[field_ref] = value;
-    }
-
-    this.props.onChange && this.props.onChange(this.values);
+    const name = typeof field_ref === "function" ? field_ref() : field_ref;
+    this.values[name] = value;
+    this.props.onChange?.(this.values);
+    this.props.onFieldChange?.(name, value);
   }
 
   getValues() {
