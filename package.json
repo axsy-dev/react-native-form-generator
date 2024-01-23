@@ -39,7 +39,7 @@
     "test:watch": "jest --watchAll",
     "format": "prettier --write --loglevel=silent"
   },
-  "version": "0.9.47",
+  "version": "0.9.48",
   "devDependencies": {
     "@tsconfig/react-native": "^1.0.4",
     "@types/react": "^17.0.39",
