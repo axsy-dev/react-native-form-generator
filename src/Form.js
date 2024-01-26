@@ -15,7 +15,7 @@ export class Form extends Component {
   handleFieldChange(field_ref, value) {
     const name = typeof field_ref === "function" ? field_ref() : field_ref;
     this.values[name] = value;
-    this.props.onChange?.(this.values, {[name]: value});
+    this.props.onChange?.({...this.values}, {[name]: value});
   }
 
   getValues() {
