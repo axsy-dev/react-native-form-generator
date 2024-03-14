@@ -97,7 +97,7 @@ export class PickerComponent extends React.Component {
             <Picker
               testID="Picker"
               {...this.props.pickerProps}
-              selectedValue={selectedOption ? selectedOption.value : null}
+              selectedValue={selectedOption ? selectedOption.value : ""}
               onValueChange={this.handleValueChange}
             >
               {this.props.options.map(({ value, label }, idx) => (
