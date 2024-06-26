@@ -299,6 +299,7 @@ export class InputComponent extends React.Component<Props, State> {
             onFocus={this._scrollToInput}
             placeholder={this.props.placeholder}
             value={this.state.displayValue}
+            editable={this.props.editable}
           />
           {this.props.iconRight ? this.props.iconRight : null}
         </View>
