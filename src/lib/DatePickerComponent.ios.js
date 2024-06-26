@@ -34,7 +34,9 @@ export class DatePickerComponent extends React.Component {
 
   UNSAFE_componentWillMount() {
     if (this.props.date) {
-      const dateToSet = this.props.noInitialDate ? null : normalizeAndFormat(this.props);
+      const dateToSet = this.props.noInitialDate
+        ? null
+        : normalizeAndFormat(this.props);
       this.setState({ date: dateToSet });
     }
   }
@@ -143,8 +145,7 @@ export class DatePickerComponent extends React.Component {
   }
 
   render() {
-    const { placeholderComponent, iconClear } = this.props;
-
+    const { placeholderComponent, iconClear, editable: active } = this.props;
     const valueString = this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
       : "";
@@ -157,12 +158,16 @@ export class DatePickerComponent extends React.Component {
     const showClear = !!(iconClear && valueString);
     return (
       <View>
-        <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
+        <Field
+          {...this.props}
+          ref="inputBox"
+          onPress={active ? this._togglePicker : () => {}}
+        >
           <View
             style={[this.props.containerStyle]}
             onLayout={this.handleLayoutChange}
           >
-            {iconLeft ? iconLeft : null}
+            {active && iconLeft ? iconLeft : null}
             {placeholderComponent ? (
               placeholderComponent
             ) : (
@@ -172,7 +177,7 @@ export class DatePickerComponent extends React.Component {
               <Text testID={valueTestId} style={[this.props.valueStyle]}>
                 {valueString}
               </Text>
-              {showClear ? (
+              {active && showClear ? (
                 <TouchableContainer
                   tid={`RemoveDateValue`}
                   onPress={this.handleClear}
@@ -180,7 +185,7 @@ export class DatePickerComponent extends React.Component {
                   {iconClear}
                 </TouchableContainer>
               ) : null}
-              {!showClear && iconRight ? (
+              {active && !showClear && iconRight ? (
                 <TouchableContainer
                   tid={`ToggleDatePicker`}
                   onPress={this._togglePicker}

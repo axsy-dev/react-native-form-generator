@@ -172,7 +172,7 @@ export class DatePickerComponent extends React.Component {
             style={this.props.containerStyle}
             onLayout={this.handleLayoutChange}
           >
-            {iconLeft ? iconLeft : null}
+            {active && iconLeft ? iconLeft : null}
             {placeholderComponent ? (
               placeholderComponent
             ) : (
@@ -182,7 +182,7 @@ export class DatePickerComponent extends React.Component {
               <Text testID={valueTestId} style={this.props.valueStyle}>
                 {valueString}
               </Text>
-              {showClear ? (
+              {active && showClear ? (
                 <TouchableContainer
                   tid={`ClearDateValue`}
                   onPress={this.handleClear}
@@ -190,7 +190,7 @@ export class DatePickerComponent extends React.Component {
                   {iconClear}
                 </TouchableContainer>
               ) : null}
-              {!showClear && iconRight ? (
+              {active && !showClear && iconRight ? (
                 <TouchableContainer
                   tid={`ToggleDatePicker`}
                   onPress={this._togglePicker}

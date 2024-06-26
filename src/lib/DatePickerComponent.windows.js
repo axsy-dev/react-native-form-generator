@@ -36,7 +36,9 @@ export class DatePickerComponent extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    const dateToSet = this.props.noInitialDate ? null : normalizeAndFormat(this.props);
+    const dateToSet = this.props.noInitialDate
+      ? null
+      : normalizeAndFormat(this.props);
 
     this.setState({ date: dateToSet });
   }
@@ -165,7 +167,12 @@ export class DatePickerComponent extends React.Component {
   }
 
   render() {
-    const { placeholderComponent, iconRight, iconClear } = this.props;
+    const {
+      placeholderComponent,
+      iconRight,
+      iconClear,
+      editable: active
+    } = this.props;
     const valueString = this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
       : "";
@@ -190,7 +197,7 @@ export class DatePickerComponent extends React.Component {
             style={this.props.containerStyle}
             onLayout={this.handleLayoutChange}
           >
-            {this.props.iconLeft ? this.props.iconLeft : null}
+            {active && this.props.iconLeft ? this.props.iconLeft : null}
             {placeholderComponent ? (
               placeholderComponent
             ) : (
@@ -200,7 +207,7 @@ export class DatePickerComponent extends React.Component {
               <Text testID={valueTestId} style={this.props.valueStyle}>
                 {valueString}
               </Text>
-              {showClear ? (
+              {active && showClear ? (
                 <TouchableContainer
                   tid={`ClearDateValue`}
                   onPress={this.handleClear}
@@ -208,7 +215,7 @@ export class DatePickerComponent extends React.Component {
                   {iconClear}
                 </TouchableContainer>
               ) : null}
-              {!showClear && iconRight ? (
+              {active && !showClear && iconRight ? (
                 <TouchableContainer
                   tid={`ToggleDatePicker`}
                   onPress={this._togglePicker}
