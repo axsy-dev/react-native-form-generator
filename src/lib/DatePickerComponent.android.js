@@ -153,7 +153,8 @@ export class DatePickerComponent extends React.Component {
   }
 
   render() {
-    const { placeholderComponent, iconClear, iconRight, iconLeft } = this.props;
+    const { placeholderComponent, iconClear, iconRight, iconLeft, editable } =
+      this.props;
 
     const valueString = this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
@@ -165,6 +166,7 @@ export class DatePickerComponent extends React.Component {
       ? `Value/${this.state.date?.getTime()}`
       : "Unknown";
     const showClear = !!(iconClear && valueString);
+    const onPress = editable ? this._togglePicker : () => {};
     return (
       <View>
         <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
@@ -172,7 +174,7 @@ export class DatePickerComponent extends React.Component {
             style={this.props.containerStyle}
             onLayout={this.handleLayoutChange}
           >
-            {active && iconLeft ? iconLeft : null}
+            {editable && iconLeft ? iconLeft : null}
             {placeholderComponent ? (
               placeholderComponent
             ) : (
@@ -182,7 +184,7 @@ export class DatePickerComponent extends React.Component {
               <Text testID={valueTestId} style={this.props.valueStyle}>
                 {valueString}
               </Text>
-              {active && showClear ? (
+              {editable && showClear ? (
                 <TouchableContainer
                   tid={`ClearDateValue`}
                   onPress={this.handleClear}
@@ -190,7 +192,7 @@ export class DatePickerComponent extends React.Component {
                   {iconClear}
                 </TouchableContainer>
               ) : null}
-              {active && !showClear && iconRight ? (
+              {editable && !showClear && iconRight ? (
                 <TouchableContainer
                   tid={`ToggleDatePicker`}
                   onPress={this._togglePicker}
