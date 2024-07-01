@@ -41,6 +41,7 @@ type Props = TextInputProps & {
     event: NativeSyntheticEvent<TextInputFocusEventData>,
     handle: ReturnType<typeof findNodeHandle>
   ) => void;
+  readonly?: boolean;
 };
 
 type State = {
@@ -270,13 +271,15 @@ export class InputComponent extends React.Component<Props, State> {
   };
 
   render() {
+    const active = (this.props.editable ?? true) && !this.props.readonly;
+    const onChange = active ? this.handleChangeFromInput : undefined;
     return (
       <Field {...this.props}>
         <View
           onLayout={this.handleLayoutChange}
           style={this.props.containerStyle}
         >
-          {this.props.iconLeft ? this.props.iconLeft : null}
+          {active && this.props.iconLeft ? this.props.iconLeft : null}
           {this.props.label ? (
             <Text
               testID="Label"
@@ -294,14 +297,14 @@ export class InputComponent extends React.Component<Props, State> {
             testID={this.props.testID ?? "Input"}
             keyboardType={this.props.keyboardType}
             style={this.props.inputStyle}
-            onChange={this.handleChangeFromInput}
+            onChange={onChange}
             onContentSizeChange={this.handleContentSizeChange}
             onFocus={this._scrollToInput}
             placeholder={this.props.placeholder}
             value={this.state.displayValue}
             editable={this.props.editable}
           />
-          {this.props.iconRight ? this.props.iconRight : null}
+          {active && this.props.iconRight ? this.props.iconRight : null}
         </View>
       </Field>
     );
