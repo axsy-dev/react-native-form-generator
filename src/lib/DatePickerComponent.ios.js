@@ -2,7 +2,7 @@
 
 import React from "react";
 import PropTypes from "prop-types";
-import { View, Text } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import { Field } from "./Field";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -34,7 +34,9 @@ export class DatePickerComponent extends React.Component {
 
   UNSAFE_componentWillMount() {
     if (this.props.date) {
-      const dateToSet = this.props.noInitialDate ? null : normalizeAndFormat(this.props);
+      const dateToSet = this.props.noInitialDate
+        ? null
+        : normalizeAndFormat(this.props);
       this.setState({ date: dateToSet });
     }
   }
@@ -143,8 +145,12 @@ export class DatePickerComponent extends React.Component {
   }
 
   render() {
-    const { placeholderComponent, iconClear } = this.props;
-
+    const {
+      placeholderComponent,
+      iconClear,
+      editable = true,
+      readonly = false
+    } = this.props;
     const valueString = this.state.date
       ? this.props.dateTimeFormat(this.state.date, this.props.mode)
       : "";
@@ -155,24 +161,33 @@ export class DatePickerComponent extends React.Component {
     const iconLeft = getIcon(this.state.isPickerVisible, this.props.iconLeft);
     const iconRight = getIcon(this.state.isPickerVisible, this.props.iconRight);
     const showClear = !!(iconClear && valueString);
+    const active = editable && !readonly;
+    const onPress = active ? this._togglePicker : null;
     return (
       <View>
-        <Field {...this.props} ref="inputBox" onPress={this._togglePicker}>
+        <Field {...this.props} ref="inputBox" onPress={onPress}>
           <View
             style={[this.props.containerStyle]}
             onLayout={this.handleLayoutChange}
           >
-            {iconLeft ? iconLeft : null}
+            {active && iconLeft ? iconLeft : null}
             {placeholderComponent ? (
               placeholderComponent
             ) : (
               <DatePickerPlaceholder {...this.props} />
             )}
             <View style={[this.props.valueContainerStyle]}>
-              <Text testID={valueTestId} style={[this.props.valueStyle]}>
-                {valueString}
-              </Text>
-              {showClear ? (
+              {readonly ? (
+                <TextInput
+                  value={valueString}
+                  style={[this.props.valueStyle, { flex: 1 }]}
+                />
+              ) : (
+                <Text testID={valueTestId} style={[this.props.valueStyle]}>
+                  {valueString}
+                </Text>
+              )}
+              {active && showClear ? (
                 <TouchableContainer
                   tid={`RemoveDateValue`}
                   onPress={this.handleClear}
@@ -180,10 +195,10 @@ export class DatePickerComponent extends React.Component {
                   {iconClear}
                 </TouchableContainer>
               ) : null}
-              {!showClear && iconRight ? (
+              {active && !showClear && iconRight ? (
                 <TouchableContainer
                   tid={`ToggleDatePicker`}
-                  onPress={this._togglePicker}
+                  onPress={readonly ? this._togglePicker : () => {}}
                 >
                   {iconRight}
                 </TouchableContainer>
