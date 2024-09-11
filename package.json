@@ -25,7 +25,7 @@
   "main": "index.js",
   "name": "@axsy-dev/react-native-form-generator",
   "peerDependencies": {
-    "@react-native-community/datetimepicker": "^3.0.2"
+    "@react-native-community/datetimepicker": ">=3.0.2"
   },
   "lint-staged": {
     "*.(js|ts|tsx)": [
