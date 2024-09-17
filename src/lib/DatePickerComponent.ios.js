@@ -132,7 +132,8 @@ export class DatePickerComponent extends React.Component {
 
   _togglePicker(event) {
     if (this.context.actionSheet) {
-      this.context.actionSheet.showContent(this._renderContent());
+      const options = { onCancel: this.props.onCancel };
+      this.context.actionSheet.showContent(this._renderContent(), options);
     } else {
       this.setState({ isPickerVisible: !this.state.isPickerVisible });
     }
@@ -223,7 +224,8 @@ DatePickerComponent.propTypes = {
   dateTimeFormat: PropTypes.func,
   pickerWrapper: PropTypes.element,
   prettyPrint: PropTypes.bool,
-  noInitialDate: PropTypes.bool
+  noInitialDate: PropTypes.bool,
+  onCancel: PropTypes.func
 };
 
 DatePickerComponent.defaultProps = {
