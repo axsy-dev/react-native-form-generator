@@ -1,20 +1,24 @@
 "use strict";
 
 import React from "react";
-import { View, StyleSheet, TextInput, Text } from "react-native";
-
 import { DatePickerComponent } from "../lib/DatePickerComponent";
 
 export class DatePickerField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.datePickerComponentRef = React.createRef();
+  }
   setDate(date) {
-    this.refs.datePickerComponent.setDate(date);
+    if (this.datePickerComponentRef.current) {
+      this.datePickerComponentRef.current.setDate(date);
+    }
   }
 
   render() {
     return (
       <DatePickerComponent
         {...this.props}
-        ref="datePickerComponent"
+        ref={this.datePickerComponentRef}
         labelStyle={this.props.labelStyle}
         valueStyle={this.props.valueStyle}
         valueContainerStyle={this.props.valueContainerStyle}

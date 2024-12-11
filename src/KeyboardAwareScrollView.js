@@ -11,7 +11,7 @@ export class KeyboardAwareScrollView extends React.Component {
     this.state = {
       keyboardSpace: 0
     };
-
+    this.keyboardAwareScrollviewRef = React.createRef();
     this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
     this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
   }
@@ -54,21 +54,24 @@ export class KeyboardAwareScrollView extends React.Component {
    * @param extraHeight: takes an extra height in consideration.
    */
   scrollToFocusedInput(event, reactNode, extraHeight = 69) {
-    const scrollView = this.refs.keyboardScrollView.getScrollResponder();
-    setTimeout(() => {
-      scrollView.scrollResponderScrollNativeHandleToKeyboard(
-        reactNode,
-        extraHeight,
-        true
-      );
-    }, 220);
+    if (this.keyboardAwareScrollviewRef.current) {
+      const scrollView =
+        this.keyboardAwareScrollviewRef.current.getScrollResponder();
+      setTimeout(() => {
+        scrollView.scrollResponderScrollNativeHandleToKeyboard(
+          reactNode,
+          extraHeight,
+          true
+        );
+      }, 220);
+    }
   }
 
   render() {
     return (
       <ScrollView
         keyboardShouldPersistTaps={false}
-        ref="keyboardScrollView"
+        ref={this.keyboardAwareScrollviewRef}
         keyboardDismissMode="interactive"
         contentInset={{ bottom: this.state.keyboardSpace }}
         showsVerticalScrollIndicator={true}
