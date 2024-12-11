@@ -7,18 +7,18 @@ import { PickerComponent } from "../lib/PickerComponent";
 export class PickerField extends React.Component {
   constructor(props) {
     super(props);
-    this.pickerFieldRef = React.createRef();
+    this.fieldComponentRef = React.createRef();
   }
   setValue(value) {
-    if (this.pickerFieldRef.current) {
-      this.pickerFieldRef.current.setValue(value);
+    if (this.fieldComponentRef.current) {
+      this.fieldComponentRef.current.setValue(value);
     }
   }
   render() {
     return (
       <PickerComponent
         {...this.props}
-        ref={this.pickerFieldRef}
+        ref={this.fieldComponentRef}
         pickerProps={{
           style: this.props.containerStyle
         }}

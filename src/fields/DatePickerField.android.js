@@ -6,18 +6,18 @@ import { DatePickerComponent } from "../lib/DatePickerComponent";
 export class DatePickerField extends React.Component {
   constructor(props) {
     super(props);
-    this.datePickerComponentRef = React.createRef();
+    this.datePickerRef = React.createRef();
   }
   setDate(date) {
-    if (this.datePickerComponentRef.current) {
-      this.datePickerComponentRef.current.setDate(date);
+    if (this.datePickerRef.current) {
+      this.datePickerRef.current.setDate(date);
     }
   }
 
   render() {
     return (
       <DatePickerComponent
-        ref={this.datePickerComponentRef}
+        ref={this.datePickerRef}
         {...this.props}
         labelStyle={this.props.labelStyle}
         valueStyle={this.props.valueStyle}

@@ -9,18 +9,18 @@ import { DatePickerComponent } from "../lib/DatePickerComponent";
 export class TimePickerField extends React.Component {
   constructor(props) {
     super(props);
-    this.timePickerFieldRef = React.createRef();
+    this.datePickerRef = React.createRef();
   }
   setTime(date) {
-    if (this.timePickerFieldRef.current) {
-      this.timePickerFieldRef.current.setTime(date);
+    if (this.datePickerRef.current) {
+      this.datePickerRef.current.setDate(date);
     }
   }
   render() {
     return (
       <DatePickerComponent
         {...this.props}
-        ref={this.timePickerFieldRef}
+        ref={this.datePickerRef}
         mode="time"
         labelStyle={this.props.labelStyle}
         valueStyle={this.props.valueStyle}
