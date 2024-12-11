@@ -27,6 +27,20 @@ import {
 } from "react-native-form-generator";
 
 class CustomModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.formRef = React.createRef();
+    this.firstNameRef = React.createRef();
+    this.lastNameRef = React.createRef();
+    this.otherInputRef = React.createRef();
+    this.emailRef = React.createRef();
+    this.hasAcceptedRef = React.createRef();
+    this.genderRef = React.createRef();
+    this.birthdayRef = React.createRef();
+    this.alarmTimeRef = React.createRef();
+    this.countdownRef = React.createRef();
+    this.meetingRef = React.createRef();
+  }
   handleClose() {
     this.props.onHidePicker && this.props.onHidePicker();
   }
@@ -116,36 +130,33 @@ export class FormView extends React.Component {
   }
   openTermsAndConditionsURL() {}
   resetForm() {
-    this.refs.registrationForm.refs.first_name.setValue("");
-    this.refs.registrationForm.refs.last_name.setValue("");
-    this.refs.registrationForm.refs.other_input.setValue("");
-    this.refs.registrationForm.refs.meeting.setDate(new Date());
-    this.refs.registrationForm.refs.has_accepted_conditions.setValue(false);
+    this.firstNameRef.current && this.firstNameRef.current.setValue("");
+    this.lastNameRef.current && this.lastNameRef.current.setValue("");
+    this.otherInputRef.current && this.otherInputRef.current.setValue("");
+    this.meetingRef.current && this.meetingRef.current.setDate(new Date());
+    this.hasAcceptedRef.current && this.hasAcceptedRef.current.setValue(false);
   }
   render() {
     return (
       <ScrollView keyboardShouldPersistTaps={true} style={{ height: 200 }}>
         <Form
-          ref="registrationForm"
+          ref={this.formRef}
           onFocus={this.handleFormFocus.bind(this)}
           onChange={this.handleFormChange.bind(this)}
           label="Personal Information"
         >
           <Separator />
           <InputField
-            ref="first_name"
+            ref={this.firstNameRef}
+            fieldKey={"first_name"}
             label="First Name"
             placeholder="First Name"
             helpText={(self => {
-              if (Object.keys(self.refs).length !== 0) {
-                if (!self.refs.registrationForm.refs.first_name.valid) {
-                  return self.refs.registrationForm.refs.first_name.validationErrors.join(
-                    "\n"
-                  );
+              if (self.firstNameRef.current) {
+                if (!self.firstNameRef.current.valid) {
+                  return self.firstNameRef.current.validationErrors.join("\n");
                 }
               }
-              // if(!!(self.refs && self.refs.first_name.valid)){
-              // }
             })(this)}
             validationFunction={[
               value => {
@@ -173,6 +184,7 @@ export class FormView extends React.Component {
             ]}
           />
           <InputField
+            fieldKey={"last_name"}
             iconLeft={
               <WrappedIcon
                 style={{
@@ -184,18 +196,20 @@ export class FormView extends React.Component {
                 size={30}
               />
             }
-            ref="last_name"
+            ref={this.lastNameRef}
             value="Default Value"
             placeholder="Last Name"
           />
           <InputField
+            fieldKey={"other_input"}
             multiline={true}
-            ref="other_input"
+            ref={this.otherInputRef}
             placeholder="Other Input"
             helpText="this is an helpful text it can be also very very long and it will wrap"
           />
           <InputField
-            ref="email"
+            fieldKey={"email"}
+            ref={this.emailRef}
             value="test@test.it"
             keyboardType="email-address"
             placeholder="Email fields"
@@ -229,12 +243,14 @@ export class FormView extends React.Component {
             }
           />
           <SwitchField
+            fieldKey={"has_accepted_conditions"}
             label="I accept Terms & Conditions"
-            ref="has_accepted_conditions"
+            ref={this.hasAcceptedRef}
             helpText="Please read carefully the terms & conditions"
           />
           <PickerField
-            ref="gender"
+            fieldKey={"gender"}
+            ref={this.genderRef}
             label="Gender"
             value="female"
             options={[
@@ -244,7 +260,8 @@ export class FormView extends React.Component {
             ]}
           />
           <DatePickerField
-            ref="birthday"
+            fieldKey={"birthday"}
+            ref={this.birthdayRef}
             minimumDate={new Date("1/1/1900")}
             maximumDate={new Date()}
             iconRight={[
@@ -262,7 +279,8 @@ export class FormView extends React.Component {
             placeholder="Birthday"
           />
           <TimePickerField
-            ref="alarm_time"
+            fieldKey={"alarm"}
+            ref={this.alarmTimeRef}
             placeholder="Set Alarm"
             iconLeft={
               <Icon
@@ -275,12 +293,14 @@ export class FormView extends React.Component {
             pickerWrapper={<CustomModal />}
           />
           <CountDownField
-            ref="countdown"
+            fieldKey={"countdown"}
+            ref={this.countdownRef}
             label="CountDown"
             placeholder="11:00"
           />
           <DatePickerField
-            ref="meeting"
+            fieldKey={"meeting"}
+            ref={this.meetingRef}
             iconLeft={[
               <Icon
                 style={{ alignSelf: "center", marginLeft: 10 }}
@@ -317,7 +337,7 @@ export class FormView extends React.Component {
         </TouchableHighlight>
         <TouchableHighlight
           disabled={!this.state.formData.has_accepted_conditions}
-          onPress={() => this.refs.registrationForm.refs.other_input.focus()}
+          onPress={() => this.otherInputRef.current.focus()}
           underlayColor="#78ac05"
         >
           <View

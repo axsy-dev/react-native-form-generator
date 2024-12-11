@@ -114,14 +114,15 @@ export class FormView extends React.Component {
         style={{ paddingLeft: 10, paddingRight: 10, height: 200 }}
       >
         <Form
-          ref="registrationForm"
+          ref={this.formRef}
           onFocus={this.handleFormFocus.bind(this)}
           onChange={this.handleFormChange.bind(this)}
           label="Personal Information"
         >
           <Separator />
           <InputField
-            ref="first_name"
+            ref={this.firstNameRef}
+            fieldKey={"first_name"}
             label="First Name"
             placeholder="First Name"
             helpText={(self => {
@@ -162,22 +163,29 @@ export class FormView extends React.Component {
               }
             ]}
           />
-          <InputField ref="last_name" placeholder="Last Name" />
+          <InputField
+            fieldKey={"last_name"}
+            ref={this.lastNameRef}
+            placeholder="Last Name"
+          />
           <InputField
             multiline={true}
-            ref="other_input"
+            fieldKey={"other_input"}
+            ref={this.otherInputRef}
             placeholder="Other Input"
             helpText="this is an helpful text it can be also very very long and it will wrap"
           />
           <Separator />
           <LinkField label="test test test" onPress={() => {}} />
           <SwitchField
+            fieldKey={"has_accepted_conditions"}
             label="I accept Terms & Conditions"
-            ref="has_accepted_conditions"
+            ref={this.hasAcceptedRef}
             helpText="Please read carefully the terms & conditions"
           />
           <PickerField
-            ref="gender"
+            fieldKey={"gender"}
+            ref={this.genderRef}
             label="Gender"
             options={{
               "": "",
@@ -186,14 +194,20 @@ export class FormView extends React.Component {
             }}
           />
           <DatePickerField
-            ref="birthday"
+            fieldKey={"birthday"}
+            ref={this.birthdayRef}
             minimumDate={new Date("1/1/1900")}
             maximumDate={new Date()}
             placeholder="Birthday"
           />
-          <TimePickerField ref="alarm_time" placeholder="Set Alarm" />
+          <TimePickerField
+            fieldKey={"alarm"}
+            ref={this.alarmTimeRef}
+            placeholder="Set Alarm"
+          />
           <DatePickerField
-            ref="meeting"
+            fieldKey={"meeting"}
+            ref={this.meetingRef}
             minimumDate={new Date("1/1/1900")}
             maximumDate={new Date()}
             mode="datetime"
@@ -239,7 +253,7 @@ It's just a wrapper that allows you to attach onFocus (used to track focus event
 
 Input fields can be used to receive text, you can add icons (a react component) to the left and the right side of the field.
 
-InputField can validate values based on keyboardType property, validation is not "aggressive", just changes a value inside the class, you can access the value using the ref (ex. this.ref.example*input_field.valid).  
+InputField can validate values based on keyboardType property, validation is not "aggressive", just changes a value inside the class, you can access the value using the ref (ex. this.refName.current.valid).  
 InputField automatically provides the attibutes \_valid* and _validationErrors_ to guarantee full control to the developer.
 
 you can customize your validation function by adding a _validationFunction_ prop to the component. _validationFunction_ supports also an array of validators.
@@ -271,7 +285,8 @@ look at the example here.
 ```javascript
 <InputField
   label="Example" // if label is present the field is rendered with the value on the left (see First Name example in the gif), otherwise its rendered with textinput at full width (second name in the gif).
-  ref="example_input_field" // used in onChange event to collect the value
+  ref={this.exampleRef}
+  fieldKey="example_input_field"  // used in onChange event to collect the value
   value="default_value" // used as initial value
   keyboardType="" // undefined, 'email-address',
   validationFunction={value => {
