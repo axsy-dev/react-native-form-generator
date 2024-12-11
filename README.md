@@ -126,15 +126,11 @@ export class FormView extends React.Component {
             label="First Name"
             placeholder="First Name"
             helpText={(self => {
-              if (Object.keys(self.refs).length !== 0) {
-                if (!self.refs.registrationForm.refs.first_name.valid) {
-                  return self.refs.registrationForm.refs.first_name.validationErrors.join(
+                if (self.firstNameRef.current && !self.firstNameRef.current.valid) {
+                  return self.firstNameRef.current.validationErrors.join(
                     "\n"
                   );
-                }
               }
-              // if(!!(self.refs && self.refs.first_name.valid)){
-              // }
             })(this)}
             validationFunction={[
               value => {
@@ -300,8 +296,8 @@ look at the example here.
         { marginTop: 7, color: "#61d062" },
         (self => {
           //i can change the style of the component related to the attibute of example_input_field
-          if (!!(self.refs && self.refs.example_input_field)) {
-            if (!self.refs.example_input_field.valid)
+          if (!!self.exampleRef.current) {
+            if (!self.exampleRef.current.valid) 
               return { color: "#d52222" };
           }
         })(this)
