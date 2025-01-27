@@ -107,7 +107,7 @@ export class DatePickerComponent extends React.Component {
   _renderContent() {
     let datePicker = (
       <DateTimePicker
-        display={"spinner"}
+        display={"inline"}
         maximumDate={this.props.maximumDate}
         minimumDate={this.props.minimumDate}
         minuteInterval={this.props.minuteInterval}
