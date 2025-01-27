@@ -16,6 +16,7 @@ export class TimePickerComponent extends React.Component {
     this.state = {
       isTimePickerVisible: false
     };
+    this.inputBoxRef = React.createRef();
   }
 
   componentDidMount() {
@@ -76,7 +77,7 @@ export class TimePickerComponent extends React.Component {
       <View>
         <Field
           {...this.props}
-          ref="inputBox"
+          ref={this.inputBoxRef}
           onPress={this._togglePicker}
         >
           <View

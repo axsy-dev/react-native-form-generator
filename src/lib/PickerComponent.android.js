@@ -13,6 +13,7 @@ export class PickerComponent extends React.Component {
     super(props);
     this.state = {};
     this.pickerMeasures = {};
+    this.inputBoxRef = React.createRef();
   }
 
   setValue(value) {}
@@ -56,7 +57,7 @@ export class PickerComponent extends React.Component {
 
     return (
       <View>
-        <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
+        <Field {...this.props} ref={this.inputBoxRef} onPress={this.props.onPress}>
           <View
             style={this.props.containerStyle}
             onLayout={this.handleLayoutChange}

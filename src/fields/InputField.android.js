@@ -1,27 +1,33 @@
 "use strict";
 
 import React from "react";
-import ReactNative from "react-native";
 import { InputComponent } from "../lib/InputComponent";
 
-const { StyleSheet } = ReactNative;
 
 export class InputField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.fieldComponentRef = React.createRef();
+  }
   handleValidation(isValid, validationErrors) {
     this.valid = isValid;
     this.validationErrors = validationErrors;
   }
   setValue(value) {
-    this.refs.fieldComponent.setValue(value);
+    if (this.fieldComponentRef.current) {
+      this.fieldComponentRef.current.setValue(value);
+    }
   }
   focus() {
-    this.refs.fieldComponent.focus();
+    if (this.fieldComponentRef.current) {
+      this.fieldComponentRef.current.focus();
+    }
   }
   render() {
     return (
       <InputComponent
         {...this.props}
-        ref="fieldComponent"
+        ref={this.fieldComponentRef}
         onValidation={this.handleValidation.bind(this)}
       />
     );
