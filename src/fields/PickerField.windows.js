@@ -1,20 +1,24 @@
 "use strict";
 
 import React from "react";
-import ReactNative from "react-native";
-let { View, StyleSheet, TextInput, Text } = ReactNative;
 
 import { PickerComponent } from "../lib/PickerComponent";
 
 export class PickerField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.fieldComponentRef = React.createRef();
+  }
   setValue(value) {
-    this.refs.fieldComponent.setValue(value);
+    if (this.fieldComponentRef.current) {
+      this.fieldComponentRef.current.setValue(value);
+    }
   }
   render() {
     return (
       <PickerComponent
         {...this.props}
-        ref="fieldComponent"
+        ref={this.fieldComponentRef}
         labelStyle={this.props.labelStyle}
         valueStyle={this.props.valueStyle}
         valueContainerStyle={this.props.valueContainerStyle}

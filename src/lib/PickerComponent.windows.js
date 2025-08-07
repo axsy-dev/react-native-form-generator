@@ -15,6 +15,7 @@ export class PickerComponent extends React.Component {
       value: props.value,
       isPickerVisible: false
     };
+    this.inputBoxRef = React.createRef();
     this.pickerMeasures = {};
   }
 
@@ -56,9 +57,11 @@ export class PickerComponent extends React.Component {
 
   _scrollToInput = event => {
     if (this.props.onFocus) {
-      const handle = findNodeHandle(this.refs.inputBox);
+      if (this.inputBoxRef) {
+        let handle = ReactNative.findNodeHandle(this.inputBoxRef.current);
 
-      this.props.onFocus(event, handle);
+        this.props.onFocus(event, handle);
+      }
     }
   };
 
@@ -85,7 +88,7 @@ export class PickerComponent extends React.Component {
 
     return (
       <View>
-        <Field {...this.props} ref="inputBox" onPress={this.props.onPress}>
+        <Field {...this.props} ref={this.inputBoxRef} onPress={this.props.onPress}>
           <View
             style={this.props.containerStyle}
             onLayout={this.handleLayoutChange}

@@ -26,6 +26,7 @@ export class DatePickerComponent extends React.Component {
 
     this._renderContent = this._renderContent.bind(this);
     this._togglePicker = this._togglePicker.bind(this);
+    this.inputBoxRef = React.createRef();
     this.handleClear = this.handleClear.bind(this);
     this.handleLayoutChange = this.handleLayoutChange.bind(this);
     this.handleValueChange = this.handleValueChange.bind(this);
@@ -166,7 +167,7 @@ export class DatePickerComponent extends React.Component {
     const onPress = active ? this._togglePicker : null;
     return (
       <View>
-        <Field {...this.props} ref="inputBox" onPress={onPress}>
+        <Field {...this.props} ref={this.inputBoxRef} onPress={onPress}>
           <View
             style={[this.props.containerStyle]}
             onLayout={this.handleLayoutChange}

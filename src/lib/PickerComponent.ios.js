@@ -11,10 +11,10 @@ import { sanatisePicklistValues } from "./helpers";
 class RenderedSelector extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       value: props.value
     };
+    this.inputBoxRef = React.createRef();
   }
 
   handleValueChange(value) {
@@ -91,9 +91,11 @@ export class PickerComponent extends React.Component {
 
   _scrollToInput(event) {
     if (this.props.onFocus) {
-      let handle = ReactNative.findNodeHandle(this.refs.inputBox);
+      if (this.inputBoxRef) {
+        let handle = ReactNative.findNodeHandle(this.inputBoxRef.current);
 
-      this.props.onFocus(event, handle);
+        this.props.onFocus(event, handle);
+      }
     }
   }
 
@@ -150,7 +152,7 @@ export class PickerComponent extends React.Component {
       <View>
         <Field
           {...this.props}
-          ref="inputBox"
+          ref={this.inputBoxRef}
           onPress={this._togglePicker.bind(this)}
         >
           <View

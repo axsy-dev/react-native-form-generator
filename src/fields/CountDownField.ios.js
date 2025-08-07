@@ -7,16 +7,20 @@ let { StyleSheet } = ReactNative;
 import { DatePickerComponent } from "../lib/DatePickerComponent";
 
 export class CountDownField extends React.Component {
+  constructor(props) {
+    super(props);
+    this.datePickerRef = createRef();
+  }
   setTime(date) {
-    this.refs.datePickerComponent.setDate(date);
+    if (this.datePickerRef.current) {
+      this.datePickerRef.current.setDate(date);
+    }
   }
   render() {
-    /*
-
- */
     return (
       <DatePickerComponent
         {...this.props}
+        ref={this.datePickerRef}
         mode="countdown"
         labelStyle={[formStyles.fieldText, this.props.labelStyle]}
         valueStyle={[formStyles.fieldValue, this.props.valueStyle]}

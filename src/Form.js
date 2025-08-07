@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export class Form extends Component {
   constructor(props) {
@@ -12,10 +12,14 @@ export class Form extends Component {
     this.props.onFocus?.(event, inputHandle);
   }
 
-  handleFieldChange(field_ref, value) {
-    const name = typeof field_ref === "function" ? field_ref() : field_ref;
-    this.values[name] = value;
-    this.props.onChange?.({...this.values}, {[name]: value});
+  handleFieldChange(fieldKey, value) {
+    if (!fieldKey) {
+      console.warn('Field key is undefined. Cannot update value.');
+      return;
+    }
+
+    this.values[fieldKey] = value;
+    this.props.onChange?.({ ...this.values }, { [fieldKey]: value });
   }
 
   getValues() {
@@ -48,6 +52,7 @@ export class Form extends Component {
         this.addProps(fieldElement, isTestable, key)
       )
     );
+
     return isTestable
       ? React.cloneElement(sectionElement, { children: connectedTarget })
       : connectedTarget;
@@ -55,13 +60,16 @@ export class Form extends Component {
 
   addProps(element, isTestable, key) {
     const target = isTestable ? element.props.children : element;
+    const fieldKey = target.props.fieldKey || target.key;
+
     const targetWithProps = React.cloneElement(target, {
       key,
-      fieldRef: target.ref,
+      fieldKey,
       ref: target.ref,
       onFocus: this.handleFieldFocused.bind(this),
-      onChange: this.handleFieldChange.bind(this, target.ref)
+      onChange: this.handleFieldChange.bind(this, fieldKey)
     });
+
     return isTestable
       ? React.cloneElement(element, { children: targetWithProps })
       : targetWithProps;
